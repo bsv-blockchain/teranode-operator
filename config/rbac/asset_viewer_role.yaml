@@ -1,0 +1,27 @@
+# permissions for end users to view assets.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: asset-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: teranode-operator
+    app.kubernetes.io/part-of: teranode-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: asset-viewer-role
+rules:
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - assets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - assets/status
+  verbs:
+  - get

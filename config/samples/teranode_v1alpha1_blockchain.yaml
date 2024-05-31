@@ -1,0 +1,12 @@
+apiVersion: teranode.bsvblockchain.org/v1alpha1
+kind: Blockchain
+metadata:
+  labels:
+    app.kubernetes.io/name: blockchain
+    app.kubernetes.io/instance: blockchain-sample
+    app.kubernetes.io/part-of: teranode-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: teranode-operator
+  name: blockchain-sample
+spec:
+  # TODO(user): Add fields here

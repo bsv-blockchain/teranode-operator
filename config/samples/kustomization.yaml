@@ -1,0 +1,7 @@
+## Append samples of your project ##
+resources:
+- teranode_v1alpha1_node.yaml
+- teranode_v1alpha1_asset.yaml
+- teranode_v1alpha1_blockchain.yaml
+- teranode_v1alpha1_peer.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples

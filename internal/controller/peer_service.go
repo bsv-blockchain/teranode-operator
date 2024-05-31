@@ -1,0 +1,85 @@
+package controller
+
+import (
+	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/go-logr/logr"
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
+)
+
+// ReconcileService is the peer service reconciler
+func (r *PeerReconciler) ReconcileService(log logr.Logger) (bool, error) {
+	peer := teranodev1alpha1.Peer{}
+	if err := r.Get(r.Context, r.NamespacedName, &peer); err != nil {
+		return false, err
+	}
+	svc := corev1.Service{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "p2p-service",
+			Namespace: r.NamespacedName.Namespace,
+			Annotations: map[string]string{
+				"prometheus.io/port":   "9091",
+				"prometheus.io/scrape": "true",
+			},
+		},
+	}
+	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &svc, func() error {
+		return r.updateService(&svc, &peer)
+	})
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (r *PeerReconciler) updateService(svc *corev1.Service, peer *teranodev1alpha1.Peer) error {
+	err := controllerutil.SetControllerReference(peer, svc, r.Scheme)
+	if err != nil {
+		return err
+	}
+	svc.Spec = *defaultPeerServiceSpec()
+	return nil
+}
+
+func defaultPeerServiceSpec() *corev1.ServiceSpec {
+	labels := map[string]string{
+		"app": "peer",
+	}
+	ipFamily := corev1.IPFamilyPolicySingleStack
+	return &corev1.ServiceSpec{
+		Selector:       labels,
+		ClusterIP:      "None",
+		IPFamilyPolicy: &ipFamily,
+		IPFamilies: []corev1.IPFamily{
+			corev1.IPv4Protocol,
+		},
+		Ports: []corev1.ServicePort{
+			{
+				Name:       "p2p-http",
+				Port:       int32(9906),
+				TargetPort: intstr.FromInt(9906),
+				Protocol:   corev1.ProtocolTCP,
+			},
+			{
+				Name:       "p2p",
+				Port:       int32(9905),
+				TargetPort: intstr.FromInt(9905),
+				Protocol:   corev1.ProtocolTCP,
+			},
+			{
+				Name:       "profiler",
+				Port:       int32(9091),
+				TargetPort: intstr.FromInt(9091),
+				Protocol:   corev1.ProtocolTCP,
+			},
+			{
+				Name:       "delve",
+				Port:       int32(4041),
+				TargetPort: intstr.FromInt(4041),
+				Protocol:   corev1.ProtocolTCP,
+			},
+		},
+	}
+}
