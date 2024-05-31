@@ -34,8 +34,8 @@ import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 )
 
-// AssetReconciler reconciles a Asset object
-type AssetReconciler struct {
+// SubtreeValidatorReconciler reconciles a SubtreeValidator object
+type SubtreeValidatorReconciler struct {
 	client.Client
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
@@ -43,26 +43,26 @@ type AssetReconciler struct {
 	Context        context.Context
 }
 
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=assets,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=assets/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=assets/finalizers,verbs=update
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=subtreevalidators,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=subtreevalidators/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=subtreevalidators/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
 // TODO(user): Modify the Reconcile function to compare the state specified by
-// the Asset object against the actual cluster state, and then
+// the SubtreeValidator object against the actual cluster state, and then
 // perform operations to make the cluster state reflect the state specified by
 // the user.
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
-func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *SubtreeValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	result := ctrl.Result{}
-	r.Log = log.FromContext(ctx).WithValues("asset", req.NamespacedName)
+	r.Log = log.FromContext(ctx).WithValues("subtree-validator", req.NamespacedName)
 	r.Context = ctx
 	r.NamespacedName = req.NamespacedName
-	asset := teranodev1alpha1.Asset{}
-	if err := r.Get(ctx, req.NamespacedName, &asset); err != nil {
+	subtreeValidator := teranodev1alpha1.SubtreeValidator{}
+	if err := r.Get(ctx, req.NamespacedName, &subtreeValidator); err != nil {
 		r.Log.Error(err, "unable to fetch asset CR")
 		return result, nil
 	}
@@ -73,13 +73,11 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		//r.ReconcileConfigMap,
 		r.ReconcileDeployment,
 		r.ReconcileService,
-		r.ReconcileGrpcIngress,
-		r.ReconcileHttpIngress,
-		r.ReconcileHttpsIngress,
+		r.ReconcilePVC,
 	)
 
 	if err != nil {
-		apimeta.SetStatusCondition(&asset.Status.Conditions,
+		apimeta.SetStatusCondition(&subtreeValidator.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -88,7 +86,7 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 			},
 		)
 	} else {
-		apimeta.SetStatusCondition(&asset.Status.Conditions,
+		apimeta.SetStatusCondition(&subtreeValidator.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,
@@ -98,7 +96,7 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		)
 	}
 
-	statusErr := r.Client.Status().Update(ctx, &asset)
+	statusErr := r.Client.Status().Update(ctx, &subtreeValidator)
 	if err == nil {
 		err = statusErr
 	}
@@ -107,10 +105,11 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *AssetReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *SubtreeValidatorReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&teranodev1alpha1.Asset{}).
+		For(&teranodev1alpha1.SubtreeValidator{}).
 		Owns(&appsv1.Deployment{}).
 		Owns(&corev1.Service{}).
+		Owns(&corev1.PersistentVolumeClaim{}).
 		Complete(r)
 }

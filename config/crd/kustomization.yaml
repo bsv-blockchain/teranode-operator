@@ -6,6 +6,7 @@ resources:
 - bases/teranode.bsvblockchain.org_assets.yaml
 - bases/teranode.bsvblockchain.org_blockchains.yaml
 - bases/teranode.bsvblockchain.org_peers.yaml
+- bases/teranode.bsvblockchain.org_subtreevalidators.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
 
 patches:
@@ -15,6 +16,7 @@ patches:
 #- path: patches/webhook_in_assets.yaml
 #- path: patches/webhook_in_blockchains.yaml
 #- path: patches/webhook_in_peers.yaml
+#- path: patches/webhook_in_subtreevalidators.yaml
 #+kubebuilder:scaffold:crdkustomizewebhookpatch
 
 # [CERTMANAGER] To enable cert-manager, uncomment all the sections with [CERTMANAGER] prefix.
@@ -23,6 +25,7 @@ patches:
 #- path: patches/cainjection_in_assets.yaml
 #- path: patches/cainjection_in_blockchains.yaml
 #- path: patches/cainjection_in_peers.yaml
+#- path: patches/cainjection_in_subtreevalidators.yaml
 #+kubebuilder:scaffold:crdkustomizecainjectionpatch
 
 # [WEBHOOK] To enable webhook, uncomment the following section

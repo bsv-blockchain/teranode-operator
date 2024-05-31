@@ -17,7 +17,7 @@ func (r *PeerReconciler) ReconcileService(log logr.Logger) (bool, error) {
 	}
 	svc := corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "p2p-service",
+			Name:      "peer",
 			Namespace: r.NamespacedName.Namespace,
 			Annotations: map[string]string{
 				"prometheus.io/port":   "9091",

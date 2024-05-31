@@ -4,4 +4,5 @@ resources:
 - teranode_v1alpha1_asset.yaml
 - teranode_v1alpha1_blockchain.yaml
 - teranode_v1alpha1_peer.yaml
+- teranode_v1alpha1_subtreevalidator.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

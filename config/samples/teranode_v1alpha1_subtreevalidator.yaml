@@ -1,0 +1,15 @@
+apiVersion: teranode.bsvblockchain.org/v1alpha1
+kind: SubtreeValidator
+metadata:
+  labels:
+    app.kubernetes.io/name: subtreevalidator
+    app.kubernetes.io/instance: subtreevalidator-sample
+    app.kubernetes.io/part-of: teranode-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: teranode-operator
+  name: subtreevalidator-sample
+spec:
+  storageResources:
+    requests:
+      storage: 1Gi
+

@@ -9,15 +9,15 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
-// ReconcileService is the blockchain service reconciler
-func (r *BlockchainReconciler) ReconcileService(log logr.Logger) (bool, error) {
-	blockchain := teranodev1alpha1.Blockchain{}
-	if err := r.Get(r.Context, r.NamespacedName, &blockchain); err != nil {
+// ReconcileService is the subtree-validator service reconciler
+func (r *SubtreeValidatorReconciler) ReconcileService(log logr.Logger) (bool, error) {
+	subtreeValidator := teranodev1alpha1.SubtreeValidator{}
+	if err := r.Get(r.Context, r.NamespacedName, &subtreeValidator); err != nil {
 		return false, err
 	}
 	svc := corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "blockchain",
+			Name:      "subtree-validator",
 			Namespace: r.NamespacedName.Namespace,
 			Annotations: map[string]string{
 				"prometheus.io/port":   "9091",
@@ -26,7 +26,7 @@ func (r *BlockchainReconciler) ReconcileService(log logr.Logger) (bool, error) {
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &svc, func() error {
-		return r.updateService(&svc, &blockchain)
+		return r.updateService(&svc, &subtreeValidator)
 	})
 	if err != nil {
 		return false, err
@@ -34,18 +34,18 @@ func (r *BlockchainReconciler) ReconcileService(log logr.Logger) (bool, error) {
 	return true, nil
 }
 
-func (r *BlockchainReconciler) updateService(svc *corev1.Service, blockchain *teranodev1alpha1.Blockchain) error {
-	err := controllerutil.SetControllerReference(blockchain, svc, r.Scheme)
+func (r *SubtreeValidatorReconciler) updateService(svc *corev1.Service, subtreeValidator *teranodev1alpha1.SubtreeValidator) error {
+	err := controllerutil.SetControllerReference(subtreeValidator, svc, r.Scheme)
 	if err != nil {
 		return err
 	}
-	svc.Spec = *defaultBlockchainServiceSpec()
+	svc.Spec = *defaultAssetServiceSpec()
 	return nil
 }
 
-func defaultBlockchainServiceSpec() *corev1.ServiceSpec {
+func defaultSubtreeValidatorServiceSpec() *corev1.ServiceSpec {
 	labels := map[string]string{
-		"app": "blockchain",
+		"app": "subtree-validator",
 	}
 	ipFamily := corev1.IPFamilyPolicySingleStack
 	return &corev1.ServiceSpec{
@@ -57,15 +57,9 @@ func defaultBlockchainServiceSpec() *corev1.ServiceSpec {
 		},
 		Ports: []corev1.ServicePort{
 			{
-				Name:       "tcp",
-				Port:       int32(8081),
-				TargetPort: intstr.FromInt(8081),
-				Protocol:   corev1.ProtocolTCP,
-			},
-			{
-				Name:       "blockchain",
-				Port:       int32(8087),
-				TargetPort: intstr.FromInt(8087),
+				Name:       "grpc",
+				Port:       int32(8086),
+				TargetPort: intstr.FromInt(8086),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{

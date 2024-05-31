@@ -58,10 +58,15 @@ type BlockchainReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
 func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	result := ctrl.Result{}
 	r.Log = log.FromContext(ctx).WithValues("blockchain", req.NamespacedName)
 	r.Context = ctx
 	r.NamespacedName = req.NamespacedName
 	blockchain := teranodev1alpha1.Blockchain{}
+	if err := r.Get(ctx, req.NamespacedName, &blockchain); err != nil {
+		r.Log.Error(err, "unable to fetch blockchain CR")
+		return result, nil
+	}
 
 	_, err := utils.ReconcileBatch(r.Log,
 		//r.Validate,

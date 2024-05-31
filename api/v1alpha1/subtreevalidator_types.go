@@ -18,30 +18,30 @@ package v1alpha1
 
 import (
 	corev1 "k8s.io/api/core/v1"
-	v1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// AssetSpec defines the desired state of Asset
-type AssetSpec struct {
+// SubtreeValidatorSpec defines the desired state of SubtreeValidator
+type SubtreeValidatorSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	NodeSelector map[string]string            `json:"nodeSelector,omitempty"`
-	Tolerations  *[]corev1.Toleration         `json:"tolerations,omitempty"`
-	Affinity     *corev1.Affinity             `json:"affinity,omitempty"`
-	Resources    *corev1.ResourceRequirements `json:"resources,omitempty"`
-	GrpcIngress  *v1.Ingress                  `json:"grpcIngress,omitempty"`
-	HttpIngress  *v1.Ingress                  `json:"httpIngress,omitempty"`
-	HttpsIngress *v1.Ingress                  `json:"httpsIngress,omitempty"`
-	//ServiceAccountName string `json:"serviceAccountName,omitempty"`
+	// Foo is an example field of SubtreeValidator. Edit subtreevalidator_types.go to remove/update
+	Resources              *corev1.ResourceRequirements `json:"resources,omitempty"`
+	StorageResources       *corev1.ResourceRequirements `json:"storageResources,omitempty"`
+	NodeSelector           map[string]string            `json:"nodeSelector,omitempty"`
+	Tolerations            *[]corev1.Toleration         `json:"tolerations,omitempty"`
+	Affinity               *corev1.Affinity             `json:"affinity,omitempty"`
+	PodTemplateAnnotations map[string]string            `json:"podTemplateAnnotations,omitempty"`
+	StorageClass           string                       `json:"storageClass,omitempty"`
+	Image                  string                       `json:"image,omitempty"`
 }
 
-// AssetStatus defines the observed state of Asset
-type AssetStatus struct {
+// SubtreeValidatorStatus defines the observed state of SubtreeValidator
+type SubtreeValidatorStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
@@ -50,24 +50,24 @@ type AssetStatus struct {
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 
-// Asset is the Schema for the assets API
-type Asset struct {
+// SubtreeValidator is the Schema for the subtreevalidators API
+type SubtreeValidator struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   AssetSpec   `json:"spec,omitempty"`
-	Status AssetStatus `json:"status,omitempty"`
+	Spec   SubtreeValidatorSpec   `json:"spec,omitempty"`
+	Status SubtreeValidatorStatus `json:"status,omitempty"`
 }
 
 //+kubebuilder:object:root=true
 
-// AssetList contains a list of Asset
-type AssetList struct {
+// SubtreeValidatorList contains a list of SubtreeValidator
+type SubtreeValidatorList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Asset `json:"items"`
+	Items           []SubtreeValidator `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Asset{}, &AssetList{})
+	SchemeBuilder.Register(&SubtreeValidator{}, &SubtreeValidatorList{})
 }
