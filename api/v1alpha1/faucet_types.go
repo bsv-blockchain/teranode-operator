@@ -24,16 +24,19 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// PeerSpec defines the desired state of Peer
-type PeerSpec struct {
+// FaucetSpec defines the desired state of Faucet
+type FaucetSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
-	Resources *corev1.ResourceRequirements `json:"resources,omitempty"`
-	Image     string                       `json:"image,omitempty"`
+	Resources    *corev1.ResourceRequirements `json:"resources,omitempty"`
+	NodeSelector map[string]string            `json:"nodeSelector,omitempty"`
+	Tolerations  *[]corev1.Toleration         `json:"tolerations,omitempty"`
+	Affinity     *corev1.Affinity             `json:"affinity,omitempty"`
+	Image        string                       `json:"image,omitempty"`
 }
 
-// PeerStatus defines the observed state of Peer
-type PeerStatus struct {
+// FaucetStatus defines the observed state of Faucet
+type FaucetStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
@@ -42,24 +45,24 @@ type PeerStatus struct {
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 
-// Peer is the Schema for the peers API
-type Peer struct {
+// Faucet is the Schema for the faucets API
+type Faucet struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   PeerSpec   `json:"spec,omitempty"`
-	Status PeerStatus `json:"status,omitempty"`
+	Spec   FaucetSpec   `json:"spec,omitempty"`
+	Status FaucetStatus `json:"status,omitempty"`
 }
 
 //+kubebuilder:object:root=true
 
-// PeerList contains a list of Peer
-type PeerList struct {
+// FaucetList contains a list of Faucet
+type FaucetList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Peer `json:"items"`
+	Items           []Faucet `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Peer{}, &PeerList{})
+	SchemeBuilder.Register(&Faucet{}, &FaucetList{})
 }

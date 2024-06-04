@@ -59,6 +59,32 @@ rules:
 - apiGroups:
   - teranode.bsvblockchain.org
   resources:
+  - faucets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - faucets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - faucets/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
   - nodes
   verbs:
   - create
@@ -130,6 +156,32 @@ rules:
   - teranode.bsvblockchain.org
   resources:
   - subtreevalidators/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - transactionblasters
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - transactionblasters/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - transactionblasters/status
   verbs:
   - get
   - patch

@@ -12,6 +12,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
+var DefaultPeerImage = "localhost/ubsv:latest"
+
 // ReconcileDeployment is the peer service deployment reconciler
 func (r *PeerReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
 	peer := teranodev1alpha1.Peer{}
@@ -40,6 +42,12 @@ func (r *PeerReconciler) updateDeployment(dep *appsv1.Deployment, peer *teranode
 		return err
 	}
 	dep.Spec = *defaultPeerDeploymentSpec()
+	if peer.Spec.Image != "" {
+		dep.Spec.Template.Spec.Containers[0].Image = peer.Spec.Image
+	}
+	if peer.Spec.Resources != nil {
+		dep.Spec.Template.Spec.Containers[0].Resources = *peer.Spec.Resources
+	}
 	return nil
 }
 
@@ -68,7 +76,6 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 			Value: "INFO",
 		},
 	}
-	image := "foo_image"
 	return &appsv1.DeploymentSpec{
 		Replicas: pointer.Int32Ptr(1),
 		Selector: metav1.SetAsLabelSelector(podLabels),
@@ -114,7 +121,7 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-p2p=1"},
-						Image:           image,
+						Image:           DefaultPeerImage,
 						ImagePullPolicy: corev1.PullAlways,
 						Name:            "peer",
 						Resources: corev1.ResourceRequirements{
