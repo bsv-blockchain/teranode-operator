@@ -9,6 +9,7 @@ resources:
 - bases/teranode.bsvblockchain.org_subtreevalidators.yaml
 - bases/teranode.bsvblockchain.org_faucets.yaml
 - bases/teranode.bsvblockchain.org_transactionblasters.yaml
+- bases/teranode.bsvblockchain.org_propagations.yaml
 - bases/teranode.bsvblockchain.org_blockpersisters.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
 
@@ -22,6 +23,7 @@ patches:
 #- path: patches/webhook_in_subtreevalidators.yaml
 #- path: patches/webhook_in_faucets.yaml
 #- path: patches/webhook_in_transactionblasters.yaml
+#- path: patches/webhook_in_propagations.yaml
 #- path: patches/webhook_in_blockpersisters.yaml
 #+kubebuilder:scaffold:crdkustomizewebhookpatch
 
@@ -34,6 +36,7 @@ patches:
 #- path: patches/cainjection_in_subtreevalidators.yaml
 #- path: patches/cainjection_in_faucets.yaml
 #- path: patches/cainjection_in_transactionblasters.yaml
+#- path: patches/cainjection_in_propagations.yaml
 #- path: patches/cainjection_in_blockpersisters.yaml
 #+kubebuilder:scaffold:crdkustomizecainjectionpatch
 
