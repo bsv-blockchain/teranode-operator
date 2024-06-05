@@ -7,4 +7,5 @@ resources:
 - teranode_v1alpha1_subtreevalidator.yaml
 - teranode_v1alpha1_faucet.yaml
 - teranode_v1alpha1_transactionblaster.yaml
+- teranode_v1alpha1_blockpersister.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

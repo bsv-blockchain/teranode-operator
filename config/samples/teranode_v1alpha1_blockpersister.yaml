@@ -1,0 +1,12 @@
+apiVersion: teranode.bsvblockchain.org/v1alpha1
+kind: BlockPersister
+metadata:
+  labels:
+    app.kubernetes.io/name: blockpersister
+    app.kubernetes.io/instance: blockpersister-sample
+    app.kubernetes.io/part-of: teranode-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: teranode-operator
+  name: blockpersister-sample
+spec:
+  # TODO(user): Add fields here
