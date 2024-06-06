@@ -94,7 +94,7 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 	}
 	image := "foo_image"
 	return &appsv1.DeploymentSpec{
-		Replicas: pointer.Int32Ptr(2), // TODO: verify the replicas number, the spec has 28
+		Replicas: pointer.Int32(2), // TODO: verify the replicas number, the spec has 28
 		Selector: metav1.SetAsLabelSelector(labels),
 		//Strategy: appsv1.DeploymentStrategy{ // TODO: verify if no strategy should be used by default
 		//	Type: appsv1.RecreateDeploymentStrategyType,
@@ -128,7 +128,7 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health",
-									Port: intstr.FromInt(9091),
+									Port: intstr.FromInt32(9091),
 								},
 							},
 							InitialDelaySeconds: 1,
@@ -140,7 +140,7 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health",
-									Port: intstr.FromInt(9091),
+									Port: intstr.FromInt32(9091),
 								},
 							},
 							InitialDelaySeconds: 1,

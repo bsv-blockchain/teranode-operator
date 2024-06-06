@@ -77,7 +77,7 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 		},
 	}
 	return &appsv1.DeploymentSpec{
-		Replicas: pointer.Int32Ptr(1),
+		Replicas: pointer.Int32(1),
 		Selector: metav1.SetAsLabelSelector(podLabels),
 		Strategy: appsv1.DeploymentStrategy{
 			Type: appsv1.RollingUpdateDeploymentStrategyType,
@@ -137,7 +137,7 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health",
-									Port: intstr.FromInt(9091),
+									Port: intstr.FromInt32(9091),
 								},
 							},
 							InitialDelaySeconds: 1,
@@ -149,7 +149,7 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health",
-									Port: intstr.FromInt(9091),
+									Port: intstr.FromInt32(9091),
 								},
 							},
 							InitialDelaySeconds: 1,

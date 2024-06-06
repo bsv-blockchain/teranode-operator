@@ -59,19 +59,19 @@ func defaultTransactionBlasterServiceSpec() *corev1.ServiceSpec {
 			{
 				Name:       "transaction-blaster-tcp",
 				Port:       int32(8086),
-				TargetPort: intstr.FromInt(8086),
+				TargetPort: intstr.FromInt32(8086),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
 				Name:       "profiler",
 				Port:       int32(9091),
-				TargetPort: intstr.FromInt(9091),
+				TargetPort: intstr.FromInt32(9091),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
 				Name:       "transaction-blaster-profiler",
 				Port:       int32(9092),
-				TargetPort: intstr.FromInt(9092),
+				TargetPort: intstr.FromInt32(9092),
 				Protocol:   corev1.ProtocolTCP,
 			},
 		},

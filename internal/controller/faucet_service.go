@@ -59,13 +59,13 @@ func defaultFaucetServiceSpec() *corev1.ServiceSpec {
 			{
 				Name:       "faucet-tcp",
 				Port:       int32(8097),
-				TargetPort: intstr.FromInt(8097),
+				TargetPort: intstr.FromInt32(8097),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
 				Name:       "profiler",
 				Port:       int32(9091),
-				TargetPort: intstr.FromInt(9091),
+				TargetPort: intstr.FromInt32(9091),
 				Protocol:   corev1.ProtocolTCP,
 			},
 		},
