@@ -10,5 +10,6 @@ resources:
 - teranode_v1alpha1_blockpersister.yaml
 - teranode_v1alpha1_propagation.yaml
 - teranode_v1alpha1_miner.yaml
+- teranode_v1alpha1_validator.yaml
 - teranode_v1alpha1_coinbase.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

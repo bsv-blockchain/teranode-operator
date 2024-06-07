@@ -290,3 +290,29 @@ rules:
   - get
   - patch
   - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - validators
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - validators/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - validators/status
+  verbs:
+  - get
+  - patch
+  - update

@@ -12,6 +12,7 @@ resources:
 - bases/teranode.bsvblockchain.org_propagations.yaml
 - bases/teranode.bsvblockchain.org_blockpersisters.yaml
 - bases/teranode.bsvblockchain.org_miners.yaml
+- bases/teranode.bsvblockchain.org_validators.yaml
 - bases/teranode.bsvblockchain.org_coinbases.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
 
@@ -28,6 +29,7 @@ patches:
 #- path: patches/webhook_in_propagations.yaml
 #- path: patches/webhook_in_blockpersisters.yaml
 #- path: patches/webhook_in_miners.yaml
+#- path: patches/webhook_in_validators.yaml
 #- path: patches/webhook_in_coinbases.yaml
 #+kubebuilder:scaffold:crdkustomizewebhookpatch
 
@@ -43,6 +45,7 @@ patches:
 #- path: patches/cainjection_in_propagations.yaml
 #- path: patches/cainjection_in_blockpersisters.yaml
 #- path: patches/cainjection_in_miners.yaml
+#- path: patches/cainjection_in_validators.yaml
 #- path: patches/cainjection_in_coinbases.yaml
 #+kubebuilder:scaffold:crdkustomizecainjectionpatch
 
