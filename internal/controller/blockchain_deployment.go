@@ -18,11 +18,13 @@ func (r *BlockchainReconciler) ReconcileDeployment(log logr.Logger) (bool, error
 	if err := r.Get(r.Context, r.NamespacedName, &blockchain); err != nil {
 		return false, err
 	}
+	labels := getAppLabels()
+	labels["app"] = "blockchain"
 	dep := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "blockchain",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    labels,
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -40,6 +42,15 @@ func (r *BlockchainReconciler) updateDeployment(dep *appsv1.Deployment, blockcha
 		return err
 	}
 	dep.Spec = *defaultBlockchainDeploymentSpec()
+	if blockchain.Spec.Image != "" {
+		dep.Spec.Template.Spec.Containers[0].Image = blockchain.Spec.Image
+	}
+	if blockchain.Spec.Resources != nil {
+		dep.Spec.Template.Spec.Containers[0].Resources = *blockchain.Spec.Resources
+	}
+	if blockchain.Spec.ImagePullPolicy != "" {
+		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = blockchain.Spec.ImagePullPolicy
+	}
 	return nil
 }
 
@@ -64,7 +75,8 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 			Value: "blockchain-service",
 		},
 	}
-	image := "foo_image"
+	// TODO: set a default
+	image := "localhost/ubsv:latest"
 	return &appsv1.DeploymentSpec{
 		Replicas: pointer.Int32(1),
 		Selector: metav1.SetAsLabelSelector(podLabels),
@@ -111,7 +123,7 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 						Env:             env,
 						Args:            []string{"-blockchain=1"},
 						Image:           image,
-						ImagePullPolicy: corev1.PullAlways,
+						ImagePullPolicy: corev1.PullNever,
 						Name:            "blockchain",
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
@@ -122,7 +134,7 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 								corev1.ResourceMemory: resource.MustParse("2Gi"),
 							},
 						},
-						ReadinessProbe: &corev1.Probe{
+						/*ReadinessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health",
@@ -133,8 +145,8 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 							PeriodSeconds:       10,
 							FailureThreshold:    5,
 							TimeoutSeconds:      3,
-						},
-						LivenessProbe: &corev1.Probe{
+						},*/
+						/*LivenessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health",
@@ -145,7 +157,7 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 							PeriodSeconds:       10,
 							FailureThreshold:    5,
 							TimeoutSeconds:      3,
-						},
+						},*/
 						TerminationMessagePolicy: corev1.TerminationMessageFallbackToLogsOnError,
 						Ports: []corev1.ContainerPort{
 							{
@@ -165,35 +177,10 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},
-						VolumeMounts: []corev1.VolumeMount{
-							{
-								MountPath: "/app/certs",
-								Name:      "scaling-tls",
-								ReadOnly:  true,
-							},
-						},
+						VolumeMounts: []corev1.VolumeMount{},
 					},
 				},
-				Volumes: []corev1.Volume{
-					{
-						Name: "scaling-tls",
-						VolumeSource: corev1.VolumeSource{
-							Secret: &corev1.SecretVolumeSource{
-								SecretName: "scaling-tls",
-								Items: []corev1.KeyToPath{
-									{
-										Key:  "tls.crt",
-										Path: "ubsv.crt",
-									},
-									{
-										Key:  "tls.key",
-										Path: "ubsv.key",
-									},
-								},
-							},
-						},
-					},
-				},
+				Volumes: []corev1.Volume{},
 			},
 		},
 	}

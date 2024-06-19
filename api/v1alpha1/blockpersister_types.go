@@ -35,6 +35,8 @@ type BlockPersisterSpec struct {
 	Resources        *corev1.ResourceRequirements `json:"resources,omitempty"`
 	StorageClass     string                       `json:"storageClass,omitempty"`
 	StorageResources *corev1.ResourceRequirements `json:"storageResources,omitempty"`
+	Image            string                       `json:"image,omitempty"`
+	ImagePullPolicy  corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 }
 
 // BlockPersisterStatus defines the observed state of BlockPersister

@@ -862,6 +862,12 @@ spec:
                         type: array
                     type: object
                 type: object
+              image:
+                type: string
+              imagePullPolicy:
+                description: PullPolicy describes a policy for if/when to pull a container
+                  image
+                type: string
               nodeSelector:
                 additionalProperties:
                   type: string

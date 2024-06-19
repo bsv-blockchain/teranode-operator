@@ -60,6 +60,14 @@ func (r *ValidatorReconciler) updateDeployment(dep *appsv1.Deployment, validator
 		dep.Spec.Template.Spec.Containers[0].Resources = *validator.Spec.Resources
 	}
 
+	// if user configures image overrides
+	if validator.Spec.Image != "" {
+		dep.Spec.Template.Spec.Containers[0].Image = validator.Spec.Image
+	}
+	if validator.Spec.ImagePullPolicy != "" {
+		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = validator.Spec.ImagePullPolicy
+	}
+
 	return nil
 }
 
@@ -94,7 +102,7 @@ func defaultValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 	}
 	image := "foo_image"
 	return &appsv1.DeploymentSpec{
-		Replicas: pointer.Int32(0), // TODO: verify if this number is valid ;)
+		Replicas: pointer.Int32(1), // TODO: verify if this number is valid ;)
 		Selector: metav1.SetAsLabelSelector(labels),
 		//Strategy: appsv1.DeploymentStrategy{ // TODO: verify no defined deployment strategy
 		//	Type: appsv1.RecreateDeploymentStrategyType,
@@ -124,7 +132,7 @@ func defaultValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 								corev1.ResourceMemory: resource.MustParse("2Gi"),
 							},
 						},
-						ReadinessProbe: &corev1.Probe{
+						/*ReadinessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health",
@@ -135,7 +143,7 @@ func defaultValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 							PeriodSeconds:       10,
 							FailureThreshold:    5,
 							TimeoutSeconds:      3,
-						},
+						},*/
 						LivenessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
@@ -166,35 +174,9 @@ func defaultValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},
-						VolumeMounts: []corev1.VolumeMount{
-							{
-								MountPath: "/app/certs",
-								Name:      "scaling-tls",
-								ReadOnly:  true,
-							},
-						},
 					},
 				},
-				Volumes: []corev1.Volume{
-					{
-						Name: "scaling-tls",
-						VolumeSource: corev1.VolumeSource{
-							Secret: &corev1.SecretVolumeSource{
-								SecretName: "scaling-tls",
-								Items: []corev1.KeyToPath{
-									{
-										Key:  "tls.crt",
-										Path: "ubsv.crt",
-									},
-									{
-										Key:  "tls.key",
-										Path: "ubsv.key",
-									},
-								},
-							},
-						},
-					},
-				},
+				Volumes: []corev1.Volume{},
 			},
 		},
 	}

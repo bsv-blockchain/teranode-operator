@@ -9,4 +9,11 @@ metadata:
     app.kubernetes.io/created-by: teranode-operator
   name: blockchain-sample
 spec:
-  # TODO(user): Add fields here
+  resources:
+    requests:
+      cpu: 1
+      memory: 1Gi
+    limits:
+      memory: 2Gi
+  image: localhost/ubsv:latest
+  imagePullPolicy: Never

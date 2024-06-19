@@ -15,3 +15,5 @@ spec:
       memory: 1Gi
     limits:
       memory: 2Gi
+  image: localhost/ubsv:latest
+  imagePullPolicy: Never

@@ -28,8 +28,9 @@ import (
 type PeerSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
-	Resources *corev1.ResourceRequirements `json:"resources,omitempty"`
-	Image     string                       `json:"image,omitempty"`
+	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
+	Image           string                       `json:"image,omitempty"`
+	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 }
 
 // PeerStatus defines the observed state of Peer

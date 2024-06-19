@@ -12,4 +12,12 @@ spec:
   storageResources:
     requests:
       storage: 1Gi
-
+  storageClass: "standard"
+  resources:
+    requests:
+      cpu: 1
+      memory: 2Gi
+    limits:
+      memory: 6Gi
+  image: localhost/ubsv:latest
+  imagePullPolicy: Never

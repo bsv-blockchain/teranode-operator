@@ -30,14 +30,15 @@ type AssetSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	NodeSelector map[string]string            `json:"nodeSelector,omitempty"`
-	Tolerations  *[]corev1.Toleration         `json:"tolerations,omitempty"`
-	Affinity     *corev1.Affinity             `json:"affinity,omitempty"`
-	Resources    *corev1.ResourceRequirements `json:"resources,omitempty"`
-	GrpcIngress  *v1.Ingress                  `json:"grpcIngress,omitempty"`
-	HttpIngress  *v1.Ingress                  `json:"httpIngress,omitempty"`
-	HttpsIngress *v1.Ingress                  `json:"httpsIngress,omitempty"`
-	//ServiceAccountName string `json:"serviceAccountName,omitempty"`
+	NodeSelector    map[string]string            `json:"nodeSelector,omitempty"`
+	Tolerations     *[]corev1.Toleration         `json:"tolerations,omitempty"`
+	Affinity        *corev1.Affinity             `json:"affinity,omitempty"`
+	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
+	GrpcIngress     *v1.Ingress                  `json:"grpcIngress,omitempty"`
+	HttpIngress     *v1.Ingress                  `json:"httpIngress,omitempty"`
+	HttpsIngress    *v1.Ingress                  `json:"httpsIngress,omitempty"`
+	Image           string                       `json:"image,omitempty"`
+	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 }
 
 // AssetStatus defines the observed state of Asset

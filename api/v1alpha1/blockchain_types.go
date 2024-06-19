@@ -17,6 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -29,7 +30,9 @@ type BlockchainSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Foo is an example field of Blockchain. Edit blockchain_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
+	Image           string                       `json:"image,omitempty"`
+	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 }
 
 // BlockchainStatus defines the observed state of Blockchain

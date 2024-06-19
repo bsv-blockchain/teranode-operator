@@ -12,6 +12,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
+var DefaultAssetImage = "localhost/ubsv:latest"
+
 // ReconcileDeployment is the asset service deployment reconciler
 func (r *AssetReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
 	asset := teranodev1alpha1.Asset{}
@@ -60,6 +62,14 @@ func (r *AssetReconciler) updateDeployment(dep *appsv1.Deployment, asset *terano
 		dep.Spec.Template.Spec.Containers[0].Resources = *asset.Spec.Resources
 	}
 
+	// if user configures image or image pull policy
+	if asset.Spec.Image != "" {
+		dep.Spec.Template.Spec.Containers[0].Image = asset.Spec.Image
+	}
+	if asset.Spec.ImagePullPolicy != "" {
+		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = asset.Spec.ImagePullPolicy
+	}
+
 	return nil
 }
 
@@ -92,7 +102,6 @@ func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
 			Value: "asset-service",
 		},
 	}
-	image := "foo_image"
 	return &appsv1.DeploymentSpec{
 		Replicas: pointer.Int32(2),
 		Selector: metav1.SetAsLabelSelector(labels),
@@ -111,8 +120,8 @@ func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-asset=1"},
-						Image:           image,
-						ImagePullPolicy: corev1.PullAlways,
+						Image:           DefaultAssetImage,
+						ImagePullPolicy: corev1.PullNever,
 						Name:            "asset",
 						// Make sane defaults, and this should be configurable
 						Resources: corev1.ResourceRequirements{
@@ -124,7 +133,7 @@ func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
 								corev1.ResourceMemory: resource.MustParse("20Gi"),
 							},
 						},
-						ReadinessProbe: &corev1.Probe{
+						/*ReadinessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health",
@@ -135,7 +144,7 @@ func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
 							PeriodSeconds:       10,
 							FailureThreshold:    5,
 							TimeoutSeconds:      3,
-						},
+						},*/
 						LivenessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
@@ -172,11 +181,6 @@ func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
 						},
 						VolumeMounts: []corev1.VolumeMount{
 							{
-								MountPath: "/app/certs",
-								Name:      "scaling-tls",
-								ReadOnly:  true,
-							},
-							{
 								MountPath: "/data/subtreestore",
 								Name:      "subtree-storage",
 							},
@@ -185,28 +189,10 @@ func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
 				},
 				Volumes: []corev1.Volume{
 					{
-						Name: "scaling-tls",
-						VolumeSource: corev1.VolumeSource{
-							Secret: &corev1.SecretVolumeSource{
-								SecretName: "scaling-tls",
-								Items: []corev1.KeyToPath{
-									{
-										Key:  "tls.crt",
-										Path: "ubsv.crt",
-									},
-									{
-										Key:  "tls.key",
-										Path: "ubsv.key",
-									},
-								},
-							},
-						},
-					},
-					{
 						Name: "subtree-storage",
 						VolumeSource: corev1.VolumeSource{
 							PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-								ClaimName: "subtree-pvc",
+								ClaimName: "subtree-storage",
 							},
 						},
 					},

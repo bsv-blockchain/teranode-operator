@@ -28,11 +28,12 @@ import (
 type FaucetSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
-	Resources    *corev1.ResourceRequirements `json:"resources,omitempty"`
-	NodeSelector map[string]string            `json:"nodeSelector,omitempty"`
-	Tolerations  *[]corev1.Toleration         `json:"tolerations,omitempty"`
-	Affinity     *corev1.Affinity             `json:"affinity,omitempty"`
-	Image        string                       `json:"image,omitempty"`
+	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
+	NodeSelector    map[string]string            `json:"nodeSelector,omitempty"`
+	Tolerations     *[]corev1.Toleration         `json:"tolerations,omitempty"`
+	Affinity        *corev1.Affinity             `json:"affinity,omitempty"`
+	Image           string                       `json:"image,omitempty"`
+	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 }
 
 // FaucetStatus defines the observed state of Faucet

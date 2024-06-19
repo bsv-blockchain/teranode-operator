@@ -60,6 +60,14 @@ func (r *CoinbaseReconciler) updateDeployment(dep *appsv1.Deployment, coinbase *
 		dep.Spec.Template.Spec.Containers[0].Resources = *coinbase.Spec.Resources
 	}
 
+	// if user configures image overrides
+	if coinbase.Spec.Image != "" {
+		dep.Spec.Template.Spec.Containers[0].Image = coinbase.Spec.Image
+	}
+	if coinbase.Spec.ImagePullPolicy != "" {
+		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = coinbase.Spec.ImagePullPolicy
+	}
+
 	return nil
 }
 
@@ -94,7 +102,7 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 	}
 	image := "foo_image"
 	return &appsv1.DeploymentSpec{
-		Replicas: pointer.Int32(0), // TODO: validate this number
+		Replicas: pointer.Int32(1), // TODO: validate this number
 		Selector: metav1.SetAsLabelSelector(labels),
 		Strategy: appsv1.DeploymentStrategy{
 			Type: appsv1.RollingUpdateDeploymentStrategyType,
@@ -132,7 +140,7 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 								corev1.ResourceMemory: resource.MustParse("20Gi"),
 							},
 						},
-						ReadinessProbe: &corev1.Probe{
+						/*ReadinessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health",
@@ -143,7 +151,7 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 							PeriodSeconds:       10,
 							FailureThreshold:    5,
 							TimeoutSeconds:      3,
-						},
+						},*/
 						LivenessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
@@ -170,35 +178,9 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},
-						VolumeMounts: []corev1.VolumeMount{
-							{
-								MountPath: "/app/certs",
-								Name:      "scaling-tls",
-								ReadOnly:  true,
-							},
-						},
 					},
 				},
-				Volumes: []corev1.Volume{
-					{
-						Name: "scaling-tls",
-						VolumeSource: corev1.VolumeSource{
-							Secret: &corev1.SecretVolumeSource{
-								SecretName: "scaling-tls",
-								Items: []corev1.KeyToPath{
-									{
-										Key:  "tls.crt",
-										Path: "ubsv.crt",
-									},
-									{
-										Key:  "tls.key",
-										Path: "ubsv.key",
-									},
-								},
-							},
-						},
-					},
-				},
+				Volumes: []corev1.Volume{},
 			},
 		},
 	}

@@ -39,6 +39,8 @@ type PropagationSpec struct {
 	GrpcIngress     *v1.Ingress                  `json:"grpcIngress,omitempty"`
 	HttpIngress     *v1.Ingress                  `json:"httpIngress,omitempty"`
 	ProfilerIngress *v1.Ingress                  `json:"httpsIngress,omitempty"`
+	Image           string                       `json:"image,omitempty"`
+	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 }
 
 // PropagationStatus defines the observed state of Propagation

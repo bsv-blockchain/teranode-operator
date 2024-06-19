@@ -47,14 +47,8 @@ func defaultAssetServiceSpec() *corev1.ServiceSpec {
 	labels := map[string]string{
 		"app": "asset",
 	}
-	ipFamily := corev1.IPFamilyPolicySingleStack
 	return &corev1.ServiceSpec{
-		Selector:       labels,
-		ClusterIP:      "None",
-		IPFamilyPolicy: &ipFamily,
-		IPFamilies: []corev1.IPFamily{
-			corev1.IPv4Protocol,
-		},
+		Selector: labels,
 		Ports: []corev1.ServicePort{
 			{
 				Name:       "asset-grpc",

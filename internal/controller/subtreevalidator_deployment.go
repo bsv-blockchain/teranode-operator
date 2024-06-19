@@ -7,7 +7,6 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/utils/pointer"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
@@ -65,6 +64,13 @@ func (r *SubtreeValidatorReconciler) updateDeployment(dep *appsv1.Deployment, su
 		dep.Spec.Template.Annotations = subtreeValidator.Spec.PodTemplateAnnotations
 	}
 
+	// if user configures image overrides
+	if subtreeValidator.Spec.Image != "" {
+		dep.Spec.Template.Spec.Containers[0].Image = subtreeValidator.Spec.Image
+	}
+	if subtreeValidator.Spec.ImagePullPolicy != "" {
+		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = subtreeValidator.Spec.ImagePullPolicy
+	}
 	return nil
 }
 
@@ -121,7 +127,7 @@ func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 								corev1.ResourceMemory: resource.MustParse("250Gi"),
 							},
 						},
-						ReadinessProbe: &corev1.Probe{
+						/*ReadinessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health",
@@ -132,8 +138,8 @@ func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 							PeriodSeconds:       10,
 							FailureThreshold:    5,
 							TimeoutSeconds:      3,
-						},
-						LivenessProbe: &corev1.Probe{
+						},*/
+						/*LivenessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health",
@@ -144,7 +150,7 @@ func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 							PeriodSeconds:       10,
 							FailureThreshold:    5,
 							TimeoutSeconds:      3,
-						},
+						},*/
 						Ports: []corev1.ContainerPort{
 							{
 								ContainerPort: 4040,
@@ -161,11 +167,6 @@ func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 						},
 						VolumeMounts: []corev1.VolumeMount{
 							{
-								MountPath: "/app/certs",
-								Name:      "scaling-tls",
-								ReadOnly:  true,
-							},
-							{
 								MountPath: "/data/subtreestore",
 								Name:      "subtree-storage",
 							},
@@ -174,28 +175,10 @@ func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 				},
 				Volumes: []corev1.Volume{
 					{
-						Name: "scaling-tls",
-						VolumeSource: corev1.VolumeSource{
-							Secret: &corev1.SecretVolumeSource{
-								SecretName: "scaling-tls",
-								Items: []corev1.KeyToPath{
-									{
-										Key:  "tls.crt",
-										Path: "ubsv.crt",
-									},
-									{
-										Key:  "tls.key",
-										Path: "ubsv.key",
-									},
-								},
-							},
-						},
-					},
-					{
 						Name: "subtree-storage",
 						VolumeSource: corev1.VolumeSource{
 							PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-								ClaimName: "subtree-pvc",
+								ClaimName: "subtree-storage",
 							},
 						},
 					},

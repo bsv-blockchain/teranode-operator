@@ -10,3 +10,11 @@ metadata:
   name: faucet-sample
 spec:
   # TODO(user): Add fields here
+  resources:
+    requests:
+      cpu: 1
+      memory: 1Gi
+    limits:
+      memory: 2Gi
+  image: localhost/ubsv:latest
+  imagePullPolicy: Never

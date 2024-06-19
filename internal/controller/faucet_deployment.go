@@ -59,6 +59,14 @@ func (r *FaucetReconciler) updateDeployment(dep *appsv1.Deployment, faucet *tera
 		dep.Spec.Template.Spec.Containers[0].Resources = *faucet.Spec.Resources
 	}
 
+	// if user configures image overrides
+	if faucet.Spec.Image != "" {
+		dep.Spec.Template.Spec.Containers[0].Image = faucet.Spec.Image
+	}
+	if faucet.Spec.ImagePullPolicy != "" {
+		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = faucet.Spec.ImagePullPolicy
+	}
+
 	return nil
 }
 
@@ -162,35 +170,9 @@ func defaultFaucetDeploymentSpec() *appsv1.DeploymentSpec {
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},
-						VolumeMounts: []corev1.VolumeMount{
-							{
-								MountPath: "/app/certs",
-								Name:      "scaling-tls",
-								ReadOnly:  true,
-							},
-						},
 					},
 				},
-				Volumes: []corev1.Volume{
-					{
-						Name: "scaling-tls",
-						VolumeSource: corev1.VolumeSource{
-							Secret: &corev1.SecretVolumeSource{
-								SecretName: "scaling-tls",
-								Items: []corev1.KeyToPath{
-									{
-										Key:  "tls.crt",
-										Path: "ubsv.crt",
-									},
-									{
-										Key:  "tls.key",
-										Path: "ubsv.key",
-									},
-								},
-							},
-						},
-					},
-				},
+				Volumes: []corev1.Volume{},
 			},
 		},
 	}
