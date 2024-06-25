@@ -1,0 +1,19 @@
+apiVersion: teranode.bsvblockchain.org/v1alpha1
+kind: Bootstrap
+metadata:
+  labels:
+    app.kubernetes.io/name: bootstrap
+    app.kubernetes.io/instance: bootstrap-sample
+    app.kubernetes.io/part-of: teranode-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: teranode-operator
+  name: bootstrap-sample
+spec:
+  resources:
+    requests:
+      cpu: 1
+      memory: 1Gi
+    limits:
+      memory: 2Gi
+  image: localhost/ubsv:latest
+  imagePullPolicy: Never
