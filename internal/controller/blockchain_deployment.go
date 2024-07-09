@@ -51,6 +51,11 @@ func (r *BlockchainReconciler) updateDeployment(dep *appsv1.Deployment, blockcha
 	if blockchain.Spec.ImagePullPolicy != "" {
 		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = blockchain.Spec.ImagePullPolicy
 	}
+
+	// if a user configures a service account
+	if blockchain.Spec.ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = blockchain.Spec.ServiceAccount
+	}
 	return nil
 }
 
@@ -99,7 +104,7 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 				Labels:            podLabels,
 			},
 			Spec: corev1.PodSpec{
-				ServiceAccountName: "sa-m",
+				ServiceAccountName: DefaultServiceAccountName,
 				Affinity: &corev1.Affinity{
 					PodAntiAffinity: &corev1.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []corev1.WeightedPodAffinityTerm{

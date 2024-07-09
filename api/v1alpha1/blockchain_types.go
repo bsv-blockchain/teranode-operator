@@ -29,10 +29,10 @@ type BlockchainSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of Blockchain. Edit blockchain_types.go to remove/update
 	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
 	Image           string                       `json:"image,omitempty"`
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
+	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
 }
 
 // BlockchainStatus defines the observed state of Blockchain

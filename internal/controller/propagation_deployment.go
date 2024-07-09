@@ -68,6 +68,10 @@ func (r *PropagationReconciler) updateDeployment(dep *appsv1.Deployment, propaga
 		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = propagation.Spec.ImagePullPolicy
 	}
 
+	// if user configures a service account
+	if propagation.Spec.ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = propagation.Spec.ServiceAccount
+	}
 	return nil
 }
 
@@ -113,7 +117,7 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 				Labels:            labels,
 			},
 			Spec: corev1.PodSpec{
-				ServiceAccountName: "sa-m",
+				ServiceAccountName: DefaultServiceAccountName,
 				Containers: []corev1.Container{
 					{
 						EnvFrom:         envFrom,

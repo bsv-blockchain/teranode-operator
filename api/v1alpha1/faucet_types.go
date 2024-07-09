@@ -34,6 +34,7 @@ type FaucetSpec struct {
 	Affinity        *corev1.Affinity             `json:"affinity,omitempty"`
 	Image           string                       `json:"image,omitempty"`
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
+	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
 }
 
 // FaucetStatus defines the observed state of Faucet

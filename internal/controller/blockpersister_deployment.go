@@ -68,6 +68,11 @@ func (r *BlockPersisterReconciler) updateDeployment(dep *appsv1.Deployment, bloc
 		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = blockPersister.Spec.ImagePullPolicy
 	}
 
+	// if user configures a service account
+	if blockPersister.Spec.ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = blockPersister.Spec.ServiceAccount
+	}
+
 	return nil
 }
 
@@ -117,7 +122,7 @@ func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 				Labels:            labels,
 			},
 			Spec: corev1.PodSpec{
-				ServiceAccountName: "sa-m",
+				ServiceAccountName: DefaultServiceAccountName,
 				Containers: []corev1.Container{
 					{
 						EnvFrom:         envFrom,

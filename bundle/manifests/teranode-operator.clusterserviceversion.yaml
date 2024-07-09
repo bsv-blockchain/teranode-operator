@@ -1,0 +1,926 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Asset",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "asset-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "asset",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "asset-sample"
+          },
+          "spec": {
+            "image": "localhost/ubsv:latest",
+            "imagePullPolicy": "Never",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "BlockPersister",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "blockpersister-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "blockpersister",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "blockpersister-sample"
+          },
+          "spec": {
+            "image": "localhost/ubsv:latest",
+            "imagePullPolicy": "Never",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            },
+            "storageClass": "standard",
+            "storageResources": {
+              "requests": {
+                "storage": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Blockchain",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "blockchain-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "blockchain",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "blockchain-sample"
+          },
+          "spec": {
+            "image": "localhost/ubsv:latest",
+            "imagePullPolicy": "Never",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Bootstrap",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "bootstrap-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "bootstrap",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "bootstrap-sample"
+          },
+          "spec": {
+            "image": "localhost/ubsv:latest",
+            "imagePullPolicy": "Never",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Coinbase",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "coinbase-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "coinbase",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "coinbase-sample"
+          },
+          "spec": {
+            "image": "localhost/ubsv:latest",
+            "imagePullPolicy": "Never",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Faucet",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "faucet-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "faucet",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "faucet-sample"
+          },
+          "spec": {
+            "image": "localhost/ubsv:latest",
+            "imagePullPolicy": "Never",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Miner",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "miner-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "miner",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "miner-sample"
+          },
+          "spec": {
+            "image": "localhost/ubsv:latest",
+            "imagePullPolicy": "Never",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Node",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "node-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "node",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "node-sample"
+          },
+          "spec": null
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Peer",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "peer-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "peer",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "peer-sample"
+          },
+          "spec": {
+            "image": "localhost/ubsv:latest",
+            "imagePullPolicy": "Never",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Propagation",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "propagation-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "propagation",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "propagation-sample"
+          },
+          "spec": {
+            "image": "localhost/ubsv:latest",
+            "imagePullPolicy": "Never",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "SubtreeValidator",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "subtreevalidator-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "subtreevalidator",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "subtreevalidator-sample"
+          },
+          "spec": {
+            "image": "localhost/ubsv:latest",
+            "imagePullPolicy": "Never",
+            "resources": {
+              "limits": {
+                "memory": "6Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "2Gi"
+              }
+            },
+            "storageClass": "standard",
+            "storageResources": {
+              "requests": {
+                "storage": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Validator",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "validator-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "validator",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "validator-sample"
+          },
+          "spec": {
+            "image": "localhost/ubsv:latest",
+            "imagePullPolicy": "Never",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        }
+      ]
+    capabilities: Basic Install
+    createdAt: "2024-07-09T01:32:18Z"
+    operators.operatorframework.io/builder: operator-sdk-v1.35.0
+    operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
+  name: teranode-operator.v0.0.1
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: Asset is the Schema for the assets API
+      displayName: Asset
+      kind: Asset
+      name: assets.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: Blockchain is the Schema for the blockchains API
+      displayName: Blockchain
+      kind: Blockchain
+      name: blockchains.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: BlockPersister is the Schema for the blockpersisters API
+      displayName: Block Persister
+      kind: BlockPersister
+      name: blockpersisters.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: Bootstrap is the Schema for the bootstraps API
+      displayName: Bootstrap
+      kind: Bootstrap
+      name: bootstraps.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: Coinbase is the Schema for the coinbases API
+      displayName: Coinbase
+      kind: Coinbase
+      name: coinbases.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: Faucet is the Schema for the faucets API
+      displayName: Faucet
+      kind: Faucet
+      name: faucets.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: Miner is the Schema for the miners API
+      displayName: Miner
+      kind: Miner
+      name: miners.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: Node is the Schema for the nodes API
+      displayName: Node
+      kind: Node
+      name: nodes.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: Peer is the Schema for the peers API
+      displayName: Peer
+      kind: Peer
+      name: peers.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: Propagation is the Schema for the propagations API
+      displayName: Propagation
+      kind: Propagation
+      name: propagations.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: SubtreeValidator is the Schema for the subtreevalidators API
+      displayName: Subtree Validator
+      kind: SubtreeValidator
+      name: subtreevalidators.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: Validator is the Schema for the validators API
+      displayName: Validator
+      kind: Validator
+      name: validators.teranode.bsvblockchain.org
+      version: v1alpha1
+  description: An operator that deploys the teranode services
+  displayName: Teranode Operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - assets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - assets/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - assets/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - blockchains
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - blockchains/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - blockchains/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - blockpersisters
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - blockpersisters/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - blockpersisters/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - bootstraps
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - bootstraps/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - bootstraps/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - coinbases
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - coinbases/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - coinbases/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - faucets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - faucets/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - faucets/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - miners
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - miners/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - miners/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - nodes
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - nodes/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - nodes/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - peers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - peers/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - peers/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - propagations
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - propagations/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - propagations/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - subtreevalidators
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - subtreevalidators/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - subtreevalidators/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - validators
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - validators/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - validators/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - authentication.k8s.io
+          resources:
+          - tokenreviews
+          verbs:
+          - create
+        - apiGroups:
+          - authorization.k8s.io
+          resources:
+          - subjectaccessreviews
+          verbs:
+          - create
+        - apiGroups:
+            - ""
+          resources:
+            - pods
+            - services
+            - services/finalizers
+            - endpoints
+            - persistentvolumeclaims
+            - events
+            - configmaps
+            - secrets
+            - serviceaccounts
+            - deployments
+          verbs:
+            - get
+            - list
+            - watch
+            - create
+            - update
+            - patch
+            - delete
+        - apiGroups:
+            - apps
+          resources:
+            - deployments
+          verbs:
+            - get
+            - list
+            - watch
+            - create
+            - update
+            - patch
+            - delete
+        - apiGroups:
+            - networking.k8s.io
+          resources:
+            - ingresses
+          verbs:
+            - get
+            - list
+            - watch
+            - create
+            - update
+            - patch
+            - delete
+        serviceAccountName: teranode-operator-controller-manager
+      deployments:
+      - label:
+          app.kubernetes.io/component: manager
+          app.kubernetes.io/created-by: teranode-operator
+          app.kubernetes.io/instance: controller-manager
+          app.kubernetes.io/managed-by: kustomize
+          app.kubernetes.io/name: deployment
+          app.kubernetes.io/part-of: teranode-operator
+          control-plane: controller-manager
+        name: teranode-operator-controller-manager
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              control-plane: controller-manager
+          strategy: {}
+          template:
+            metadata:
+              annotations:
+                kubectl.kubernetes.io/default-container: manager
+              labels:
+                control-plane: controller-manager
+            spec:
+              containers:
+              - args:
+                - --secure-listen-address=0.0.0.0:8443
+                - --upstream=http://127.0.0.1:8080/
+                - --logtostderr=true
+                - --v=0
+                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.15.0
+                name: kube-rbac-proxy
+                ports:
+                - containerPort: 8443
+                  name: https
+                  protocol: TCP
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 128Mi
+                  requests:
+                    cpu: 5m
+                    memory: 64Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+              - args:
+                - --health-probe-bind-address=:8081
+                - --metrics-bind-address=127.0.0.1:8080
+                - --leader-elect
+                command:
+                - /manager
+                image: docker.io/galtbv/to:v1
+                imagePullPolicy: Always
+                livenessProbe:
+                  httpGet:
+                    path: /healthz
+                    port: 8081
+                  initialDelaySeconds: 15
+                  periodSeconds: 20
+                name: manager
+                readinessProbe:
+                  httpGet:
+                    path: /readyz
+                    port: 8081
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 128Mi
+                  requests:
+                    cpu: 10m
+                    memory: 64Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+              securityContext:
+                runAsNonRoot: true
+              serviceAccountName: teranode-operator-controller-manager
+              terminationGracePeriodSeconds: 10
+      permissions:
+      - rules:
+        - apiGroups:
+          - coordination.k8s.io
+          resources:
+          - leases
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+          - patch
+        serviceAccountName: teranode-operator-controller-manager
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - services
+          - services/finalizers
+          - endpoints
+          - persistentvolumeclaims
+          - events
+          - configmaps
+          - secrets
+          - serviceaccounts
+          verbs:
+          - '*'
+        serviceAccountName: teranode-service-runner
+    strategy: deployment
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - teranode
+  - blockchain
+  - bsv
+  links:
+  - name: Teranode Operator
+    url: https://teranode-operator.domain
+  maintainers:
+  - email: dylan.murray@bsvblockchain.org
+    name: Dylan Murray
+  maturity: alpha
+  provider:
+    name: BSV Association
+  version: 0.0.1

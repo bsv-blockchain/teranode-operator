@@ -37,6 +37,7 @@ type CoinbaseSpec struct {
 	GrpcIngress     *v1.Ingress                  `json:"grpcIngress,omitempty"`
 	Image           string                       `json:"image,omitempty"`
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
+	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
 }
 
 // CoinbaseStatus defines the observed state of Coinbase

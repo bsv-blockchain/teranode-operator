@@ -68,6 +68,11 @@ func (r *CoinbaseReconciler) updateDeployment(dep *appsv1.Deployment, coinbase *
 		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = coinbase.Spec.ImagePullPolicy
 	}
 
+	// if user configures a service account
+	if coinbase.Spec.ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = coinbase.Spec.ServiceAccount
+	}
+
 	return nil
 }
 
@@ -121,7 +126,7 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 				Labels:            labels,
 			},
 			Spec: corev1.PodSpec{
-				ServiceAccountName: "sa-m",
+				ServiceAccountName: DefaultServiceAccountName,
 				Containers: []corev1.Container{
 					{
 						EnvFrom:         envFrom,

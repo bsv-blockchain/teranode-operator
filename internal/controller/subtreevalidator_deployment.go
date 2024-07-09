@@ -71,6 +71,11 @@ func (r *SubtreeValidatorReconciler) updateDeployment(dep *appsv1.Deployment, su
 	if subtreeValidator.Spec.ImagePullPolicy != "" {
 		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = subtreeValidator.Spec.ImagePullPolicy
 	}
+
+	// if user configures a service account
+	if subtreeValidator.Spec.ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = subtreeValidator.Spec.ServiceAccount
+	}
 	return nil
 }
 
@@ -108,7 +113,7 @@ func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 				Labels:            labels,
 			},
 			Spec: corev1.PodSpec{
-				ServiceAccountName: "sa-m",
+				ServiceAccountName: DefaultServiceAccountName,
 				Containers: []corev1.Container{
 					{
 						EnvFrom:         envFrom,

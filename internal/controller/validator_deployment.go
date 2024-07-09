@@ -68,6 +68,11 @@ func (r *ValidatorReconciler) updateDeployment(dep *appsv1.Deployment, validator
 		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = validator.Spec.ImagePullPolicy
 	}
 
+	// if user configures a service account
+	if validator.Spec.ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = validator.Spec.ServiceAccount
+	}
+
 	return nil
 }
 
@@ -113,7 +118,7 @@ func defaultValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 				Labels:            labels,
 			},
 			Spec: corev1.PodSpec{
-				ServiceAccountName: "sa-m",
+				ServiceAccountName: DefaultServiceAccountName,
 				Containers: []corev1.Container{
 					{
 						EnvFrom:         envFrom,

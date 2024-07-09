@@ -51,6 +51,11 @@ func (r *PeerReconciler) updateDeployment(dep *appsv1.Deployment, peer *teranode
 	if peer.Spec.ImagePullPolicy != "" {
 		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = peer.Spec.ImagePullPolicy
 	}
+
+	// if user configures a service account
+	if peer.Spec.ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = peer.Spec.ServiceAccount
+	}
 	return nil
 }
 
@@ -101,7 +106,7 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 				Labels:            podLabels,
 			},
 			Spec: corev1.PodSpec{
-				ServiceAccountName: "sa-m",
+				ServiceAccountName: DefaultServiceAccountName,
 				Affinity: &corev1.Affinity{
 					PodAntiAffinity: &corev1.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []corev1.WeightedPodAffinityTerm{

@@ -51,6 +51,11 @@ func (r *BootstrapReconciler) updateDeployment(dep *appsv1.Deployment, bs *teran
 	if bs.Spec.ImagePullPolicy != "" {
 		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = bs.Spec.ImagePullPolicy
 	}
+
+	// if user configures a service account
+	if bs.Spec.ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = bs.Spec.ServiceAccount
+	}
 	return nil
 }
 
@@ -105,7 +110,7 @@ func defaultBootstrapDeploymentSpec() *appsv1.DeploymentSpec {
 				Labels:            podLabels,
 			},
 			Spec: corev1.PodSpec{
-				ServiceAccountName: "sa-m",
+				ServiceAccountName: DefaultServiceAccountName,
 				Affinity: &corev1.Affinity{
 					PodAntiAffinity: &corev1.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []corev1.WeightedPodAffinityTerm{

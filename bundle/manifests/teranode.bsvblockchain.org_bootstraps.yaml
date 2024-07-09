@@ -1,23 +1,23 @@
----
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-  name: blockchains.teranode.bsvblockchain.org
+  creationTimestamp: null
+  name: bootstraps.teranode.bsvblockchain.org
 spec:
   group: teranode.bsvblockchain.org
   names:
-    kind: Blockchain
-    listKind: BlockchainList
-    plural: blockchains
-    singular: blockchain
+    kind: Bootstrap
+    listKind: BootstrapList
+    plural: bootstraps
+    singular: bootstrap
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Blockchain is the Schema for the blockchains API
+        description: Bootstrap is the Schema for the bootstraps API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -32,7 +32,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: BlockchainSpec defines the desired state of Blockchain
+            description: BootstrapSpec defines the desired state of Bootstrap
             properties:
               image:
                 type: string
@@ -41,7 +41,8 @@ spec:
                   image
                 type: string
               resources:
-                description: ResourceRequirements describes the compute resource requirements.
+                description: 'INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
+                  Important: Run "make" to regenerate code after modifying this file'
                 properties:
                   claims:
                     description: "Claims lists the names of resources, defined in
@@ -88,11 +89,9 @@ spec:
                       More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                     type: object
                 type: object
-              serviceAccount:
-                type: string
             type: object
           status:
-            description: BlockchainStatus defines the observed state of Blockchain
+            description: BootstrapStatus defines the observed state of Bootstrap
             properties:
               conditions:
                 description: 'INSERT ADDITIONAL STATUS FIELD - define observed state
@@ -171,3 +170,9 @@ spec:
     storage: true
     subresources:
       status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: null
+  storedVersions: null

@@ -35,6 +35,7 @@ type ValidatorSpec struct {
 	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
 	Image           string                       `json:"image,omitempty"`
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
+	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
 }
 
 // ValidatorStatus defines the observed state of Validator

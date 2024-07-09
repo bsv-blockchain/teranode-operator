@@ -67,6 +67,11 @@ func (r *FaucetReconciler) updateDeployment(dep *appsv1.Deployment, faucet *tera
 		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = faucet.Spec.ImagePullPolicy
 	}
 
+	// if user configures a service account
+	if faucet.Spec.ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = faucet.Spec.ServiceAccount
+	}
+
 	return nil
 }
 
@@ -112,7 +117,7 @@ func defaultFaucetDeploymentSpec() *appsv1.DeploymentSpec {
 				Labels:            labels,
 			},
 			Spec: corev1.PodSpec{
-				ServiceAccountName: "sa-m",
+				ServiceAccountName: DefaultServiceAccountName,
 				Containers: []corev1.Container{
 					{
 						EnvFrom:         envFrom,

@@ -41,6 +41,7 @@ type PropagationSpec struct {
 	ProfilerIngress *v1.Ingress                  `json:"httpsIngress,omitempty"`
 	Image           string                       `json:"image,omitempty"`
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
+	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
 }
 
 // PropagationStatus defines the observed state of Propagation

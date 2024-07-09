@@ -39,6 +39,7 @@ type AssetSpec struct {
 	HttpsIngress    *v1.Ingress                  `json:"httpsIngress,omitempty"`
 	Image           string                       `json:"image,omitempty"`
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
+	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
 }
 
 // AssetStatus defines the observed state of Asset

@@ -70,6 +70,11 @@ func (r *AssetReconciler) updateDeployment(dep *appsv1.Deployment, asset *terano
 		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = asset.Spec.ImagePullPolicy
 	}
 
+	// if user configures a service account
+	if asset.Spec.ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = asset.Spec.ServiceAccount
+	}
+
 	return nil
 }
 
@@ -114,7 +119,7 @@ func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
 				Labels:            labels,
 			},
 			Spec: corev1.PodSpec{
-				ServiceAccountName: "sa-m",
+				ServiceAccountName: DefaultServiceAccountName,
 				Containers: []corev1.Container{
 					{
 						EnvFrom:         envFrom,
