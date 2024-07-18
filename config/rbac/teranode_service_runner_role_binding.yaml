@@ -5,7 +5,8 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: teranode-operator-sr-role
+  name: sr-role
 subjects:
 - kind: ServiceAccount
   name: service-runner
+  namespace: system

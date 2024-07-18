@@ -11,6 +11,5 @@ resources:
 - teranode_v1alpha1_miner.yaml
 - teranode_v1alpha1_validator.yaml
 - teranode_v1alpha1_coinbase.yaml
-- teranode_v1alpha1_bootstrap.yaml
 - teranode_v1alpha1_blockassembly.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

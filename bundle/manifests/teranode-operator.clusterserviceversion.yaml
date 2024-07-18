@@ -120,33 +120,6 @@ metadata:
         },
         {
           "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
-          "kind": "Bootstrap",
-          "metadata": {
-            "labels": {
-              "app.kubernetes.io/created-by": "teranode-operator",
-              "app.kubernetes.io/instance": "bootstrap-sample",
-              "app.kubernetes.io/managed-by": "kustomize",
-              "app.kubernetes.io/name": "bootstrap",
-              "app.kubernetes.io/part-of": "teranode-operator"
-            },
-            "name": "bootstrap-sample"
-          },
-          "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
-            "imagePullPolicy": "Always",
-            "resources": {
-              "limits": {
-                "memory": "2Gi"
-              },
-              "requests": {
-                "cpu": 1,
-                "memory": "1Gi"
-              }
-            }
-          }
-        },
-        {
-          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
           "kind": "Coinbase",
           "metadata": {
             "labels": {
@@ -360,7 +333,7 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-07-18T03:55:40Z"
+    createdAt: "2024-07-18T04:11:48Z"
     operators.operatorframework.io/builder: operator-sdk-v1.34.2
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
   name: teranode-operator.v0.0.1
