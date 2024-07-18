@@ -360,7 +360,7 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-07-18T03:37:10Z"
+    createdAt: "2024-07-18T03:40:36Z"
     operators.operatorframework.io/builder: operator-sdk-v1.34.2
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
   name: teranode-operator.v0.0.1
