@@ -9,6 +9,7 @@ resources:
 - role_binding.yaml
 - leader_election_role.yaml
 - leader_election_role_binding.yaml
+# service runner rbac
 - teranode_service_runner_service_account.yaml
 - teranode_service_runner_role_binding.yaml
 - teranode_service_runner_role.yaml

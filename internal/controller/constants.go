@@ -1,3 +1,3 @@
 package controller
 
-const DefaultServiceAccountName = "teranode-operator-service-runner"
+const DefaultServiceAccountName = "service-runner"

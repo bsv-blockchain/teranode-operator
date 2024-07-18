@@ -333,7 +333,7 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-07-18T04:11:48Z"
+    createdAt: "2024-07-18T04:23:01Z"
     operators.operatorframework.io/builder: operator-sdk-v1.34.2
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
   name: teranode-operator.v0.0.1
@@ -886,6 +886,20 @@ spec:
               serviceAccountName: teranode-operator-controller-manager
               terminationGracePeriodSeconds: 10
       permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - persistentvolumeclaims
+          - deployments
+          - configmaps
+          - secrets
+          - endpoints
+          verbs:
+          - get
+          - list
+          - watch
+        serviceAccountName: service-runner
       - rules:
         - apiGroups:
           - ""
