@@ -12,8 +12,8 @@ spec:
   # TODO(user): Add fields here
   storageResources:
     requests:
-      storage: 1Gi
-  storageClass: "standard"
+      storage: 5Gi
+  storageClass: "fsx-sc"
   resources:
     requests:
       cpu: 1

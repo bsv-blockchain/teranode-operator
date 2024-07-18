@@ -83,10 +83,10 @@ metadata:
                 "memory": "1Gi"
               }
             },
-            "storageClass": "standard",
+            "storageClass": "fsx-sc",
             "storageResources": {
               "requests": {
-                "storage": "1Gi"
+                "storage": "5Gi"
               }
             }
           }
@@ -360,7 +360,7 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-07-18T03:40:36Z"
+    createdAt: "2024-07-18T03:55:40Z"
     operators.operatorframework.io/builder: operator-sdk-v1.34.2
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
   name: teranode-operator.v0.0.1
