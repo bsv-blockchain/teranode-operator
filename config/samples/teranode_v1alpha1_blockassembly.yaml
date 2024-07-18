@@ -1,13 +1,13 @@
 apiVersion: teranode.bsvblockchain.org/v1alpha1
-kind: Peer
+kind: BlockAssembly
 metadata:
   labels:
-    app.kubernetes.io/name: peer
-    app.kubernetes.io/instance: peer-sample
+    app.kubernetes.io/name: blockassembly
+    app.kubernetes.io/instance: blockassembly-sample
     app.kubernetes.io/part-of: teranode-operator
     app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/created-by: teranode-operator
-  name: peer-sample
+  name: blockassembly-sample
 spec:
   resources:
     requests:

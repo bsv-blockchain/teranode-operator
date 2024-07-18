@@ -18,8 +18,8 @@ metadata:
             "name": "asset-sample"
           },
           "spec": {
-            "image": "localhost/ubsv:latest",
-            "imagePullPolicy": "Never",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "imagePullPolicy": "Always",
             "resources": {
               "limits": {
                 "memory": "2Gi"
@@ -30,6 +30,21 @@ metadata:
               }
             }
           }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "BlockAssembly",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "blockassembly-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "blockassembly",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "blockassembly-sample"
+          },
+          "spec": null
         },
         {
           "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
@@ -45,8 +60,8 @@ metadata:
             "name": "blockpersister-sample"
           },
           "spec": {
-            "image": "localhost/ubsv:latest",
-            "imagePullPolicy": "Never",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "imagePullPolicy": "Always",
             "resources": {
               "limits": {
                 "memory": "2Gi"
@@ -78,8 +93,8 @@ metadata:
             "name": "blockchain-sample"
           },
           "spec": {
-            "image": "localhost/ubsv:latest",
-            "imagePullPolicy": "Never",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "imagePullPolicy": "Always",
             "resources": {
               "limits": {
                 "memory": "2Gi"
@@ -105,8 +120,8 @@ metadata:
             "name": "bootstrap-sample"
           },
           "spec": {
-            "image": "localhost/ubsv:latest",
-            "imagePullPolicy": "Never",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "imagePullPolicy": "Always",
             "resources": {
               "limits": {
                 "memory": "2Gi"
@@ -132,8 +147,8 @@ metadata:
             "name": "coinbase-sample"
           },
           "spec": {
-            "image": "localhost/ubsv:latest",
-            "imagePullPolicy": "Never",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "imagePullPolicy": "Always",
             "resources": {
               "limits": {
                 "memory": "2Gi"
@@ -159,8 +174,8 @@ metadata:
             "name": "faucet-sample"
           },
           "spec": {
-            "image": "localhost/ubsv:latest",
-            "imagePullPolicy": "Never",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "imagePullPolicy": "Always",
             "resources": {
               "limits": {
                 "memory": "2Gi"
@@ -186,8 +201,8 @@ metadata:
             "name": "miner-sample"
           },
           "spec": {
-            "image": "localhost/ubsv:latest",
-            "imagePullPolicy": "Never",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "imagePullPolicy": "Always",
             "resources": {
               "limits": {
                 "memory": "2Gi"
@@ -212,7 +227,10 @@ metadata:
             },
             "name": "node-sample"
           },
-          "spec": null
+          "spec": {
+            "startBlockchain": true,
+            "startMiner": true
+          }
         },
         {
           "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
@@ -228,8 +246,8 @@ metadata:
             "name": "peer-sample"
           },
           "spec": {
-            "image": "localhost/ubsv:latest",
-            "imagePullPolicy": "Never",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "imagePullPolicy": "Always",
             "resources": {
               "limits": {
                 "memory": "2Gi"
@@ -255,8 +273,8 @@ metadata:
             "name": "propagation-sample"
           },
           "spec": {
-            "image": "localhost/ubsv:latest",
-            "imagePullPolicy": "Never",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "imagePullPolicy": "Always",
             "resources": {
               "limits": {
                 "memory": "2Gi"
@@ -282,8 +300,8 @@ metadata:
             "name": "subtreevalidator-sample"
           },
           "spec": {
-            "image": "localhost/ubsv:latest",
-            "imagePullPolicy": "Never",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "imagePullPolicy": "Always",
             "resources": {
               "limits": {
                 "memory": "6Gi"
@@ -293,10 +311,10 @@ metadata:
                 "memory": "2Gi"
               }
             },
-            "storageClass": "standard",
+            "storageClass": "fsx-sc",
             "storageResources": {
               "requests": {
-                "storage": "1Gi"
+                "storage": "5Gi"
               }
             }
           }
@@ -315,8 +333,8 @@ metadata:
             "name": "validator-sample"
           },
           "spec": {
-            "image": "localhost/ubsv:latest",
-            "imagePullPolicy": "Never",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "imagePullPolicy": "Always",
             "resources": {
               "limits": {
                 "memory": "2Gi"
@@ -330,8 +348,8 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-07-09T01:32:18Z"
-    operators.operatorframework.io/builder: operator-sdk-v1.35.0
+    createdAt: "2024-07-17T02:59:14Z"
+    operators.operatorframework.io/builder: operator-sdk-v1.34.2
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
   name: teranode-operator.v0.0.1
   namespace: placeholder
@@ -343,6 +361,11 @@ spec:
       displayName: Asset
       kind: Asset
       name: assets.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: BlockAssembly is the Schema for the blockassemblies API
+      displayName: Block Assembly
+      kind: BlockAssembly
+      name: blockassemblies.teranode.bsvblockchain.org
       version: v1alpha1
     - description: Blockchain is the Schema for the blockchains API
       displayName: Blockchain
@@ -430,6 +453,32 @@ spec:
           - teranode.bsvblockchain.org
           resources:
           - assets/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - blockassemblies
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - blockassemblies/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - blockassemblies/status
           verbs:
           - get
           - patch
@@ -733,50 +782,18 @@ spec:
           verbs:
           - create
         - apiGroups:
-            - ""
+          - ""
           resources:
-            - pods
-            - services
-            - services/finalizers
-            - endpoints
-            - persistentvolumeclaims
-            - events
-            - configmaps
-            - secrets
-            - serviceaccounts
-            - deployments
+          - persistentvolumeclaims
+          - services
+          - deployments
+          - endpoints
           verbs:
-            - get
-            - list
-            - watch
-            - create
-            - update
-            - patch
-            - delete
-        - apiGroups:
-            - apps
-          resources:
-            - deployments
-          verbs:
-            - get
-            - list
-            - watch
-            - create
-            - update
-            - patch
-            - delete
-        - apiGroups:
-            - networking.k8s.io
-          resources:
-            - ingresses
-          verbs:
-            - get
-            - list
-            - watch
-            - create
-            - update
-            - patch
-            - delete
+          - create
+          - list
+          - delete
+          - get
+          - watch
         serviceAccountName: teranode-operator-controller-manager
       deployments:
       - label:
@@ -832,7 +849,6 @@ spec:
                 command:
                 - /manager
                 image: docker.io/galtbv/to:v1
-                imagePullPolicy: Always
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -865,6 +881,18 @@ spec:
       permissions:
       - rules:
         - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
           - coordination.k8s.io
           resources:
           - leases
@@ -888,17 +916,13 @@ spec:
         - apiGroups:
           - ""
           resources:
-          - pods
-          - services
-          - services/finalizers
-          - endpoints
           - persistentvolumeclaims
-          - events
+          - deployments
           - configmaps
           - secrets
-          - serviceaccounts
           verbs:
-          - '*'
+          - get
+          - list
         serviceAccountName: teranode-service-runner
     strategy: deployment
   installModes:

@@ -33,6 +33,32 @@ rules:
 - apiGroups:
   - teranode.bsvblockchain.org
   resources:
+  - blockassemblies
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - blockassemblies/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - blockassemblies/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
   - blockchains
   verbs:
   - create

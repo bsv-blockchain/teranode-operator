@@ -11,13 +11,13 @@ metadata:
 spec:
   storageResources:
     requests:
-      storage: 1Gi
-  storageClass: "standard"
+      storage: 5Gi
+  storageClass: "fsx-sc"
   resources:
     requests:
       cpu: 1
       memory: 2Gi
     limits:
       memory: 6Gi
-  image: localhost/ubsv:latest
-  imagePullPolicy: Never
+  image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6
+  imagePullPolicy: Always

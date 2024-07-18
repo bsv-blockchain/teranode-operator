@@ -118,4 +118,13 @@ resources:
   kind: Bootstrap
   path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
   version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: bsvblockchain.org
+  group: teranode
+  kind: BlockAssembly
+  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  version: v1alpha1
 version: "3"

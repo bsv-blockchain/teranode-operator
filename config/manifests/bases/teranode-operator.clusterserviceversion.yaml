@@ -15,6 +15,11 @@ spec:
       kind: Asset
       name: assets.teranode.bsvblockchain.org
       version: v1alpha1
+    - description: BlockAssembly is the Schema for the blockassemblies API
+      displayName: Block Assembly
+      kind: BlockAssembly
+      name: blockassemblies.teranode.bsvblockchain.org
+      version: v1alpha1
     - description: Blockchain is the Schema for the blockchains API
       displayName: Blockchain
       kind: Blockchain

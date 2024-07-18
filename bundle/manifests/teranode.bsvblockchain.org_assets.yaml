@@ -2021,6 +2021,8 @@ spec:
                       More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                     type: object
                 type: object
+              serviceAccount:
+                type: string
               tolerations:
                 items:
                   description: The pod this Toleration is attached to tolerates any

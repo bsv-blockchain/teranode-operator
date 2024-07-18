@@ -16,5 +16,5 @@ spec:
       memory: 1Gi
     limits:
       memory: 2Gi
-  image: localhost/ubsv:latest
-  imagePullPolicy: Never
+  image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6
+  imagePullPolicy: Always

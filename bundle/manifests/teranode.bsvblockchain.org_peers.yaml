@@ -89,6 +89,8 @@ spec:
                       More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                     type: object
                 type: object
+              serviceAccount:
+                type: string
             type: object
           status:
             description: PeerStatus defines the observed state of Peer
