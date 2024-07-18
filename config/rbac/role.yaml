@@ -11,9 +11,12 @@ rules:
   - endpoints
   - persistentvolumeclaims
   - secrets
+  - services
   verbs:
+  - create
   - get
   - list
+  - update
   - watch
 - apiGroups:
   - apps
@@ -23,6 +26,7 @@ rules:
   - create
   - get
   - list
+  - update
   - watch
 - apiGroups:
   - networking.k8s.io
@@ -32,6 +36,7 @@ rules:
   - create
   - get
   - list
+  - update
   - watch
 - apiGroups:
   - teranode.bsvblockchain.org

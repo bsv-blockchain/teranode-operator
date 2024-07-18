@@ -1,11 +1,13 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: sr-role-binding
+  creationTimestamp: null
+  name: teranode-operator-sr-role-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: sr-service-account-role
 subjects:
 - kind: ServiceAccount
-  name: service-runner
+  name: teranode-operator-service-runner
+  namespace: teranode-operator-system

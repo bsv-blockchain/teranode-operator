@@ -44,9 +44,9 @@ type BlockchainStatus struct {
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
-//+kubebuilder:rbac:groups="",resources=endpoints;configmaps;secrets;persistentvolumeclaims,verbs=get;list;watch
-//+kubebuilder:rbac:groups="apps",resources=deployments,verbs=get;create;list;watch
-//+kubebuilder:rbac:groups="networking.k8s.io",resources=ingresses,verbs=get;create;list;watch
+//+kubebuilder:rbac:groups="",resources=endpoints;configmaps;services;secrets;persistentvolumeclaims,verbs=get;create;update;list;watch
+//+kubebuilder:rbac:groups="apps",resources=deployments,verbs=get;update;create;list;watch
+//+kubebuilder:rbac:groups="networking.k8s.io",resources=ingresses,verbs=get;update;create;list;watch
 
 // Blockchain is the Schema for the blockchains API
 type Blockchain struct {

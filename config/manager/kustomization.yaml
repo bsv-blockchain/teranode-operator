@@ -5,4 +5,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: docker.io/galtbv/to
-  newTag: v1
+  newTag: v2
