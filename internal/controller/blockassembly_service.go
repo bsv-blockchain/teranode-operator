@@ -53,7 +53,7 @@ func defaultBlockAssemblyServiceSpec() *corev1.ServiceSpec {
 			{
 				Name:       "block-assembly",
 				Port:       int32(8085),
-				TargetPort: intstr.FromInt32(8055),
+				TargetPort: intstr.FromInt32(8085),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
