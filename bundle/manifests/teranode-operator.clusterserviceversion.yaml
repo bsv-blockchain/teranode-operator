@@ -44,7 +44,19 @@ metadata:
             },
             "name": "blockassembly-sample"
           },
-          "spec": null
+          "spec": {
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "imagePullPolicy": "Always",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
         },
         {
           "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
@@ -348,7 +360,7 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-07-17T02:59:14Z"
+    createdAt: "2024-07-18T03:22:29Z"
     operators.operatorframework.io/builder: operator-sdk-v1.34.2
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
   name: teranode-operator.v0.0.1
@@ -431,6 +443,35 @@ spec:
     spec:
       clusterPermissions:
       - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          - endpoints
+          - persistentvolumeclaims
+          - secrets
+          verbs:
+          - get
+          - list
+          - watch
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - create
+          - get
+          - list
+          - watch
+        - apiGroups:
+          - networking.k8s.io
+          resources:
+          - ingresses
+          verbs:
+          - create
+          - get
+          - list
+          - watch
         - apiGroups:
           - teranode.bsvblockchain.org
           resources:
@@ -781,19 +822,6 @@ spec:
           - subjectaccessreviews
           verbs:
           - create
-        - apiGroups:
-          - ""
-          resources:
-          - persistentvolumeclaims
-          - services
-          - deployments
-          - endpoints
-          verbs:
-          - create
-          - list
-          - delete
-          - get
-          - watch
         serviceAccountName: teranode-operator-controller-manager
       deployments:
       - label:
@@ -912,18 +940,6 @@ spec:
           - create
           - patch
         serviceAccountName: teranode-operator-controller-manager
-      - rules:
-        - apiGroups:
-          - ""
-          resources:
-          - persistentvolumeclaims
-          - deployments
-          - configmaps
-          - secrets
-          verbs:
-          - get
-          - list
-        serviceAccountName: teranode-service-runner
     strategy: deployment
   installModes:
   - supported: false
