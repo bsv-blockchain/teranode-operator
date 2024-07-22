@@ -72,6 +72,15 @@ func (r *PropagationReconciler) updateDeployment(dep *appsv1.Deployment, propaga
 	if propagation.Spec.ServiceAccount != "" {
 		dep.Spec.Template.Spec.ServiceAccountName = propagation.Spec.ServiceAccount
 	}
+
+	// if user configures a config map name
+	if propagation.Spec.ConfigMapName != "" {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
+			ConfigMapRef: &corev1.ConfigMapEnvSource{
+				LocalObjectReference: corev1.LocalObjectReference{Name: propagation.Spec.ConfigMapName},
+			},
+		})
+	}
 	return nil
 }
 
@@ -81,23 +90,7 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 		"deployment": "propagation",
 		"project":    "service",
 	}
-	envFrom := []corev1.EnvFromSource{
-		{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "shared-config-m",
-				},
-			},
-		},
-		// For now, don't override the default config
-		/*{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "propagation-config-m",
-				},
-			},
-		},*/
-	}
+	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
 			Name:  "SERVICE_NAME",

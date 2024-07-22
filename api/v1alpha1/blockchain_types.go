@@ -33,6 +33,7 @@ type BlockchainSpec struct {
 	Image           string                       `json:"image,omitempty"`
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
+	ConfigMapName   string                       `json:"configMapName,omitempty"`
 }
 
 // BlockchainStatus defines the observed state of Blockchain

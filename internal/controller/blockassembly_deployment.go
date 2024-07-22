@@ -14,8 +14,8 @@ import (
 
 // ReconcileDeployment is the block assembly service deployment reconciler
 func (r *BlockAssemblyReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
-	BlockAssembly := teranodev1alpha1.BlockAssembly{}
-	if err := r.Get(r.Context, r.NamespacedName, &BlockAssembly); err != nil {
+	blockAssembly := teranodev1alpha1.BlockAssembly{}
+	if err := r.Get(r.Context, r.NamespacedName, &blockAssembly); err != nil {
 		return false, err
 	}
 	dep := appsv1.Deployment{
@@ -26,7 +26,7 @@ func (r *BlockAssemblyReconciler) ReconcileDeployment(log logr.Logger) (bool, er
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
-		return r.updateDeployment(&dep, &BlockAssembly)
+		return r.updateDeployment(&dep, &blockAssembly)
 	})
 	if err != nil {
 		return false, err
@@ -34,43 +34,52 @@ func (r *BlockAssemblyReconciler) ReconcileDeployment(log logr.Logger) (bool, er
 	return true, nil
 }
 
-func (r *BlockAssemblyReconciler) updateDeployment(dep *appsv1.Deployment, BlockAssembly *teranodev1alpha1.BlockAssembly) error {
-	err := controllerutil.SetControllerReference(BlockAssembly, dep, r.Scheme)
+func (r *BlockAssemblyReconciler) updateDeployment(dep *appsv1.Deployment, blockAssembly *teranodev1alpha1.BlockAssembly) error {
+	err := controllerutil.SetControllerReference(blockAssembly, dep, r.Scheme)
 	if err != nil {
 		return err
 	}
 	dep.Spec = *defaultBlockAssemblyDeploymentSpec()
 	// If user configures a node selector
-	if BlockAssembly.Spec.NodeSelector != nil {
-		dep.Spec.Template.Spec.NodeSelector = BlockAssembly.Spec.NodeSelector
+	if blockAssembly.Spec.NodeSelector != nil {
+		dep.Spec.Template.Spec.NodeSelector = blockAssembly.Spec.NodeSelector
 	}
 
 	// If user configures tolerations
-	if BlockAssembly.Spec.Tolerations != nil {
-		dep.Spec.Template.Spec.Tolerations = *BlockAssembly.Spec.Tolerations
+	if blockAssembly.Spec.Tolerations != nil {
+		dep.Spec.Template.Spec.Tolerations = *blockAssembly.Spec.Tolerations
 	}
 
 	// If user configures affinity
-	if BlockAssembly.Spec.Affinity != nil {
-		dep.Spec.Template.Spec.Affinity = BlockAssembly.Spec.Affinity
+	if blockAssembly.Spec.Affinity != nil {
+		dep.Spec.Template.Spec.Affinity = blockAssembly.Spec.Affinity
 	}
 
 	// if user configures resources requests
-	if BlockAssembly.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *BlockAssembly.Spec.Resources
+	if blockAssembly.Spec.Resources != nil {
+		dep.Spec.Template.Spec.Containers[0].Resources = *blockAssembly.Spec.Resources
 	}
 
 	// if user configures image overrides
-	if BlockAssembly.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = BlockAssembly.Spec.Image
+	if blockAssembly.Spec.Image != "" {
+		dep.Spec.Template.Spec.Containers[0].Image = blockAssembly.Spec.Image
 	}
-	if BlockAssembly.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = BlockAssembly.Spec.ImagePullPolicy
+	if blockAssembly.Spec.ImagePullPolicy != "" {
+		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = blockAssembly.Spec.ImagePullPolicy
 	}
 
 	// if user configures a service account
-	if BlockAssembly.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = BlockAssembly.Spec.ServiceAccount
+	if blockAssembly.Spec.ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = blockAssembly.Spec.ServiceAccount
+	}
+
+	// if user configures a config map name
+	if blockAssembly.Spec.ConfigMapName != "" {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
+			ConfigMapRef: &corev1.ConfigMapEnvSource{
+				LocalObjectReference: corev1.LocalObjectReference{Name: blockAssembly.Spec.ConfigMapName},
+			},
+		})
 	}
 
 	return nil
@@ -82,15 +91,7 @@ func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
 		"deployment": "block-assembly",
 		"project":    "service",
 	}
-	envFrom := []corev1.EnvFromSource{
-		{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "shared-config-m",
-				},
-			},
-		},
-	}
+	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
 			Name:  "SERVICE_NAME",
@@ -101,7 +102,6 @@ func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
 			Value: "blockassembly-service",
 		},
 	}
-	image := "foo_image"
 	return &appsv1.DeploymentSpec{
 		Replicas: pointer.Int32(2),
 		Selector: metav1.SetAsLabelSelector(labels),
@@ -120,7 +120,7 @@ func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-blockassembly=1"},
-						Image:           image,
+						Image:           DefaultAssetImage,
 						ImagePullPolicy: corev1.PullAlways,
 						Name:            "block-assembly",
 						// Make sane defaults, and this should be configurable

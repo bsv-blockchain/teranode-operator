@@ -34,6 +34,8 @@ spec:
           spec:
             description: PeerSpec defines the desired state of Peer
             properties:
+              configMapName:
+                type: string
               image:
                 type: string
               imagePullPolicy:

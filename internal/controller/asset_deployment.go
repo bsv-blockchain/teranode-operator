@@ -75,6 +75,15 @@ func (r *AssetReconciler) updateDeployment(dep *appsv1.Deployment, asset *terano
 		dep.Spec.Template.Spec.ServiceAccountName = asset.Spec.ServiceAccount
 	}
 
+	// if user configures a config map name
+	if asset.Spec.ConfigMapName != "" {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
+			ConfigMapRef: &corev1.ConfigMapEnvSource{
+				LocalObjectReference: corev1.LocalObjectReference{Name: asset.Spec.ConfigMapName},
+			},
+		})
+	}
+
 	return nil
 }
 
@@ -84,23 +93,7 @@ func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
 		"deployment": "asset",
 		"project":    "service",
 	}
-	envFrom := []corev1.EnvFromSource{
-		{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "shared-config-m",
-				},
-			},
-		},
-		// For now, don't override the default config
-		/*{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "asset-config-m",
-				},
-			},
-		},*/
-	}
+	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
 			Name:  "SERVICE_NAME",

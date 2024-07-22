@@ -34,6 +34,8 @@ spec:
           spec:
             description: BlockchainSpec defines the desired state of Blockchain
             properties:
+              configMapName:
+                type: string
               image:
                 type: string
               imagePullPolicy:

@@ -56,6 +56,15 @@ func (r *BlockchainReconciler) updateDeployment(dep *appsv1.Deployment, blockcha
 	if blockchain.Spec.ServiceAccount != "" {
 		dep.Spec.Template.Spec.ServiceAccountName = blockchain.Spec.ServiceAccount
 	}
+
+	// if user configures a config map name
+	if blockchain.Spec.ConfigMapName != "" {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
+			ConfigMapRef: &corev1.ConfigMapEnvSource{
+				LocalObjectReference: corev1.LocalObjectReference{Name: blockchain.Spec.ConfigMapName},
+			},
+		})
+	}
 	return nil
 }
 

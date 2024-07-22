@@ -35,6 +35,7 @@ type FaucetSpec struct {
 	Image           string                       `json:"image,omitempty"`
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
+	ConfigMapName   string                       `json:"configMapName,omitempty"`
 }
 
 // FaucetStatus defines the observed state of Faucet

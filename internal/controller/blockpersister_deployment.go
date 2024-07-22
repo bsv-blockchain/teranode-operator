@@ -73,6 +73,14 @@ func (r *BlockPersisterReconciler) updateDeployment(dep *appsv1.Deployment, bloc
 		dep.Spec.Template.Spec.ServiceAccountName = blockPersister.Spec.ServiceAccount
 	}
 
+	// if user configures a config map name
+	if blockPersister.Spec.ConfigMapName != "" {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
+			ConfigMapRef: &corev1.ConfigMapEnvSource{
+				LocalObjectReference: corev1.LocalObjectReference{Name: blockPersister.Spec.ConfigMapName},
+			},
+		})
+	}
 	return nil
 }
 
@@ -82,23 +90,7 @@ func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 		"deployment": "block-persister",
 		"project":    "service",
 	}
-	envFrom := []corev1.EnvFromSource{
-		{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "shared-config-m",
-				},
-			},
-		},
-		// For now, don't override the default config
-		/*{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "block-persister-config-m",
-				},
-			},
-		},*/
-	}
+	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
 			Name:  "SERVICE_NAME",

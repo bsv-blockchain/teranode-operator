@@ -76,6 +76,15 @@ func (r *SubtreeValidatorReconciler) updateDeployment(dep *appsv1.Deployment, su
 	if subtreeValidator.Spec.ServiceAccount != "" {
 		dep.Spec.Template.Spec.ServiceAccountName = subtreeValidator.Spec.ServiceAccount
 	}
+
+	// if user configures a config map name
+	if subtreeValidator.Spec.ConfigMapName != "" {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
+			ConfigMapRef: &corev1.ConfigMapEnvSource{
+				LocalObjectReference: corev1.LocalObjectReference{Name: subtreeValidator.Spec.ConfigMapName},
+			},
+		})
+	}
 	return nil
 }
 
@@ -85,15 +94,7 @@ func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 		"deployment": "subtree-validator",
 		"project":    "service",
 	}
-	envFrom := []corev1.EnvFromSource{
-		{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "shared-config-m",
-				},
-			},
-		},
-	}
+	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
 			Name:  "SERVICE_NAME",

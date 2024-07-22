@@ -862,6 +862,8 @@ spec:
                         type: array
                     type: object
                 type: object
+              configMapName:
+                type: string
               image:
                 type: string
               imagePullPolicy:

@@ -73,6 +73,15 @@ func (r *CoinbaseReconciler) updateDeployment(dep *appsv1.Deployment, coinbase *
 		dep.Spec.Template.Spec.ServiceAccountName = coinbase.Spec.ServiceAccount
 	}
 
+	// if user configures a config map name
+	if coinbase.Spec.ConfigMapName != "" {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
+			ConfigMapRef: &corev1.ConfigMapEnvSource{
+				LocalObjectReference: corev1.LocalObjectReference{Name: coinbase.Spec.ConfigMapName},
+			},
+		})
+	}
+
 	return nil
 }
 
@@ -82,23 +91,7 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 		"deployment": "coinbase",
 		"project":    "service",
 	}
-	envFrom := []corev1.EnvFromSource{
-		{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "shared-config-m",
-				},
-			},
-		},
-		// For now, don't override the default config
-		/*{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "coinbase-config-m",
-				},
-			},
-		},*/
-	}
+	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
 			Name:  "SERVICE_NAME",

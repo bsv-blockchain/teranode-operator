@@ -862,6 +862,8 @@ spec:
                         type: array
                     type: object
                 type: object
+              configMapName:
+                type: string
               grpcIngress:
                 description: Ingress is a collection of rules that allow inbound connections
                   to reach the endpoints defined by a backend. An Ingress can be configured

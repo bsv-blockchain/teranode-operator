@@ -73,6 +73,14 @@ func (r *ValidatorReconciler) updateDeployment(dep *appsv1.Deployment, validator
 		dep.Spec.Template.Spec.ServiceAccountName = validator.Spec.ServiceAccount
 	}
 
+	// if user configures a config map name
+	if validator.Spec.ConfigMapName != "" {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
+			ConfigMapRef: &corev1.ConfigMapEnvSource{
+				LocalObjectReference: corev1.LocalObjectReference{Name: validator.Spec.ConfigMapName},
+			},
+		})
+	}
 	return nil
 }
 
@@ -82,23 +90,7 @@ func defaultValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 		"deployment": "validator",
 		"project":    "service",
 	}
-	envFrom := []corev1.EnvFromSource{
-		{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "shared-config-m",
-				},
-			},
-		},
-		// For now, don't override the default config
-		/*{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "validator-config-m",
-				},
-			},
-		},*/
-	}
+	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
 			Name:  "SERVICE_NAME",

@@ -56,6 +56,15 @@ func (r *PeerReconciler) updateDeployment(dep *appsv1.Deployment, peer *teranode
 	if peer.Spec.ServiceAccount != "" {
 		dep.Spec.Template.Spec.ServiceAccountName = peer.Spec.ServiceAccount
 	}
+
+	// if user configures a config map name
+	if peer.Spec.ConfigMapName != "" {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
+			ConfigMapRef: &corev1.ConfigMapEnvSource{
+				LocalObjectReference: corev1.LocalObjectReference{Name: peer.Spec.ConfigMapName},
+			},
+		})
+	}
 	return nil
 }
 
@@ -65,15 +74,7 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 		"deployment": "peer",
 		"project":    "service",
 	}
-	envFrom := []corev1.EnvFromSource{
-		{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "shared-config-m",
-				},
-			},
-		},
-	}
+	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
 			Name:  "SERVICE_NAME",

@@ -72,6 +72,14 @@ func (r *FaucetReconciler) updateDeployment(dep *appsv1.Deployment, faucet *tera
 		dep.Spec.Template.Spec.ServiceAccountName = faucet.Spec.ServiceAccount
 	}
 
+	// if user configures a config map name
+	if faucet.Spec.ConfigMapName != "" {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
+			ConfigMapRef: &corev1.ConfigMapEnvSource{
+				LocalObjectReference: corev1.LocalObjectReference{Name: faucet.Spec.ConfigMapName},
+			},
+		})
+	}
 	return nil
 }
 
@@ -81,23 +89,7 @@ func defaultFaucetDeploymentSpec() *appsv1.DeploymentSpec {
 		"deployment": "faucet",
 		"project":    "service",
 	}
-	envFrom := []corev1.EnvFromSource{
-		{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "shared-config-m",
-				},
-			},
-		},
-		// For now, don't override the default config
-		/*{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "faucet-config-m",
-				},
-			},
-		},*/
-	}
+	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
 			Name:  "SERVICE_NAME",
