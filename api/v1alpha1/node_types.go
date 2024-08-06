@@ -20,22 +20,104 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+// AssetConfig defines the asset configuration
+type AssetConfig struct {
+	Enabled bool       `json:"enabled"`
+	Spec    *AssetSpec `json:"spec"`
+}
+
+// BlockAssembly defines the blockassembly configuration
+type BlockAssemblyConfig struct {
+	Enabled bool               `json:"enabled"`
+	Spec    *BlockAssemblySpec `json:"spec"`
+}
+
+// BlockchainConfig defines the blockchain configuration
+type BlockchainConfig struct {
+	Enabled bool            `json:"enabled"`
+	Spec    *BlockchainSpec `json:"spec"`
+}
+
+// BlockPersisterConfig defines the blockpersister configuration
+type BlockPersisterConfig struct {
+	Enabled bool                `json:"enabled"`
+	Spec    *BlockPersisterSpec `json:"spec"`
+}
+
+// BlockValidatorConfig defines the blockvalidator configuration
+type BlockValidatorConfig struct {
+	Enabled bool                `json:"enabled"`
+	Spec    *BlockValidatorSpec `json:"spec"`
+}
+
+// BootstrapConfig defines the bootstrap configuration
+type BootstrapConfig struct {
+	Enabled bool           `json:"enabled"`
+	Spec    *BootstrapSpec `json:"spec"`
+}
+
+// CoinbaseConfig defines the coinbase configuration
+type CoinbaseConfig struct {
+	Enabled bool          `json:"enabled"`
+	Spec    *CoinbaseSpec `json:"spec"`
+}
+
+// MinerConfig defines the miner configuration
+type MinerConfig struct {
+	Enabled bool       `json:"enabled"`
+	Spec    *MinerSpec `json:"spec"`
+}
+
+// PeerConfig defines the miner configuration
+type PeerConfig struct {
+	Enabled bool      `json:"enabled"`
+	Spec    *PeerSpec `json:"spec"`
+}
+
+// PropagationConfig defines the propagation configuration
+type PropagationConfig struct {
+	Enabled bool             `json:"enabled"`
+	Spec    *PropagationSpec `json:"spec"`
+}
+
+// SubtreeValidatorConfig defines the subtreevalidator configuration
+type SubtreeValidatorConfig struct {
+	Enabled bool                  `json:"enabled"`
+	Spec    *SubtreeValidatorSpec `json:"spec"`
+}
+
+// ValidatorConfig defines the validator configuration
+type ValidatorConfig struct {
+	Enabled bool           `json:"enabled"`
+	Spec    *ValidatorSpec `json:"spec"`
+}
+
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
 // NodeSpec defines the desired state of Node
 type NodeSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	Asset            AssetConfig            `json:"asset"`
+	BlockAssembly    BlockAssemblyConfig    `json:"blockAssembly"`
+	Blockchain       BlockchainConfig       `json:"blockchain"`
+	BlockPersister   BlockPersisterConfig   `json:"blockPersister"`
+	BlockValidator   BlockValidatorConfig   `json:"blockValidator"`
+	Bootstrap        BootstrapConfig        `json:"bootstrap"`
+	Coinbase         CoinbaseConfig         `json:"coinbase"`
+	Miner            MinerConfig            `json:"miner"`
+	Peer             PeerConfig             `json:"peer"`
+	Propagation      PropagationConfig      `json:"propagation"`
+	SubtreeValidator SubtreeValidatorConfig `json:"subtreeValidator"`
+	Validator        ValidatorConfig        `json:"validator"`
 
-	StartBlockchain bool `json:"startBlockchain,omitempty"`
+	ConfigMapName string `json:"configMapName"`
 }
 
 // NodeStatus defines the observed state of Node
 type NodeStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
-	BlockchainRunning bool `json:"blockchainRunning,omitempty"`
+	Conditions []metav1.Condition `json:"conditions"`
 }
 
 //+kubebuilder:object:root=true

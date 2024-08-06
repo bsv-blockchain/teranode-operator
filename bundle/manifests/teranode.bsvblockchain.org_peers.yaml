@@ -36,6 +36,20 @@ spec:
             properties:
               configMapName:
                 type: string
+              grpcIngress:
+                description: IngressDef defines ingress spec and annotations
+                properties:
+                  annotations:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  className:
+                    type: string
+                  host:
+                    type: string
+                required:
+                - host
+                type: object
               image:
                 type: string
               imagePullPolicy:
@@ -93,6 +107,34 @@ spec:
                 type: object
               serviceAccount:
                 type: string
+              wsIngress:
+                description: IngressDef defines ingress spec and annotations
+                properties:
+                  annotations:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  className:
+                    type: string
+                  host:
+                    type: string
+                required:
+                - host
+                type: object
+              wssIngress:
+                description: IngressDef defines ingress spec and annotations
+                properties:
+                  annotations:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  className:
+                    type: string
+                  host:
+                    type: string
+                required:
+                - host
+                type: object
             type: object
           status:
             description: PeerStatus defines the observed state of Peer

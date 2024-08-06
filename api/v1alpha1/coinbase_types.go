@@ -18,7 +18,6 @@ package v1alpha1
 
 import (
 	corev1 "k8s.io/api/core/v1"
-	v1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -34,7 +33,7 @@ type CoinbaseSpec struct {
 	Tolerations     *[]corev1.Toleration         `json:"tolerations,omitempty"`
 	Affinity        *corev1.Affinity             `json:"affinity,omitempty"`
 	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
-	GrpcIngress     *v1.Ingress                  `json:"grpcIngress,omitempty"`
+	GrpcIngress     *IngressDef                  `json:"grpcIngress,omitempty"`
 	Image           string                       `json:"image,omitempty"`
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 	ServiceAccount  string                       `json:"serviceAccount,omitempty"`

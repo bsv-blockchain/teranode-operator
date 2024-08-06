@@ -21,7 +21,6 @@ import (
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
-	corev1 "k8s.io/api/core/v1"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -72,7 +71,6 @@ func (r *BlockPersisterReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		// TODO: Come back and determine how to more appropriately handle overriding the configmap for each service
 		//r.ReconcileConfigMap,
 		r.ReconcileDeployment,
-		r.ReconcilePVC,
 	)
 
 	if err != nil {
@@ -108,6 +106,5 @@ func (r *BlockPersisterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&teranodev1alpha1.BlockPersister{}).
 		Owns(&appsv1.Deployment{}).
-		Owns(&corev1.PersistentVolumeClaim{}).
 		Complete(r)
 }

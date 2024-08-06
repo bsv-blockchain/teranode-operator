@@ -12,8 +12,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
-var DefaultPeerImage = "localhost/ubsv:latest"
-
 // ReconcileDeployment is the peer service deployment reconciler
 func (r *PeerReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
 	peer := teranodev1alpha1.Peer{}
@@ -130,8 +128,8 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-p2p=1"},
-						Image:           DefaultPeerImage,
-						ImagePullPolicy: corev1.PullNever,
+						Image:           DefaultImage,
+						ImagePullPolicy: corev1.PullAlways,
 						Name:            "peer",
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
@@ -169,19 +167,19 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 						TerminationMessagePolicy: corev1.TerminationMessageFallbackToLogsOnError,
 						Ports: []corev1.ContainerPort{
 							{
-								ContainerPort: 4040,
+								ContainerPort: DebuggerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 9905,
+								ContainerPort: PeerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 9906,
+								ContainerPort: PeerHTTPPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 9901,
+								ContainerPort: ProfilerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},

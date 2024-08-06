@@ -17,7 +17,7 @@ func (r *SubtreeValidatorReconciler) ReconcilePVC(log logr.Logger) (bool, error)
 	}
 	pvc := corev1.PersistentVolumeClaim{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "subtree-storage",
+			Name:      SharedPVCName,
 			Namespace: r.NamespacedName.Namespace,
 			Labels:    getAppLabels(),
 		},
@@ -47,6 +47,9 @@ func (r *SubtreeValidatorReconciler) updatePVC(pvc *corev1.PersistentVolumeClaim
 	// If storage resources are configured, use them
 	if subtreeValidator.Spec.StorageResources != nil {
 		pvc.Spec.Resources = *subtreeValidator.Spec.StorageResources
+	}
+	if subtreeValidator.Spec.StorageVolume != "" {
+		pvc.Spec.VolumeName = subtreeValidator.Spec.StorageVolume
 	}
 	return nil
 }

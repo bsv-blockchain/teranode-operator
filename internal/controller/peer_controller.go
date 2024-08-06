@@ -22,6 +22,7 @@ import (
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
+	networkingv1 "k8s.io/api/networking/v1"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -70,6 +71,9 @@ func (r *PeerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 		//r.Validate,
 		r.ReconcileDeployment,
 		r.ReconcileService,
+		r.ReconcileGrpcIngress,
+		r.ReconcileWsIngress,
+		r.ReconcileWssIngress,
 	)
 	if err != nil {
 		apimeta.SetStatusCondition(&peer.Status.Conditions,
@@ -105,5 +109,6 @@ func (r *PeerReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		For(&teranodev1alpha1.Peer{}).
 		Owns(&appsv1.Deployment{}).
 		Owns(&corev1.Service{}).
+		Owns(&networkingv1.Ingress{}).
 		Complete(r)
 }

@@ -96,7 +96,6 @@ func defaultMinerDeploymentSpec() *appsv1.DeploymentSpec {
 			Value: "miner-service",
 		},
 	}
-	image := "foo_image"
 	return &appsv1.DeploymentSpec{
 		Replicas: pointer.Int32(1),
 		Selector: metav1.SetAsLabelSelector(labels),
@@ -115,7 +114,7 @@ func defaultMinerDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-miner=1"},
-						Image:           image,
+						Image:           DefaultImage,
 						ImagePullPolicy: corev1.PullAlways,
 						Name:            "miner",
 						// Make sane defaults, and this should be configurable
@@ -154,23 +153,23 @@ func defaultMinerDeploymentSpec() *appsv1.DeploymentSpec {
 						//},
 						Ports: []corev1.ContainerPort{
 							{
-								ContainerPort: 4040,
+								ContainerPort: DebuggerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8089,
+								ContainerPort: BootstrapGRPCPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8092,
+								ContainerPort: MinerHTTPPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8099,
+								ContainerPort: BootstrapHTTPPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 9091,
+								ContainerPort: ProfilerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},

@@ -145,6 +145,32 @@ rules:
 - apiGroups:
   - teranode.bsvblockchain.org
   resources:
+  - blockvalidators
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - blockvalidators/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - blockvalidators/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
   - bootstraps
   verbs:
   - create

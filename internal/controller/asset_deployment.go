@@ -12,8 +12,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
-var DefaultAssetImage = "localhost/ubsv:latest"
-
 // ReconcileDeployment is the asset service deployment reconciler
 func (r *AssetReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
 	asset := teranodev1alpha1.Asset{}
@@ -118,8 +116,8 @@ func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-asset=1"},
-						Image:           DefaultAssetImage,
-						ImagePullPolicy: corev1.PullNever,
+						Image:           DefaultImage,
+						ImagePullPolicy: corev1.PullAlways,
 						Name:            "asset",
 						// Make sane defaults, and this should be configurable
 						Resources: corev1.ResourceRequirements{
@@ -157,40 +155,36 @@ func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
 						},
 						Ports: []corev1.ContainerPort{
 							{
-								ContainerPort: 4040,
+								ContainerPort: DebuggerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8090,
+								ContainerPort: AssetHTTPPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8099,
+								ContainerPort: AssetGRPCPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8091,
-								Protocol:      corev1.ProtocolTCP,
-							},
-							{
-								ContainerPort: 9091,
+								ContainerPort: ProfilerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},
 						VolumeMounts: []corev1.VolumeMount{
 							{
-								MountPath: "/data/subtreestore",
-								Name:      "subtree-storage",
+								MountPath: "/data",
+								Name:      SharedPVCName,
 							},
 						},
 					},
 				},
 				Volumes: []corev1.Volume{
 					{
-						Name: "subtree-storage",
+						Name: SharedPVCName,
 						VolumeSource: corev1.VolumeSource{
 							PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-								ClaimName: "subtree-storage",
+								ClaimName: SharedPVCName,
 							},
 						},
 					},

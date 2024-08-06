@@ -1,3 +1,31 @@
 package controller
 
+// DefaultServiceAccountName defines the name of the service acount created by the bundle
 const DefaultServiceAccountName = "service-runner"
+
+// SharedPVCName is the PVC name for shared storage
+const SharedPVCName = "node-storage"
+
+// DefaultImage is the default teranode service image
+const DefaultImage = "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22"
+
+// Ports for services
+const AssetGRPCPort = 8091
+const AssetHTTPPort = 8090
+const BlockAssemblyPort = 8085
+const BlockchainGRPCPort = 8087
+const BlockchainHTTPPort = 8082
+const BlockValidationGRPCPort = 8088
+const BlockValidationHTTPPort = 8188
+const BootstrapGRPCPort = 8089
+const BootstrapHTTPPort = 8099
+const CoinbaseGRPCPort = 8093
+const MinerHTTPPort = 8092
+const PeerPort = 9095
+const PeerHTTPPort = 9096
+const PropagationGRPCPort = 8084
+const PropagationHTTPPort = 8833
+const PropagationQuicPort = 8384
+const SubtreeValidatorGRPCPort = 8086
+const ProfilerPort = 9091
+const DebuggerPort = 4040

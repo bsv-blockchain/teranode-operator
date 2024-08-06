@@ -12,8 +12,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
-var DefaultBootstrapImage = "localhost/ubsv:latest"
-
 // ReconcileDeployment is the bootstrap service deployment reconciler
 func (r *BootstrapReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
 	bs := teranodev1alpha1.Bootstrap{}
@@ -134,8 +132,8 @@ func defaultBootstrapDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{},
-						Image:           DefaultBootstrapImage,
-						ImagePullPolicy: corev1.PullNever,
+						Image:           DefaultImage,
+						ImagePullPolicy: corev1.PullAlways,
 						Name:            "bootstrap",
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
@@ -173,19 +171,19 @@ func defaultBootstrapDeploymentSpec() *appsv1.DeploymentSpec {
 						TerminationMessagePolicy: corev1.TerminationMessageFallbackToLogsOnError,
 						Ports: []corev1.ContainerPort{
 							{
-								ContainerPort: 4040,
+								ContainerPort: DebuggerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8089,
+								ContainerPort: BootstrapGRPCPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8099,
+								ContainerPort: BootstrapHTTPPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 9901,
+								ContainerPort: ProfilerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},

@@ -40,6 +40,9 @@ func (r *PropagationReconciler) updateService(svc *corev1.Service, propagation *
 		return err
 	}
 	svc.Spec = *defaultPropagationServiceSpec()
+	for k, v := range propagation.Spec.ServiceAnnotations {
+		svc.Annotations[k] = v
+	}
 	return nil
 }
 
@@ -58,32 +61,32 @@ func defaultPropagationServiceSpec() *corev1.ServiceSpec {
 		Ports: []corev1.ServicePort{
 			{
 				Name:       "propagation-delve",
-				Port:       int32(4041),
-				TargetPort: intstr.FromInt32(4040),
+				Port:       int32(DebuggerPort),
+				TargetPort: intstr.FromInt32(DebuggerPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
 				Name:       "propagation-grpc",
-				Port:       int32(8084),
-				TargetPort: intstr.FromInt32(8084),
+				Port:       int32(PropagationGRPCPort),
+				TargetPort: intstr.FromInt32(PropagationGRPCPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
 				Name:       "propagation-quic",
-				Port:       int32(8384),
-				TargetPort: intstr.FromInt32(8384),
+				Port:       int32(PropagationQuicPort),
+				TargetPort: intstr.FromInt32(PropagationQuicPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
 				Name:       "propagation-http",
-				Port:       int32(8833),
-				TargetPort: intstr.FromInt32(8833),
+				Port:       int32(PropagationHTTPPort),
+				TargetPort: intstr.FromInt32(PropagationHTTPPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
 				Name:       "profiler", // TODO: shouldn't we call these x-profiler, where x is respective service name?
-				Port:       int32(9091),
-				TargetPort: intstr.FromInt32(9091),
+				Port:       int32(ProfilerPort),
+				TargetPort: intstr.FromInt32(ProfilerPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 		},

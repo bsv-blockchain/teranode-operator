@@ -78,7 +78,7 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 		{
 			ConfigMapRef: &corev1.ConfigMapEnvSource{
 				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "shared-config-m",
+					Name: "shared-config",
 				},
 			},
 		},
@@ -90,7 +90,6 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 		},
 	}
 	// TODO: set a default
-	image := "localhost/ubsv:latest"
 	return &appsv1.DeploymentSpec{
 		Replicas: pointer.Int32(1),
 		Selector: metav1.SetAsLabelSelector(podLabels),
@@ -136,8 +135,8 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-blockchain=1"},
-						Image:           image,
-						ImagePullPolicy: corev1.PullNever,
+						Image:           DefaultImage,
+						ImagePullPolicy: corev1.PullAlways,
 						Name:            "blockchain",
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
@@ -175,19 +174,19 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 						TerminationMessagePolicy: corev1.TerminationMessageFallbackToLogsOnError,
 						Ports: []corev1.ContainerPort{
 							{
-								ContainerPort: 8081,
+								ContainerPort: BlockchainHTTPPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8087,
+								ContainerPort: BlockchainGRPCPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 9091,
+								ContainerPort: ProfilerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 4040,
+								ContainerPort: DebuggerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},

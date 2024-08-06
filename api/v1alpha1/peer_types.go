@@ -33,6 +33,9 @@ type PeerSpec struct {
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
 	ConfigMapName   string                       `json:"configMapName,omitempty"`
+	GrpcIngress     *IngressDef                  `json:"grpcIngress,omitempty"`
+	WsIngress       *IngressDef                  `json:"wsIngress,omitempty"`
+	WssIngress      *IngressDef                  `json:"wssIngress,omitempty"`
 }
 
 // PeerStatus defines the observed state of Peer

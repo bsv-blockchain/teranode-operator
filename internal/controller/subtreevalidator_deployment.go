@@ -101,7 +101,6 @@ func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 			Value: "subtreevalidation-service",
 		},
 	}
-	image := "foo_image"
 	return &appsv1.DeploymentSpec{
 		Replicas: pointer.Int32(2),
 		Selector: metav1.SetAsLabelSelector(labels),
@@ -120,7 +119,7 @@ func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-subtreevalidation=1"},
-						Image:           image,
+						Image:           DefaultImage,
 						ImagePullPolicy: corev1.PullAlways,
 						Name:            "subtree-validator",
 						// Make sane defaults, and this should be configurable
@@ -159,32 +158,32 @@ func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 						},*/
 						Ports: []corev1.ContainerPort{
 							{
-								ContainerPort: 4040,
+								ContainerPort: DebuggerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8086,
+								ContainerPort: SubtreeValidatorGRPCPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 9091,
+								ContainerPort: ProfilerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},
 						VolumeMounts: []corev1.VolumeMount{
 							{
-								MountPath: "/data/subtreestore",
-								Name:      "subtree-storage",
+								MountPath: "/data",
+								Name:      SharedPVCName,
 							},
 						},
 					},
 				},
 				Volumes: []corev1.Volume{
 					{
-						Name: "subtree-storage",
+						Name: SharedPVCName,
 						VolumeSource: corev1.VolumeSource{
 							PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-								ClaimName: "subtree-storage",
+								ClaimName: SharedPVCName,
 							},
 						},
 					},

@@ -18,6 +18,11 @@ package controller
 
 import (
 	"context"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
+	"github.com/go-logr/logr"
+	apimeta "k8s.io/apimachinery/pkg/api/meta"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -30,7 +35,10 @@ import (
 // NodeReconciler reconciles a Node object
 type NodeReconciler struct {
 	client.Client
-	Scheme *runtime.Scheme
+	Scheme         *runtime.Scheme
+	Log            logr.Logger
+	NamespacedName types.NamespacedName
+	Context        context.Context
 }
 
 //+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=nodes,verbs=get;list;watch;create;update;patch;delete
@@ -47,16 +55,73 @@ type NodeReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
 func (r *NodeReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	result := ctrl.Result{}
+	r.Log = log.FromContext(ctx).WithValues("node", req.NamespacedName)
+	r.Context = ctx
+	r.NamespacedName = req.NamespacedName
+	node := teranodev1alpha1.Node{}
+	if err := r.Get(ctx, req.NamespacedName, &node); err != nil {
+		r.Log.Error(err, "unable to fetch node CR")
+		return result, nil
+	}
 
-	// TODO(user): your logic here
+	_, err := utils.ReconcileBatch(r.Log,
+		//r.Validate,
+		r.ReconcileAsset,
+		r.ReconcileBlockAssembly,
+		r.ReconcileBlockPersister,
+		r.ReconcileBlockValidator,
+		r.ReconcileBlockchain,
+		r.ReconcileCoinbase,
+		r.ReconcileBootstrap,
+		r.ReconcileMiner,
+		r.ReconcilePeer,
+		r.ReconcilePropagation,
+		r.ReconcileSubtreeValidator,
+		r.ReconcileValidator,
+	)
+	if err != nil {
+		apimeta.SetStatusCondition(&node.Status.Conditions,
+			metav1.Condition{
+				Type:    teranodev1alpha1.ConditionReconciled,
+				Status:  metav1.ConditionFalse,
+				Reason:  teranodev1alpha1.ReconciledReasonError,
+				Message: err.Error(),
+			},
+		)
+	} else {
+		apimeta.SetStatusCondition(&node.Status.Conditions,
+			metav1.Condition{
+				Type:    teranodev1alpha1.ConditionReconciled,
+				Status:  metav1.ConditionTrue,
+				Reason:  teranodev1alpha1.ReconciledReasonComplete,
+				Message: teranodev1alpha1.ReconcileCompleteMessage,
+			},
+		)
+	}
 
-	return ctrl.Result{}, nil
+	statusErr := r.Client.Status().Update(ctx, &node)
+	if err == nil {
+		err = statusErr
+	}
+
+	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
 }
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *NodeReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&teranodev1alpha1.Node{}).
+		Owns(&teranodev1alpha1.Asset{}).
+		Owns(&teranodev1alpha1.BlockAssembly{}).
+		Owns(&teranodev1alpha1.Blockchain{}).
+		Owns(&teranodev1alpha1.BlockPersister{}).
+		Owns(&teranodev1alpha1.Bootstrap{}).
+		Owns(&teranodev1alpha1.Coinbase{}).
+		Owns(&teranodev1alpha1.Miner{}).
+		Owns(&teranodev1alpha1.Peer{}).
+		Owns(&teranodev1alpha1.Propagation{}).
+		Owns(&teranodev1alpha1.SubtreeValidator{}).
+		Owns(&teranodev1alpha1.Validator{}).
 		Complete(r)
 }

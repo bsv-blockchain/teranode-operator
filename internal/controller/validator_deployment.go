@@ -97,7 +97,6 @@ func defaultValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 			Value: "validator-service",
 		},
 	}
-	image := "foo_image"
 	return &appsv1.DeploymentSpec{
 		Replicas: pointer.Int32(1), // TODO: verify if this number is valid ;)
 		Selector: metav1.SetAsLabelSelector(labels),
@@ -116,7 +115,7 @@ func defaultValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-validator=1"},
-						Image:           image,
+						Image:           DefaultImage,
 						ImagePullPolicy: corev1.PullAlways,
 						Name:            "validator",
 						// Make sane defaults, and this should be configurable

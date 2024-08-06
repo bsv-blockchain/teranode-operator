@@ -97,7 +97,6 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 			Value: "propagation-service",
 		},
 	}
-	image := "foo_image"
 	return &appsv1.DeploymentSpec{
 		Replicas: pointer.Int32(2), // TODO: verify the replicas number, the spec has 28
 		Selector: metav1.SetAsLabelSelector(labels),
@@ -116,7 +115,7 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-propagation=1"},
-						Image:           image,
+						Image:           DefaultImage,
 						ImagePullPolicy: corev1.PullAlways,
 						Name:            "propagation",
 						// Make sane defaults, and this should be configurable
@@ -155,19 +154,19 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 						},
 						Ports: []corev1.ContainerPort{
 							{
-								ContainerPort: 4040,
+								ContainerPort: DebuggerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8084,
+								ContainerPort: PropagationGRPCPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8384,
+								ContainerPort: PropagationQuicPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8833,
+								ContainerPort: PropagationHTTPPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},

@@ -51,27 +51,21 @@ func defaultAssetServiceSpec() *corev1.ServiceSpec {
 		Selector: labels,
 		Ports: []corev1.ServicePort{
 			{
-				Name:       "asset-grpc",
-				Port:       int32(8091),
-				TargetPort: intstr.FromInt32(8091),
-				Protocol:   corev1.ProtocolTCP,
-			},
-			{
 				Name:       "asset-http",
-				Port:       int32(8090),
-				TargetPort: intstr.FromInt32(8090),
+				Port:       int32(AssetHTTPPort),
+				TargetPort: intstr.FromInt32(AssetHTTPPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
 				Name:       "profiler",
-				Port:       int32(9091),
-				TargetPort: intstr.FromInt32(9091),
+				Port:       int32(ProfilerPort),
+				TargetPort: intstr.FromInt32(ProfilerPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
 				Name:       "debugger",
-				Port:       int32(4040),
-				TargetPort: intstr.FromInt32(4040),
+				Port:       int32(DebuggerPort),
+				TargetPort: intstr.FromInt32(DebuggerPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 		},

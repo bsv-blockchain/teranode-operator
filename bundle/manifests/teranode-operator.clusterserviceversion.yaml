@@ -18,7 +18,7 @@ metadata:
             "name": "asset-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -45,7 +45,7 @@ metadata:
             "name": "blockassembly-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -72,7 +72,7 @@ metadata:
             "name": "blockpersister-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -93,6 +93,21 @@ metadata:
         },
         {
           "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "BlockValidator",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "blockvalidator-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "blockvalidator",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "blockvalidator-sample"
+          },
+          "spec": null
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
           "kind": "Blockchain",
           "metadata": {
             "labels": {
@@ -105,7 +120,7 @@ metadata:
             "name": "blockchain-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -132,7 +147,7 @@ metadata:
             "name": "coinbase-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -159,7 +174,7 @@ metadata:
             "name": "faucet-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -186,7 +201,7 @@ metadata:
             "name": "miner-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -213,8 +228,216 @@ metadata:
             "name": "node-sample"
           },
           "spec": {
-            "startBlockchain": true,
-            "startMiner": true
+            "asset": {
+              "enabled": true,
+              "spec": {
+                "grpcIngress": {
+                  "annotations": {
+                    "traefik.ingress.kubernetes.io/router.entrypoints": "ast-grpc"
+                  },
+                  "className": "traefik-internal",
+                  "host": "t3.testing.ubsv.dev"
+                },
+                "httpIngress": {
+                  "annotations": {
+                    "traefik.ingress.kubernetes.io/router.entrypoints": "web"
+                  },
+                  "className": "traefik-internal",
+                  "host": "t3.testing.ubsv.dev"
+                },
+                "httpsIngress": {
+                  "annotations": {
+                    "traefik.ingress.kubernetes.io/router.entrypoints": "websecure"
+                  },
+                  "className": "traefik-internal",
+                  "host": "t3.testing.ubsv.dev"
+                },
+                "resources": {
+                  "limits": {
+                    "memory": "2Gi"
+                  },
+                  "requests": {
+                    "cpu": 1,
+                    "memory": "1Gi"
+                  }
+                }
+              }
+            },
+            "blockAssembly": {
+              "enabled": true,
+              "spec": {
+                "resources": {
+                  "limits": {
+                    "memory": "2Gi"
+                  },
+                  "requests": {
+                    "cpu": 1,
+                    "memory": "1Gi"
+                  }
+                }
+              }
+            },
+            "blockPersister": {
+              "enabled": true,
+              "spec": {
+                "resources": {
+                  "limits": {
+                    "memory": "2Gi"
+                  },
+                  "requests": {
+                    "cpu": 1,
+                    "memory": "1Gi"
+                  }
+                },
+                "storageClass": "fsx-sc",
+                "storageResources": {
+                  "requests": {
+                    "storage": "5Gi"
+                  }
+                }
+              }
+            },
+            "blockValidator": {
+              "enabled": true,
+              "spec": {
+                "resources": {
+                  "limits": {
+                    "memory": "2Gi"
+                  },
+                  "requests": {
+                    "cpu": 1,
+                    "memory": "1Gi"
+                  }
+                }
+              }
+            },
+            "blockchain": {
+              "enabled": true,
+              "spec": {
+                "resources": {
+                  "limits": {
+                    "memory": "2Gi"
+                  },
+                  "requests": {
+                    "cpu": 1,
+                    "memory": "1Gi"
+                  }
+                }
+              }
+            },
+            "bootstrap": {
+              "enabled": false,
+              "spec": {}
+            },
+            "coinbase": {
+              "enabled": true,
+              "spec": {
+                "resources": {
+                  "limits": {
+                    "memory": "2Gi"
+                  },
+                  "requests": {
+                    "cpu": 1,
+                    "memory": "1Gi"
+                  }
+                }
+              }
+            },
+            "configMapName": "shared-config",
+            "miner": {
+              "enabled": true,
+              "spec": {
+                "resources": {
+                  "limits": {
+                    "memory": "2Gi"
+                  },
+                  "requests": {
+                    "cpu": 1,
+                    "memory": "1Gi"
+                  }
+                }
+              }
+            },
+            "peer": {
+              "enabled": true,
+              "spec": {
+                "grpcIngress": {
+                  "annotations": {
+                    "traefik.ingress.kubernetes.io/router.entrypoints": "peer-grpc"
+                  },
+                  "className": "traefik-internal",
+                  "host": "t3.testing.ubsv.dev"
+                },
+                "resources": {
+                  "limits": {
+                    "memory": "2Gi"
+                  },
+                  "requests": {
+                    "cpu": 1,
+                    "memory": "1Gi"
+                  }
+                },
+                "wsIngress": {
+                  "annotations": {
+                    "traefik.ingress.kubernetes.io/router.entrypoints": "p2p-ws"
+                  },
+                  "className": "traefik-internal",
+                  "host": "t3.testing.ubsv.dev"
+                },
+                "wssIngress": {
+                  "annotations": {
+                    "traefik.ingress.kubernetes.io/router.entrypoints": "p2p-wss"
+                  },
+                  "className": "traefik-internal",
+                  "host": "t3.testing.ubsv.dev"
+                }
+              }
+            },
+            "propagation": {
+              "enabled": true,
+              "spec": {
+                "grpcIngress": {
+                  "annotations": {
+                    "traefik.ingress.kubernetes.io/router.entrypoints": "prop-grpc"
+                  },
+                  "className": "traefik-internal",
+                  "host": "t3.testing.ubsv.dev"
+                },
+                "resources": {
+                  "limits": {
+                    "memory": "2Gi"
+                  },
+                  "requests": {
+                    "cpu": 1,
+                    "memory": "1Gi"
+                  }
+                }
+              }
+            },
+            "subtreeValidator": {
+              "enabled": true,
+              "spec": {
+                "resources": {
+                  "limits": {
+                    "memory": "6Gi"
+                  },
+                  "requests": {
+                    "cpu": 1,
+                    "memory": "2Gi"
+                  }
+                },
+                "storageClass": "fsx-sc",
+                "storageResources": {
+                  "requests": {
+                    "storage": "5Gi"
+                  }
+                }
+              }
+            },
+            "validator": {
+              "enabled": false,
+              "spec": {}
+            }
           }
         },
         {
@@ -231,7 +454,7 @@ metadata:
             "name": "peer-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -258,7 +481,7 @@ metadata:
             "name": "propagation-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -285,7 +508,7 @@ metadata:
             "name": "subtreevalidator-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -318,7 +541,7 @@ metadata:
             "name": "validator-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.6",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -333,8 +556,8 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-07-22T15:02:55Z"
-    operators.operatorframework.io/builder: operator-sdk-v1.34.2
+    createdAt: "2024-08-06T02:39:36Z"
+    operators.operatorframework.io/builder: operator-sdk-v1.35.0
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
   name: teranode-operator.v0.0.1
   namespace: placeholder
@@ -361,6 +584,11 @@ spec:
       displayName: Block Persister
       kind: BlockPersister
       name: blockpersisters.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: BlockValidator is the Schema for the blockvalidators API
+      displayName: Block Validator
+      kind: BlockValidator
+      name: blockvalidators.teranode.bsvblockchain.org
       version: v1alpha1
     - description: Bootstrap is the Schema for the bootstraps API
       displayName: Bootstrap
@@ -550,6 +778,32 @@ spec:
           - teranode.bsvblockchain.org
           resources:
           - blockpersisters/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - blockvalidators
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - blockvalidators/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - blockvalidators/status
           verbs:
           - get
           - patch
@@ -854,7 +1108,12 @@ spec:
                 - --leader-elect
                 command:
                 - /manager
-                image: docker.io/galtbv/to:v2
+                env:
+                - name: WATCH_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.annotations['olm.targetNamespaces']
+                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.1
                 imagePullPolicy: Always
                 livenessProbe:
                   httpGet:
@@ -935,13 +1194,13 @@ spec:
         serviceAccountName: teranode-operator-controller-manager
     strategy: deployment
   installModes:
-  - supported: false
+  - supported: true
     type: OwnNamespace
   - supported: false
     type: SingleNamespace
   - supported: false
     type: MultiNamespace
-  - supported: true
+  - supported: false
     type: AllNamespaces
   keywords:
   - teranode

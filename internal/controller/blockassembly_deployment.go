@@ -120,7 +120,7 @@ func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-blockassembly=1"},
-						Image:           DefaultAssetImage,
+						Image:           DefaultImage,
 						ImagePullPolicy: corev1.PullAlways,
 						Name:            "block-assembly",
 						// Make sane defaults, and this should be configurable
@@ -159,32 +159,32 @@ func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
 						},
 						Ports: []corev1.ContainerPort{
 							{
-								ContainerPort: 8085,
+								ContainerPort: BlockAssemblyPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 9091,
+								ContainerPort: ProfilerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 4040,
+								ContainerPort: DebuggerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},
 						VolumeMounts: []corev1.VolumeMount{
 							{
 								MountPath: "/data/",
-								Name:      "subtree-storage",
+								Name:      SharedPVCName,
 							},
 						},
 					},
 				},
 				Volumes: []corev1.Volume{
 					{
-						Name: "subtree-storage",
+						Name: SharedPVCName,
 						VolumeSource: corev1.VolumeSource{
 							PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-								ClaimName: "subtree-storage",
+								ClaimName: SharedPVCName,
 							},
 						},
 					},

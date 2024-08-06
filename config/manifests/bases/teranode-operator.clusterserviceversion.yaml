@@ -30,6 +30,11 @@ spec:
       kind: BlockPersister
       name: blockpersisters.teranode.bsvblockchain.org
       version: v1alpha1
+    - description: BlockValidator is the Schema for the blockvalidators API
+      displayName: Block Validator
+      kind: BlockValidator
+      name: blockvalidators.teranode.bsvblockchain.org
+      version: v1alpha1
     - description: Bootstrap is the Schema for the bootstraps API
       displayName: Bootstrap
       kind: Bootstrap
@@ -85,13 +90,13 @@ spec:
       deployments: null
     strategy: ""
   installModes:
-  - supported: false
+  - supported: true
     type: OwnNamespace
   - supported: false
     type: SingleNamespace
   - supported: false
     type: MultiNamespace
-  - supported: true
+  - supported: false
     type: AllNamespaces
   keywords:
   - teranode

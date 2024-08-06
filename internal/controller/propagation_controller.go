@@ -74,11 +74,7 @@ func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 		//r.ReconcileConfigMap,
 		r.ReconcileDeployment,
 		r.ReconcileService,
-		r.ReconcileDelveIngress,
 		r.ReconcileGrpcIngress,
-		r.ReconcileQuicIngress,
-		r.ReconcileHttpIngress,
-		r.ReconcileProfilerIngress,
 	)
 
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
 	v1 "k8s.io/api/networking/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
@@ -19,7 +20,41 @@ func (r *AssetReconciler) ReconcileGrpcIngress(log logr.Logger) (bool, error) {
 	if asset.Spec.GrpcIngress == nil {
 		return false, nil
 	}
-	ingress := asset.Spec.GrpcIngress.DeepCopy()
+	labels := getAppLabels()
+	prefix := v1.PathTypePrefix
+	ingress := &v1.Ingress{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:        "asset-grpc",
+			Namespace:   r.NamespacedName.Namespace,
+			Annotations: asset.Spec.GrpcIngress.Annotations,
+			Labels:      labels,
+		},
+		Spec: v1.IngressSpec{
+			Rules: []v1.IngressRule{
+				{
+					Host: asset.Spec.GrpcIngress.Host,
+					IngressRuleValue: v1.IngressRuleValue{
+						HTTP: &v1.HTTPIngressRuleValue{
+							Paths: []v1.HTTPIngressPath{
+								{
+									Path:     "/",
+									PathType: &prefix,
+									Backend: v1.IngressBackend{
+										Service: &v1.IngressServiceBackend{
+											Name: "asset-grpc",
+											Port: v1.ServiceBackendPort{
+												Name: "asset-grpc",
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, ingress, func() error {
 		return r.updateGrpcIngress(ingress, &asset)
 	})
@@ -34,7 +69,16 @@ func (r *AssetReconciler) updateGrpcIngress(ingress *v1.Ingress, asset *teranode
 	if err != nil {
 		return err
 	}
-	ingress = asset.Spec.GrpcIngress.DeepCopy()
+	if asset.Spec.GrpcIngress == nil {
+		return nil
+	}
+	if asset.Spec.GrpcIngress.Annotations == nil {
+		ingress.Annotations = asset.Spec.GrpcIngress.Annotations
+	}
+	if asset.Spec.GrpcIngress.ClassName != nil {
+		ingress.Spec.IngressClassName = asset.Spec.GrpcIngress.ClassName
+	}
+
 	return nil
 }
 
@@ -49,7 +93,42 @@ func (r *AssetReconciler) ReconcileHttpIngress(log logr.Logger) (bool, error) {
 	if asset.Spec.HttpIngress == nil {
 		return false, nil
 	}
-	ingress := asset.Spec.HttpIngress.DeepCopy()
+	labels := getAppLabels()
+	prefix := v1.PathTypePrefix
+	ingress := &v1.Ingress{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:        "asset-http",
+			Namespace:   r.NamespacedName.Namespace,
+			Annotations: asset.Spec.HttpIngress.Annotations,
+			Labels:      labels,
+		},
+		Spec: v1.IngressSpec{
+			Rules: []v1.IngressRule{
+				{
+					Host: asset.Spec.GrpcIngress.Host,
+					IngressRuleValue: v1.IngressRuleValue{
+						HTTP: &v1.HTTPIngressRuleValue{
+							Paths: []v1.HTTPIngressPath{
+								{
+									Path:     "/",
+									PathType: &prefix,
+									Backend: v1.IngressBackend{
+										Service: &v1.IngressServiceBackend{
+											Name: "asset",
+											Port: v1.ServiceBackendPort{
+												Name: "asset-http",
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, ingress, func() error {
 		return r.updateHttpIngress(ingress, &asset)
 	})
@@ -64,7 +143,16 @@ func (r *AssetReconciler) updateHttpIngress(ingress *v1.Ingress, asset *teranode
 	if err != nil {
 		return err
 	}
-	ingress = asset.Spec.HttpIngress.DeepCopy()
+	if asset.Spec.HttpIngress == nil {
+		return nil
+	}
+	if asset.Spec.HttpIngress.Annotations == nil {
+		ingress.Annotations = asset.Spec.HttpIngress.Annotations
+	}
+	if asset.Spec.HttpIngress.ClassName != nil {
+		ingress.Spec.IngressClassName = asset.Spec.HttpIngress.ClassName
+	}
+
 	return nil
 }
 
@@ -79,7 +167,49 @@ func (r *AssetReconciler) ReconcileHttpsIngress(log logr.Logger) (bool, error) {
 	if asset.Spec.HttpsIngress == nil {
 		return false, nil
 	}
-	ingress := asset.Spec.HttpsIngress.DeepCopy()
+
+	labels := getAppLabels()
+	prefix := v1.PathTypePrefix
+	ingress := &v1.Ingress{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:        "asset-https",
+			Namespace:   r.NamespacedName.Namespace,
+			Annotations: asset.Spec.HttpsIngress.Annotations,
+			Labels:      labels,
+		},
+		Spec: v1.IngressSpec{
+			Rules: []v1.IngressRule{
+				{
+					Host: asset.Spec.GrpcIngress.Host,
+					IngressRuleValue: v1.IngressRuleValue{
+						HTTP: &v1.HTTPIngressRuleValue{
+							Paths: []v1.HTTPIngressPath{
+								{
+									Path:     "/",
+									PathType: &prefix,
+									Backend: v1.IngressBackend{
+										Service: &v1.IngressServiceBackend{
+											Name: "asset",
+											Port: v1.ServiceBackendPort{
+												Name: "asset-http",
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			TLS: []v1.IngressTLS{
+				{
+					Hosts:      []string{asset.Spec.HttpsIngress.Host},
+					SecretName: "asset-tls",
+				},
+			},
+		},
+	}
+
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, ingress, func() error {
 		return r.updateHttpsIngress(ingress, &asset)
 	})
@@ -94,6 +224,15 @@ func (r *AssetReconciler) updateHttpsIngress(ingress *v1.Ingress, asset *teranod
 	if err != nil {
 		return err
 	}
-	ingress = asset.Spec.GrpcIngress.DeepCopy()
+	if asset.Spec.HttpsIngress == nil {
+		return nil
+	}
+	if asset.Spec.HttpsIngress.Annotations == nil {
+		ingress.Annotations = asset.Spec.HttpsIngress.Annotations
+	}
+	if asset.Spec.HttpsIngress.ClassName != nil {
+		ingress.Spec.IngressClassName = asset.Spec.HttpsIngress.ClassName
+	}
+
 	return nil
 }

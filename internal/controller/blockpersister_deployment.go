@@ -101,7 +101,6 @@ func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 			Value: "100",
 		},
 	}
-	image := "foo_image"
 	return &appsv1.DeploymentSpec{
 		Replicas: pointer.Int32(2),
 		Selector: metav1.SetAsLabelSelector(labels),
@@ -120,7 +119,7 @@ func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-blockpersister=1"},
-						Image:           image,
+						Image:           DefaultImage,
 						ImagePullPolicy: corev1.PullAlways,
 						Name:            "block-persister",
 						// Make sane defaults, and this should be configurable
@@ -159,36 +158,24 @@ func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 						},
 						Ports: []corev1.ContainerPort{
 							{
-								ContainerPort: 4040,
+								ContainerPort: DebuggerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},
 						VolumeMounts: []corev1.VolumeMount{
 							{
-								MountPath: "/data/subtreestore",
-								Name:      "subtree-storage",
-							},
-							{
-								MountPath: "/data/blockstore",
-								Name:      "block-persister-storage",
+								MountPath: "/data",
+								Name:      SharedPVCName,
 							},
 						},
 					},
 				},
 				Volumes: []corev1.Volume{
 					{
-						Name: "subtree-storage",
+						Name: SharedPVCName,
 						VolumeSource: corev1.VolumeSource{
 							PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-								ClaimName: "subtree-storage",
-							},
-						},
-					},
-					{
-						Name: "block-persister-storage",
-						VolumeSource: corev1.VolumeSource{
-							PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-								ClaimName: "block-persister-storage",
+								ClaimName: SharedPVCName,
 							},
 						},
 					},

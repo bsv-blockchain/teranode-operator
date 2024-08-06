@@ -18,7 +18,6 @@ package v1alpha1
 
 import (
 	corev1 "k8s.io/api/core/v1"
-	v1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -30,17 +29,18 @@ type AssetSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	NodeSelector    map[string]string            `json:"nodeSelector,omitempty"`
-	Tolerations     *[]corev1.Toleration         `json:"tolerations,omitempty"`
-	Affinity        *corev1.Affinity             `json:"affinity,omitempty"`
-	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
-	GrpcIngress     *v1.Ingress                  `json:"grpcIngress,omitempty"`
-	HttpIngress     *v1.Ingress                  `json:"httpIngress,omitempty"`
-	HttpsIngress    *v1.Ingress                  `json:"httpsIngress,omitempty"`
-	Image           string                       `json:"image,omitempty"`
-	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
-	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
-	ConfigMapName   string                       `json:"configMapName,omitempty"`
+	NodeSelector       map[string]string            `json:"nodeSelector,omitempty"`
+	Tolerations        *[]corev1.Toleration         `json:"tolerations,omitempty"`
+	Affinity           *corev1.Affinity             `json:"affinity,omitempty"`
+	Resources          *corev1.ResourceRequirements `json:"resources,omitempty"`
+	GrpcIngress        *IngressDef                  `json:"grpcIngress,omitempty"`
+	HttpIngress        *IngressDef                  `json:"httpIngress,omitempty"`
+	HttpsIngress       *IngressDef                  `json:"httpsIngress,omitempty"`
+	Image              string                       `json:"image,omitempty"`
+	ImagePullPolicy    corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
+	ServiceAccount     string                       `json:"serviceAccount,omitempty"`
+	ConfigMapName      string                       `json:"configMapName,omitempty"`
+	ServiceAnnotations map[string]string            `json:"serviceAnnotations,omitempty"`
 }
 
 // AssetStatus defines the observed state of Asset

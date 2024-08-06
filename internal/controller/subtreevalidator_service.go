@@ -58,20 +58,20 @@ func defaultSubtreeValidatorServiceSpec() *corev1.ServiceSpec {
 		Ports: []corev1.ServicePort{
 			{
 				Name:       "grpc",
-				Port:       int32(8086),
-				TargetPort: intstr.FromInt32(8086),
+				Port:       int32(SubtreeValidatorGRPCPort),
+				TargetPort: intstr.FromInt32(SubtreeValidatorGRPCPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
 				Name:       "profiler",
-				Port:       int32(9091),
-				TargetPort: intstr.FromInt32(9091),
+				Port:       int32(ProfilerPort),
+				TargetPort: intstr.FromInt32(ProfilerPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
 				Name:       "debugger",
-				Port:       int32(4040),
-				TargetPort: intstr.FromInt32(4040),
+				Port:       int32(DebuggerPort),
+				TargetPort: intstr.FromInt32(DebuggerPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 		},

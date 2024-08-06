@@ -98,7 +98,6 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 			Value: "coinbase-service",
 		},
 	}
-	image := "foo_image"
 	return &appsv1.DeploymentSpec{
 		Replicas: pointer.Int32(1), // TODO: validate this number
 		Selector: metav1.SetAsLabelSelector(labels),
@@ -125,7 +124,7 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-coinbase=1"},
-						Image:           image,
+						Image:           DefaultImage,
 						ImagePullPolicy: corev1.PullAlways,
 						Name:            "coinbase",
 						// Make sane defaults, and this should be configurable
@@ -164,15 +163,15 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 						},
 						Ports: []corev1.ContainerPort{
 							{
-								ContainerPort: 4040,
+								ContainerPort: DebuggerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 8093,
+								ContainerPort: CoinbaseGRPCPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
-								ContainerPort: 9091,
+								ContainerPort: ProfilerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},

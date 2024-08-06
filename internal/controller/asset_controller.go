@@ -74,6 +74,7 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		//r.ReconcileConfigMap,
 		r.ReconcileDeployment,
 		r.ReconcileService,
+		r.ReconcileGrpcService,
 		r.ReconcileGrpcIngress,
 		r.ReconcileHttpIngress,
 		r.ReconcileHttpsIngress,

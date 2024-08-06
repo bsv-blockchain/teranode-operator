@@ -37,6 +37,7 @@ type SubtreeValidatorSpec struct {
 	Affinity               *corev1.Affinity             `json:"affinity,omitempty"`
 	PodTemplateAnnotations map[string]string            `json:"podTemplateAnnotations,omitempty"`
 	StorageClass           string                       `json:"storageClass,omitempty"`
+	StorageVolume          string                       `json:"storageVolume,omitempty"`
 	Image                  string                       `json:"image,omitempty"`
 	ImagePullPolicy        corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 	ServiceAccount         string                       `json:"serviceAccount,omitempty"`
