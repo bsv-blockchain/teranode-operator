@@ -32,8 +32,8 @@ import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 )
 
-// NodeReconciler reconciles a Node object
-type NodeReconciler struct {
+// ClusterReconciler reconciles a Cluster object
+type ClusterReconciler struct {
 	client.Client
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
@@ -41,27 +41,27 @@ type NodeReconciler struct {
 	Context        context.Context
 }
 
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=nodes,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=nodes/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=nodes/finalizers,verbs=update
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=clusters,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=clusters/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=clusters/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
 // TODO(user): Modify the Reconcile function to compare the state specified by
-// the Node object against the actual cluster state, and then
+// the Cluster object against the actual cluster state, and then
 // perform operations to make the cluster state reflect the state specified by
 // the user.
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
-func (r *NodeReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	result := ctrl.Result{}
-	r.Log = log.FromContext(ctx).WithValues("node", req.NamespacedName)
+	r.Log = log.FromContext(ctx).WithValues("cluster", req.NamespacedName)
 	r.Context = ctx
 	r.NamespacedName = req.NamespacedName
-	node := teranodev1alpha1.Node{}
-	if err := r.Get(ctx, req.NamespacedName, &node); err != nil {
-		r.Log.Error(err, "unable to fetch node CR")
+	cluster := teranodev1alpha1.Cluster{}
+	if err := r.Get(ctx, req.NamespacedName, &cluster); err != nil {
+		r.Log.Error(err, "unable to fetch cluster CR")
 		return result, nil
 	}
 
@@ -81,7 +81,7 @@ func (r *NodeReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 		r.ReconcileValidator,
 	)
 	if err != nil {
-		apimeta.SetStatusCondition(&node.Status.Conditions,
+		apimeta.SetStatusCondition(&cluster.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -90,7 +90,7 @@ func (r *NodeReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 			},
 		)
 	} else {
-		apimeta.SetStatusCondition(&node.Status.Conditions,
+		apimeta.SetStatusCondition(&cluster.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,
@@ -100,7 +100,7 @@ func (r *NodeReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 		)
 	}
 
-	statusErr := r.Client.Status().Update(ctx, &node)
+	statusErr := r.Client.Status().Update(ctx, &cluster)
 	if err == nil {
 		err = statusErr
 	}
@@ -109,9 +109,9 @@ func (r *NodeReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *NodeReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *ClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&teranodev1alpha1.Node{}).
+		For(&teranodev1alpha1.Cluster{}).
 		Owns(&teranodev1alpha1.Asset{}).
 		Owns(&teranodev1alpha1.BlockAssembly{}).
 		Owns(&teranodev1alpha1.Blockchain{}).

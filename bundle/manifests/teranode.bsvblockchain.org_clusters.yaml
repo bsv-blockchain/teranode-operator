@@ -4,20 +4,20 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
   creationTimestamp: null
-  name: nodes.teranode.bsvblockchain.org
+  name: clusters.teranode.bsvblockchain.org
 spec:
   group: teranode.bsvblockchain.org
   names:
-    kind: Node
-    listKind: NodeList
-    plural: nodes
-    singular: node
+    kind: Cluster
+    listKind: ClusterList
+    plural: clusters
+    singular: cluster
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Node is the Schema for the nodes API
+        description: Cluster is the Schema for the nodes API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -32,7 +32,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: NodeSpec defines the desired state of Node
+            description: ClusterSpec defines the desired state of Cluster
             properties:
               asset:
                 description: AssetConfig defines the asset configuration
@@ -8847,7 +8847,7 @@ spec:
             - validator
             type: object
           status:
-            description: NodeStatus defines the observed state of Node
+            description: ClusterStatus defines the observed state of Cluster
             properties:
               conditions:
                 description: 'INSERT ADDITIONAL STATUS FIELD - define observed state

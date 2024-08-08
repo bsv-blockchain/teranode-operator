@@ -1,21 +1,22 @@
+## Cluster Custom Resource
+This resource is what a user is expected to create in order to get an instance of Teranode. While each service is managed by separate APIs, this API allows the user to declare all of their services in one place with shared artifacts.
+
+The following is a sample Cluster CR:
+```yaml
 apiVersion: teranode.bsvblockchain.org/v1alpha1
-kind: Node
+kind: Cluster
 metadata:
-  labels:
-    app.kubernetes.io/name: node
-    app.kubernetes.io/instance: node-sample
-    app.kubernetes.io/part-of: teranode-operator
-    app.kubernetes.io/managed-by: kustomize
-    app.kubernetes.io/created-by: teranode-operator
-  name: node-sample
+  name: cluster-sample
 spec:
-  configMapName: "shared-config"
+  configMapName: "my-config"
   bootstrap:
     enabled: false
     spec: {}
   asset:
     enabled: true
     spec:
+      serviceAnnotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: h2c
       resources:
         requests:
           cpu: 1
@@ -36,6 +37,7 @@ spec:
         className: *my-class
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: websecure
+          cert-manager.io/cluster-issuer: letsencrypt-prod
         host: *my-host
   blockValidator:
     enabled: true
@@ -113,6 +115,8 @@ spec:
   propagation:
     enabled: true
     spec:
+      serviceAnnotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: h2c
       grpcIngress:
         className: *my-class
         annotations:
@@ -137,6 +141,7 @@ spec:
         requests:
           storage: 5Gi
       storageClass: "fsx-sc"
+      storageVolume: "shared-storage-1"
   validator:
     enabled: false
     spec: {}
@@ -149,3 +154,8 @@ spec:
           memory: 1Gi
         limits:
           memory: 2Gi
+```
+
+At the root level, `configMapName` allows the user to set a configmap that will be mounted as environment variables for each service. 
+
+

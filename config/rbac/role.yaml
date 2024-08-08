@@ -197,6 +197,32 @@ rules:
 - apiGroups:
   - teranode.bsvblockchain.org
   resources:
+  - clusters
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - clusters/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - clusters/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
   - coinbases
   verbs:
   - create
@@ -268,32 +294,6 @@ rules:
   - teranode.bsvblockchain.org
   resources:
   - miners/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - nodes
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - nodes/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - nodes/status
   verbs:
   - get
   - patch

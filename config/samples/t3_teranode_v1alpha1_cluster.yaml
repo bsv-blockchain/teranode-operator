@@ -1,13 +1,13 @@
 apiVersion: teranode.bsvblockchain.org/v1alpha1
-kind: Node
+kind: Cluster
 metadata:
   labels:
-    app.kubernetes.io/name: node
-    app.kubernetes.io/instance: node-sample
+    app.kubernetes.io/name: cluster
+    app.kubernetes.io/instance: cluster-sample
     app.kubernetes.io/part-of: teranode-operator
     app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/created-by: teranode-operator
-  name: node-sample
+  name: cluster-sample
 spec:
   configMapName: "shared-config"
   bootstrap:

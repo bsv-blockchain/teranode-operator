@@ -8,24 +8,24 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
-// ReconcileMiner is the node coinbase reconciler
-func (r *NodeReconciler) ReconcileMiner(log logr.Logger) (bool, error) {
-	node := teranodev1alpha1.Node{}
-	if err := r.Get(r.Context, r.NamespacedName, &node); err != nil {
+// ReconcileMiner is the cluster coinbase reconciler
+func (r *ClusterReconciler) ReconcileMiner(log logr.Logger) (bool, error) {
+	cluster := teranodev1alpha1.Cluster{}
+	if err := r.Get(r.Context, r.NamespacedName, &cluster); err != nil {
 		return false, err
 	}
-	if !node.Spec.Miner.Enabled {
+	if !cluster.Spec.Miner.Enabled {
 		return true, nil
 	}
 	miner := teranodev1alpha1.Miner{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      fmt.Sprintf("%s-miner", node.Name),
+			Name:      fmt.Sprintf("%s-miner", cluster.Name),
 			Namespace: r.NamespacedName.Namespace,
 			Labels:    getAppLabels(),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &miner, func() error {
-		return r.updateMiner(&miner, &node)
+		return r.updateMiner(&miner, &cluster)
 	})
 	if err != nil {
 		return false, err
@@ -33,22 +33,22 @@ func (r *NodeReconciler) ReconcileMiner(log logr.Logger) (bool, error) {
 	return true, nil
 }
 
-func (r *NodeReconciler) updateMiner(miner *teranodev1alpha1.Miner, node *teranodev1alpha1.Node) error {
-	err := controllerutil.SetControllerReference(node, miner, r.Scheme)
+func (r *ClusterReconciler) updateMiner(miner *teranodev1alpha1.Miner, cluster *teranodev1alpha1.Cluster) error {
+	err := controllerutil.SetControllerReference(cluster, miner, r.Scheme)
 	if err != nil {
 		return err
 	}
 	miner.Spec = *defaultMinerSpec()
 
 	// if user configures a config map name
-	if node.Spec.Miner.Spec != nil {
-		miner.Spec = *node.Spec.Miner.Spec
+	if cluster.Spec.Miner.Spec != nil {
+		miner.Spec = *cluster.Spec.Miner.Spec
 	}
-	if node.Spec.Image != "" {
-		miner.Spec.Image = node.Spec.Image
+	if cluster.Spec.Image != "" {
+		miner.Spec.Image = cluster.Spec.Image
 	}
-	if node.Spec.ConfigMapName != "" {
-		miner.Spec.ConfigMapName = node.Spec.ConfigMapName
+	if cluster.Spec.ConfigMapName != "" {
+		miner.Spec.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }

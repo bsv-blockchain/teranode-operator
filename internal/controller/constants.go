@@ -4,7 +4,7 @@ package controller
 const DefaultServiceAccountName = "service-runner"
 
 // SharedPVCName is the PVC name for shared storage
-const SharedPVCName = "node-storage"
+const SharedPVCName = "cluster-storage"
 
 // DefaultImage is the default teranode service image
 const DefaultImage = "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22"

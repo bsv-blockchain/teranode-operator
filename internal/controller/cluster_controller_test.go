@@ -30,7 +30,7 @@ import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 )
 
-var _ = Describe("Node Controller", func() {
+var _ = Describe("Cluster Controller", func() {
 	Context("When reconciling a resource", func() {
 		const resourceName = "test-resource"
 
@@ -40,13 +40,13 @@ var _ = Describe("Node Controller", func() {
 			Name:      resourceName,
 			Namespace: "default", // TODO(user):Modify as needed
 		}
-		node := &teranodev1alpha1.Node{}
+		cluster := &teranodev1alpha1.Cluster{}
 
 		BeforeEach(func() {
-			By("creating the custom resource for the Kind Node")
-			err := k8sClient.Get(ctx, typeNamespacedName, node)
+			By("creating the custom resource for the Kind Cluster")
+			err := k8sClient.Get(ctx, typeNamespacedName, cluster)
 			if err != nil && errors.IsNotFound(err) {
-				resource := &teranodev1alpha1.Node{
+				resource := &teranodev1alpha1.Cluster{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
@@ -59,16 +59,16 @@ var _ = Describe("Node Controller", func() {
 
 		AfterEach(func() {
 			// TODO(user): Cleanup logic after each test, like removing the resource instance.
-			resource := &teranodev1alpha1.Node{}
+			resource := &teranodev1alpha1.Cluster{}
 			err := k8sClient.Get(ctx, typeNamespacedName, resource)
 			Expect(err).NotTo(HaveOccurred())
 
-			By("Cleanup the specific resource instance Node")
+			By("Cleanup the specific resource instance Cluster")
 			Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
 		})
 		It("should successfully reconcile the resource", func() {
 			By("Reconciling the created resource")
-			controllerReconciler := &NodeReconciler{
+			controllerReconciler := &ClusterReconciler{
 				Client: k8sClient,
 				Scheme: k8sClient.Scheme(),
 			}

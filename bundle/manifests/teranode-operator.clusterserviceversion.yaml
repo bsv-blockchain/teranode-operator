@@ -135,97 +135,16 @@ metadata:
         },
         {
           "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
-          "kind": "Coinbase",
+          "kind": "Cluster",
           "metadata": {
             "labels": {
               "app.kubernetes.io/created-by": "teranode-operator",
-              "app.kubernetes.io/instance": "coinbase-sample",
+              "app.kubernetes.io/instance": "cluster-sample",
               "app.kubernetes.io/managed-by": "kustomize",
-              "app.kubernetes.io/name": "coinbase",
+              "app.kubernetes.io/name": "cluster",
               "app.kubernetes.io/part-of": "teranode-operator"
             },
-            "name": "coinbase-sample"
-          },
-          "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
-            "imagePullPolicy": "Always",
-            "resources": {
-              "limits": {
-                "memory": "2Gi"
-              },
-              "requests": {
-                "cpu": 1,
-                "memory": "1Gi"
-              }
-            }
-          }
-        },
-        {
-          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
-          "kind": "Faucet",
-          "metadata": {
-            "labels": {
-              "app.kubernetes.io/created-by": "teranode-operator",
-              "app.kubernetes.io/instance": "faucet-sample",
-              "app.kubernetes.io/managed-by": "kustomize",
-              "app.kubernetes.io/name": "faucet",
-              "app.kubernetes.io/part-of": "teranode-operator"
-            },
-            "name": "faucet-sample"
-          },
-          "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
-            "imagePullPolicy": "Always",
-            "resources": {
-              "limits": {
-                "memory": "2Gi"
-              },
-              "requests": {
-                "cpu": 1,
-                "memory": "1Gi"
-              }
-            }
-          }
-        },
-        {
-          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
-          "kind": "Miner",
-          "metadata": {
-            "labels": {
-              "app.kubernetes.io/created-by": "teranode-operator",
-              "app.kubernetes.io/instance": "miner-sample",
-              "app.kubernetes.io/managed-by": "kustomize",
-              "app.kubernetes.io/name": "miner",
-              "app.kubernetes.io/part-of": "teranode-operator"
-            },
-            "name": "miner-sample"
-          },
-          "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
-            "imagePullPolicy": "Always",
-            "resources": {
-              "limits": {
-                "memory": "2Gi"
-              },
-              "requests": {
-                "cpu": 1,
-                "memory": "1Gi"
-              }
-            }
-          }
-        },
-        {
-          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
-          "kind": "Node",
-          "metadata": {
-            "labels": {
-              "app.kubernetes.io/created-by": "teranode-operator",
-              "app.kubernetes.io/instance": "node-sample",
-              "app.kubernetes.io/managed-by": "kustomize",
-              "app.kubernetes.io/name": "node",
-              "app.kubernetes.io/part-of": "teranode-operator"
-            },
-            "name": "node-sample"
+            "name": "cluster-sample"
           },
           "spec": {
             "asset": {
@@ -442,6 +361,87 @@ metadata:
         },
         {
           "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Coinbase",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "coinbase-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "coinbase",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "coinbase-sample"
+          },
+          "spec": {
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "imagePullPolicy": "Always",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Faucet",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "faucet-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "faucet",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "faucet-sample"
+          },
+          "spec": {
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "imagePullPolicy": "Always",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "Miner",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/created-by": "teranode-operator",
+              "app.kubernetes.io/instance": "miner-sample",
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "miner",
+              "app.kubernetes.io/part-of": "teranode-operator"
+            },
+            "name": "miner-sample"
+          },
+          "spec": {
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "imagePullPolicy": "Always",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
           "kind": "Peer",
           "metadata": {
             "labels": {
@@ -556,7 +556,7 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-08-08T00:37:08Z"
+    createdAt: "2024-08-08T02:24:21Z"
     operators.operatorframework.io/builder: operator-sdk-v1.35.0
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
   name: teranode-operator.v0.0.1
@@ -595,6 +595,11 @@ spec:
       kind: Bootstrap
       name: bootstraps.teranode.bsvblockchain.org
       version: v1alpha1
+    - description: Cluster is the Schema for the nodes API
+      displayName: Cluster
+      kind: Cluster
+      name: clusters.teranode.bsvblockchain.org
+      version: v1alpha1
     - description: Coinbase is the Schema for the coinbases API
       displayName: Coinbase
       kind: Coinbase
@@ -609,11 +614,6 @@ spec:
       displayName: Miner
       kind: Miner
       name: miners.teranode.bsvblockchain.org
-      version: v1alpha1
-    - description: Node is the Schema for the nodes API
-      displayName: Node
-      kind: Node
-      name: nodes.teranode.bsvblockchain.org
       version: v1alpha1
     - description: Peer is the Schema for the peers API
       displayName: Peer
@@ -837,6 +837,32 @@ spec:
         - apiGroups:
           - teranode.bsvblockchain.org
           resources:
+          - clusters
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - clusters/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - clusters/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
           - coinbases
           verbs:
           - create
@@ -908,32 +934,6 @@ spec:
           - teranode.bsvblockchain.org
           resources:
           - miners/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - nodes
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - nodes/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - nodes/status
           verbs:
           - get
           - patch
@@ -1113,7 +1113,7 @@ spec:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.annotations['olm.targetNamespaces']
-                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.1
+                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.1.1
                 imagePullPolicy: Always
                 livenessProbe:
                   httpGet:

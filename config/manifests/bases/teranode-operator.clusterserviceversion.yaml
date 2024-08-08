@@ -40,6 +40,11 @@ spec:
       kind: Bootstrap
       name: bootstraps.teranode.bsvblockchain.org
       version: v1alpha1
+    - description: Cluster is the Schema for the nodes API
+      displayName: Cluster
+      kind: Cluster
+      name: clusters.teranode.bsvblockchain.org
+      version: v1alpha1
     - description: Coinbase is the Schema for the coinbases API
       displayName: Coinbase
       kind: Coinbase
@@ -54,11 +59,6 @@ spec:
       displayName: Miner
       kind: Miner
       name: miners.teranode.bsvblockchain.org
-      version: v1alpha1
-    - description: Node is the Schema for the nodes API
-      displayName: Node
-      kind: Node
-      name: nodes.teranode.bsvblockchain.org
       version: v1alpha1
     - description: Peer is the Schema for the peers API
       displayName: Peer

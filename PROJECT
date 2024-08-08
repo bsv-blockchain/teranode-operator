@@ -17,7 +17,7 @@ resources:
   controller: true
   domain: bsvblockchain.org
   group: teranode
-  kind: Node
+  kind: Cluster
   path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:

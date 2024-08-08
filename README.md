@@ -11,13 +11,13 @@ $ operator-sdk olm install
 ```
 Run the bundle to install teranode operator on the cluster:
 ```bash
-$ operator-sdk run bundle <bundle_img> --install-mode OwnNamespace -n <namespace>
+$ operator-sdk run bundle 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.0.2 --install-mode OwnNamespace -n <namespace>
 ```
 
 ## Running a node
 Once you have the operator installed, modify `config/samples/teranode_v1alpha1_node.yaml` with your needed configuration values, then create the instance in the cluster:
 ```bash
-$ kubectl create config/samples/teranode_v1alpha1_node.yaml
+$ kubectl create config/samples/teranode_v1alpha1_cluster.yaml
 ```
 This step assumes you have created a prerequisite `configmap` and specified it on the above CR.
 
