@@ -44,6 +44,9 @@ func (r *NodeReconciler) updateBlockAssembly(blockAssembly *teranodev1alpha1.Blo
 	if node.Spec.BlockAssembly.Spec != nil {
 		blockAssembly.Spec = *node.Spec.BlockAssembly.Spec
 	}
+	if node.Spec.Image != "" {
+		blockAssembly.Spec.Image = node.Spec.Image
+	}
 	if node.Spec.ConfigMapName != "" {
 		blockAssembly.Spec.ConfigMapName = node.Spec.ConfigMapName
 	}

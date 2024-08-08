@@ -44,6 +44,9 @@ func (r *NodeReconciler) updateBlockPersister(blockPersister *teranodev1alpha1.B
 	if node.Spec.BlockPersister.Spec != nil {
 		blockPersister.Spec = *node.Spec.BlockPersister.Spec
 	}
+	if node.Spec.Image != "" {
+		blockPersister.Spec.Image = node.Spec.Image
+	}
 	if node.Spec.ConfigMapName != "" {
 		blockPersister.Spec.ConfigMapName = node.Spec.ConfigMapName
 	}

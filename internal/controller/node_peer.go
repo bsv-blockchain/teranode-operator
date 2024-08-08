@@ -44,6 +44,9 @@ func (r *NodeReconciler) updatePeer(peer *teranodev1alpha1.Peer, node *teranodev
 	if node.Spec.Peer.Spec != nil {
 		peer.Spec = *node.Spec.Peer.Spec
 	}
+	if node.Spec.Image != "" {
+		peer.Spec.Image = node.Spec.Image
+	}
 	if node.Spec.ConfigMapName != "" {
 		peer.Spec.ConfigMapName = node.Spec.ConfigMapName
 	}

@@ -74,15 +74,7 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 		"deployment": "blockchain",
 		"project":    "service",
 	}
-	envFrom := []corev1.EnvFromSource{
-		{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: "shared-config",
-				},
-			},
-		},
-	}
+	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
 			Name:  "SERVICE_NAME",

@@ -44,6 +44,9 @@ func (r *NodeReconciler) updatePropagation(propagation *teranodev1alpha1.Propaga
 	if node.Spec.Propagation.Spec != nil {
 		propagation.Spec = *node.Spec.Propagation.Spec
 	}
+	if node.Spec.Image != "" {
+		propagation.Spec.Image = node.Spec.Image
+	}
 	if node.Spec.ConfigMapName != "" {
 		propagation.Spec.ConfigMapName = node.Spec.ConfigMapName
 	}

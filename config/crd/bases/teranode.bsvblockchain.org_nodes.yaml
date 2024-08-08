@@ -4500,6 +4500,8 @@ spec:
                 type: object
               configMapName:
                 type: string
+              image:
+                type: string
               miner:
                 description: MinerConfig defines the miner configuration
                 properties:

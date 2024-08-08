@@ -44,6 +44,9 @@ func (r *NodeReconciler) updateBlockchain(blockchain *teranodev1alpha1.Blockchai
 	if node.Spec.Blockchain.Spec != nil {
 		blockchain.Spec = *node.Spec.Blockchain.Spec
 	}
+	if node.Spec.Image != "" {
+		blockchain.Spec.Image = node.Spec.Image
+	}
 	if node.Spec.ConfigMapName != "" {
 		blockchain.Spec.ConfigMapName = node.Spec.ConfigMapName
 	}

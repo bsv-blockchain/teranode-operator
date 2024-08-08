@@ -44,6 +44,9 @@ func (r *NodeReconciler) updateValidator(validator *teranodev1alpha1.Validator, 
 	if node.Spec.Validator.Spec != nil {
 		validator.Spec = *node.Spec.Validator.Spec
 	}
+	if node.Spec.Image != "" {
+		validator.Spec.Image = node.Spec.Image
+	}
 	if node.Spec.ConfigMapName != "" {
 		validator.Spec.ConfigMapName = node.Spec.ConfigMapName
 	}

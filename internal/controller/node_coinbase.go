@@ -44,6 +44,9 @@ func (r *NodeReconciler) updateCoinbase(coinbase *teranodev1alpha1.Coinbase, nod
 	if node.Spec.Coinbase.Spec != nil {
 		coinbase.Spec = *node.Spec.Coinbase.Spec
 	}
+	if node.Spec.Image != "" {
+		coinbase.Spec.Image = node.Spec.Image
+	}
 	if node.Spec.ConfigMapName != "" {
 		coinbase.Spec.ConfigMapName = node.Spec.ConfigMapName
 	}

@@ -44,6 +44,9 @@ func (r *NodeReconciler) updateAsset(asset *teranodev1alpha1.Asset, node *terano
 	if node.Spec.Asset.Spec != nil {
 		asset.Spec = *node.Spec.Asset.Spec
 	}
+	if node.Spec.Image != "" {
+		asset.Spec.Image = node.Spec.Image
+	}
 	if node.Spec.ConfigMapName != "" {
 		asset.Spec.ConfigMapName = node.Spec.ConfigMapName
 	}

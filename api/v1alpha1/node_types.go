@@ -111,6 +111,7 @@ type NodeSpec struct {
 	Validator        ValidatorConfig        `json:"validator"`
 
 	ConfigMapName string `json:"configMapName"`
+	Image         string `json:"image,omitempty"`
 }
 
 // NodeStatus defines the observed state of Node

@@ -44,6 +44,9 @@ func (r *NodeReconciler) updateMiner(miner *teranodev1alpha1.Miner, node *terano
 	if node.Spec.Miner.Spec != nil {
 		miner.Spec = *node.Spec.Miner.Spec
 	}
+	if node.Spec.Image != "" {
+		miner.Spec.Image = node.Spec.Image
+	}
 	if node.Spec.ConfigMapName != "" {
 		miner.Spec.ConfigMapName = node.Spec.ConfigMapName
 	}

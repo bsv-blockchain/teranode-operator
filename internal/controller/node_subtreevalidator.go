@@ -44,6 +44,9 @@ func (r *NodeReconciler) updateSubtreeValidator(subtreeValidator *teranodev1alph
 	if node.Spec.SubtreeValidator.Spec != nil {
 		subtreeValidator.Spec = *node.Spec.SubtreeValidator.Spec
 	}
+	if node.Spec.Image != "" {
+		subtreeValidator.Spec.Image = node.Spec.Image
+	}
 	if node.Spec.ConfigMapName != "" {
 		subtreeValidator.Spec.ConfigMapName = node.Spec.ConfigMapName
 	}

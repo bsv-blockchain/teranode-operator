@@ -44,6 +44,9 @@ func (r *NodeReconciler) updateBootstrap(bootstrap *teranodev1alpha1.Bootstrap, 
 	if node.Spec.Bootstrap.Spec != nil {
 		bootstrap.Spec = *node.Spec.Bootstrap.Spec
 	}
+	if node.Spec.Image != "" {
+		bootstrap.Spec.Image = node.Spec.Image
+	}
 	if node.Spec.ConfigMapName != "" {
 		bootstrap.Spec.ConfigMapName = node.Spec.ConfigMapName
 	}
