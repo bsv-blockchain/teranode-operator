@@ -11,8 +11,8 @@ import (
 
 // ReconcileService is the block-validator service reconciler
 func (r *BlockValidatorReconciler) ReconcileService(log logr.Logger) (bool, error) {
-	blockvalidator := teranodev1alpha1.BlockValidator{}
-	if err := r.Get(r.Context, r.NamespacedName, &blockvalidator); err != nil {
+	blockValidator := teranodev1alpha1.BlockValidator{}
+	if err := r.Get(r.Context, r.NamespacedName, &blockValidator); err != nil {
 		return false, err
 	}
 	svc := corev1.Service{
@@ -26,7 +26,7 @@ func (r *BlockValidatorReconciler) ReconcileService(log logr.Logger) (bool, erro
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &svc, func() error {
-		return r.updateService(&svc, &blockvalidator)
+		return r.updateService(&svc, &blockValidator)
 	})
 	if err != nil {
 		return false, err
@@ -34,8 +34,8 @@ func (r *BlockValidatorReconciler) ReconcileService(log logr.Logger) (bool, erro
 	return true, nil
 }
 
-func (r *BlockValidatorReconciler) updateService(svc *corev1.Service, blockvalidator *teranodev1alpha1.BlockValidator) error {
-	err := controllerutil.SetControllerReference(blockvalidator, svc, r.Scheme)
+func (r *BlockValidatorReconciler) updateService(svc *corev1.Service, blockValidator *teranodev1alpha1.BlockValidator) error {
+	err := controllerutil.SetControllerReference(blockValidator, svc, r.Scheme)
 	if err != nil {
 		return err
 	}

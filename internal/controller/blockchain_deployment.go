@@ -57,6 +57,11 @@ func (r *BlockchainReconciler) updateDeployment(dep *appsv1.Deployment, blockcha
 		dep.Spec.Template.Spec.ServiceAccountName = blockchain.Spec.ServiceAccount
 	}
 
+	// if user configures replicas
+	if blockchain.Spec.Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*blockchain.Spec.Replicas)
+	}
+
 	// if user configures a config map name
 	if blockchain.Spec.ConfigMapName != "" {
 		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{

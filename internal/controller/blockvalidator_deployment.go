@@ -14,8 +14,8 @@ import (
 
 // ReconcileDeployment is the blockchain service deployment reconciler
 func (r *BlockValidatorReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
-	blockchain := teranodev1alpha1.BlockValidator{}
-	if err := r.Get(r.Context, r.NamespacedName, &blockchain); err != nil {
+	blockValidator := teranodev1alpha1.BlockValidator{}
+	if err := r.Get(r.Context, r.NamespacedName, &blockValidator); err != nil {
 		return false, err
 	}
 	labels := getAppLabels()
@@ -28,7 +28,7 @@ func (r *BlockValidatorReconciler) ReconcileDeployment(log logr.Logger) (bool, e
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
-		return r.updateDeployment(&dep, &blockchain)
+		return r.updateDeployment(&dep, &blockValidator)
 	})
 	if err != nil {
 		return false, err
@@ -36,32 +36,37 @@ func (r *BlockValidatorReconciler) ReconcileDeployment(log logr.Logger) (bool, e
 	return true, nil
 }
 
-func (r *BlockValidatorReconciler) updateDeployment(dep *appsv1.Deployment, blockchain *teranodev1alpha1.BlockValidator) error {
-	err := controllerutil.SetControllerReference(blockchain, dep, r.Scheme)
+func (r *BlockValidatorReconciler) updateDeployment(dep *appsv1.Deployment, blockValidator *teranodev1alpha1.BlockValidator) error {
+	err := controllerutil.SetControllerReference(blockValidator, dep, r.Scheme)
 	if err != nil {
 		return err
 	}
 	dep.Spec = *defaultBlockValidatorDeploymentSpec()
-	if blockchain.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = blockchain.Spec.Image
+	if blockValidator.Spec.Image != "" {
+		dep.Spec.Template.Spec.Containers[0].Image = blockValidator.Spec.Image
 	}
-	if blockchain.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *blockchain.Spec.Resources
+	if blockValidator.Spec.Resources != nil {
+		dep.Spec.Template.Spec.Containers[0].Resources = *blockValidator.Spec.Resources
 	}
-	if blockchain.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = blockchain.Spec.ImagePullPolicy
+	if blockValidator.Spec.ImagePullPolicy != "" {
+		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = blockValidator.Spec.ImagePullPolicy
 	}
 
 	// if a user configures a service account
-	if blockchain.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = blockchain.Spec.ServiceAccount
+	if blockValidator.Spec.ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = blockValidator.Spec.ServiceAccount
+	}
+
+	// if user configures replicas
+	if blockValidator.Spec.Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*blockValidator.Spec.Replicas)
 	}
 
 	// if user configures a config map name
-	if blockchain.Spec.ConfigMapName != "" {
+	if blockValidator.Spec.ConfigMapName != "" {
 		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
 			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: blockchain.Spec.ConfigMapName},
+				LocalObjectReference: corev1.LocalObjectReference{Name: blockValidator.Spec.ConfigMapName},
 			},
 		})
 	}

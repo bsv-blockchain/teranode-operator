@@ -50,6 +50,11 @@ func (r *BootstrapReconciler) updateDeployment(dep *appsv1.Deployment, bs *teran
 		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = bs.Spec.ImagePullPolicy
 	}
 
+	// if user configures replicas
+	if bs.Spec.Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*bs.Spec.Replicas)
+	}
+
 	// if user configures a service account
 	if bs.Spec.ServiceAccount != "" {
 		dep.Spec.Template.Spec.ServiceAccountName = bs.Spec.ServiceAccount
@@ -77,10 +82,6 @@ func defaultBootstrapDeploymentSpec() *appsv1.DeploymentSpec {
 		{
 			Name:  "SERVICE_NAME",
 			Value: "bootstrap-service",
-		},
-		{
-			Name:  "logLevel",
-			Value: "INFO",
 		},
 		{
 			Name:  "startBootstrap",

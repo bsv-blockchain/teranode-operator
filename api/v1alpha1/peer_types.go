@@ -36,6 +36,7 @@ type PeerSpec struct {
 	GrpcIngress     *IngressDef                  `json:"grpcIngress,omitempty"`
 	WsIngress       *IngressDef                  `json:"wsIngress,omitempty"`
 	WssIngress      *IngressDef                  `json:"wssIngress,omitempty"`
+	Replicas        *int32                       `json:"replicas,omitempty"`
 }
 
 // PeerStatus defines the observed state of Peer

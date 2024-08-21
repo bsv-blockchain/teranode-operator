@@ -73,6 +73,11 @@ func (r *ValidatorReconciler) updateDeployment(dep *appsv1.Deployment, validator
 		dep.Spec.Template.Spec.ServiceAccountName = validator.Spec.ServiceAccount
 	}
 
+	// if user configures replicas
+	if validator.Spec.Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*validator.Spec.Replicas)
+	}
+
 	// if user configures a config map name
 	if validator.Spec.ConfigMapName != "" {
 		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{

@@ -41,6 +41,7 @@ type AssetSpec struct {
 	ServiceAccount     string                       `json:"serviceAccount,omitempty"`
 	ConfigMapName      string                       `json:"configMapName,omitempty"`
 	ServiceAnnotations map[string]string            `json:"serviceAnnotations,omitempty"`
+	Replicas           *int32                       `json:"replicas,omitempty"`
 }
 
 // AssetStatus defines the observed state of Asset

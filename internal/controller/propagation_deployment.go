@@ -73,6 +73,11 @@ func (r *PropagationReconciler) updateDeployment(dep *appsv1.Deployment, propaga
 		dep.Spec.Template.Spec.ServiceAccountName = propagation.Spec.ServiceAccount
 	}
 
+	// if user configures replicas
+	if propagation.Spec.Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*propagation.Spec.Replicas)
+	}
+
 	// if user configures a config map name
 	if propagation.Spec.ConfigMapName != "" {
 		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{

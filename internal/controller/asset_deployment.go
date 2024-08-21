@@ -60,6 +60,11 @@ func (r *AssetReconciler) updateDeployment(dep *appsv1.Deployment, asset *terano
 		dep.Spec.Template.Spec.Containers[0].Resources = *asset.Spec.Resources
 	}
 
+	// if user configures replicas
+	if asset.Spec.Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*asset.Spec.Replicas)
+	}
+
 	// if user configures image or image pull policy
 	if asset.Spec.Image != "" {
 		dep.Spec.Template.Spec.Containers[0].Image = asset.Spec.Image

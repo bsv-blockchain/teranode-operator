@@ -37,6 +37,7 @@ type MinerSpec struct {
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
 	ConfigMapName   string                       `json:"configMapName,omitempty"`
+	Replicas        *int32                       `json:"replicas,omitempty"`
 }
 
 // MinerStatus defines the observed state of Miner

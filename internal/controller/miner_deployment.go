@@ -72,6 +72,11 @@ func (r *MinerReconciler) updateDeployment(dep *appsv1.Deployment, miner *terano
 		dep.Spec.Template.Spec.ServiceAccountName = miner.Spec.ServiceAccount
 	}
 
+	// if user configures replicas
+	if miner.Spec.Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*miner.Spec.Replicas)
+	}
+
 	// if user configures a config map name
 	if miner.Spec.ConfigMapName != "" {
 		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{

@@ -60,6 +60,11 @@ func (r *CoinbaseReconciler) updateDeployment(dep *appsv1.Deployment, coinbase *
 		dep.Spec.Template.Spec.Containers[0].Resources = *coinbase.Spec.Resources
 	}
 
+	// if user configures replicas
+	if coinbase.Spec.Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*coinbase.Spec.Replicas)
+	}
+
 	// if user configures image overrides
 	if coinbase.Spec.Image != "" {
 		dep.Spec.Template.Spec.Containers[0].Image = coinbase.Spec.Image

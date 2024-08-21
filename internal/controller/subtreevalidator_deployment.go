@@ -77,6 +77,11 @@ func (r *SubtreeValidatorReconciler) updateDeployment(dep *appsv1.Deployment, su
 		dep.Spec.Template.Spec.ServiceAccountName = subtreeValidator.Spec.ServiceAccount
 	}
 
+	// if user configures replicas
+	if subtreeValidator.Spec.Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*subtreeValidator.Spec.Replicas)
+	}
+
 	// if user configures a config map name
 	if subtreeValidator.Spec.ConfigMapName != "" {
 		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{

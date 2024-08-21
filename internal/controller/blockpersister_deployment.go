@@ -73,6 +73,11 @@ func (r *BlockPersisterReconciler) updateDeployment(dep *appsv1.Deployment, bloc
 		dep.Spec.Template.Spec.ServiceAccountName = blockPersister.Spec.ServiceAccount
 	}
 
+	// if user configures replicas
+	if blockPersister.Spec.Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*blockPersister.Spec.Replicas)
+	}
+
 	// if user configures a config map name
 	if blockPersister.Spec.ConfigMapName != "" {
 		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{

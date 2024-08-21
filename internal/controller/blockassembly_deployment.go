@@ -73,6 +73,11 @@ func (r *BlockAssemblyReconciler) updateDeployment(dep *appsv1.Deployment, block
 		dep.Spec.Template.Spec.ServiceAccountName = blockAssembly.Spec.ServiceAccount
 	}
 
+	// if user configures replicas
+	if blockAssembly.Spec.Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*blockAssembly.Spec.Replicas)
+	}
+
 	// if user configures a config map name
 	if blockAssembly.Spec.ConfigMapName != "" {
 		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
@@ -103,7 +108,7 @@ func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
 		},
 	}
 	return &appsv1.DeploymentSpec{
-		Replicas: pointer.Int32(2),
+		Replicas: pointer.Int32(1),
 		Selector: metav1.SetAsLabelSelector(labels),
 		//Strategy: appsv1.DeploymentStrategy{ // TODO: confirm the lack of defined update strategy
 		//	Type: appsv1.RecreateDeploymentStrategyType,

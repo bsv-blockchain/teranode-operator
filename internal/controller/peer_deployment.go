@@ -55,6 +55,11 @@ func (r *PeerReconciler) updateDeployment(dep *appsv1.Deployment, peer *teranode
 		dep.Spec.Template.Spec.ServiceAccountName = peer.Spec.ServiceAccount
 	}
 
+	// if user configures replicas
+	if peer.Spec.Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*peer.Spec.Replicas)
+	}
+
 	// if user configures a config map name
 	if peer.Spec.ConfigMapName != "" {
 		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
@@ -77,10 +82,6 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 		{
 			Name:  "SERVICE_NAME",
 			Value: "p2p-service",
-		},
-		{
-			Name:  "logLevel",
-			Value: "INFO",
 		},
 	}
 	return &appsv1.DeploymentSpec{
