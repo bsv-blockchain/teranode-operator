@@ -944,6 +944,9 @@ spec:
                 required:
                 - host
                 type: object
+              replicas:
+                format: int32
+                type: integer
               resources:
                 description: ResourceRequirements describes the compute resource requirements.
                 properties:

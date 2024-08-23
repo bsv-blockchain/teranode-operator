@@ -998,6 +998,9 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      replicas:
+                        format: int32
+                        type: integer
                       resources:
                         description: ResourceRequirements describes the compute resource
                           requirements.
@@ -2022,6 +2025,9 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      replicas:
+                        format: int32
+                        type: integer
                       resources:
                         description: ResourceRequirements describes the compute resource
                           requirements.
@@ -3094,6 +3100,9 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      replicas:
+                        format: int32
+                        type: integer
                       resources:
                         description: ResourceRequirements describes the compute resource
                           requirements.
@@ -3260,6 +3269,9 @@ spec:
                         description: PullPolicy describes a policy for if/when to
                           pull a container image
                         type: string
+                      replicas:
+                        format: int32
+                        type: integer
                       resources:
                         description: ResourceRequirements describes the compute resource
                           requirements.
@@ -3333,6 +3345,9 @@ spec:
                         description: PullPolicy describes a policy for if/when to
                           pull a container image
                         type: string
+                      replicas:
+                        format: int32
+                        type: integer
                       resources:
                         description: ResourceRequirements describes the compute resource
                           requirements.
@@ -3406,6 +3421,9 @@ spec:
                         description: PullPolicy describes a policy for if/when to
                           pull a container image
                         type: string
+                      replicas:
+                        format: int32
+                        type: integer
                       resources:
                         description: 'INSERT ADDITIONAL SPEC FIELDS - desired state
                           of cluster Important: Run "make" to regenerate code after
@@ -4400,6 +4418,9 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      replicas:
+                        format: int32
+                        type: integer
                       resources:
                         description: ResourceRequirements describes the compute resource
                           requirements.
@@ -5424,6 +5445,9 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      replicas:
+                        format: int32
+                        type: integer
                       resources:
                         description: ResourceRequirements describes the compute resource
                           requirements.
@@ -5552,6 +5576,9 @@ spec:
                         description: PullPolicy describes a policy for if/when to
                           pull a container image
                         type: string
+                      replicas:
+                        format: int32
+                        type: integer
                       resources:
                         description: 'INSERT ADDITIONAL SPEC FIELDS - desired state
                           of cluster Important: Run "make" to regenerate code after
@@ -6630,6 +6657,9 @@ spec:
                         required:
                         - host
                         type: object
+                      replicas:
+                        format: int32
+                        type: integer
                       resources:
                         description: ResourceRequirements describes the compute resource
                           requirements.
@@ -7659,6 +7689,9 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      replicas:
+                        format: int32
+                        type: integer
                       resources:
                         description: Foo is an example field of SubtreeValidator.
                           Edit subtreevalidator_types.go to remove/update
@@ -8733,6 +8766,9 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      replicas:
+                        format: int32
+                        type: integer
                       resources:
                         description: ResourceRequirements describes the compute resource
                           requirements.

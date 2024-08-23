@@ -878,6 +878,9 @@ spec:
                 additionalProperties:
                   type: string
                 type: object
+              replicas:
+                format: int32
+                type: integer
               resources:
                 description: Foo is an example field of SubtreeValidator. Edit subtreevalidator_types.go
                   to remove/update

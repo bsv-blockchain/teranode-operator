@@ -5,4 +5,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator
-  newTag: v0.1.1
+  newTag: v0.1.3
