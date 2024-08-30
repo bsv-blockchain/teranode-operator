@@ -55,6 +55,11 @@ spec:
       kind: Faucet
       name: faucets.teranode.bsvblockchain.org
       version: v1alpha1
+    - description: Legacy is the Schema for the legacies API
+      displayName: Legacy
+      kind: Legacy
+      name: legacies.teranode.bsvblockchain.org
+      version: v1alpha1
     - description: Miner is the Schema for the miners API
       displayName: Miner
       kind: Miner

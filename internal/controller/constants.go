@@ -27,5 +27,6 @@ const PropagationGRPCPort = 8084
 const PropagationHTTPPort = 8833
 const PropagationQuicPort = 8384
 const SubtreeValidatorGRPCPort = 8086
+const LegacyHttpPort = 8098
 const ProfilerPort = 9091
 const DebuggerPort = 4040

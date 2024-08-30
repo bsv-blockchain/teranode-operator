@@ -9,15 +9,15 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
-// ReconcileService is the subtree-validator service reconciler
-func (r *SubtreeValidatorReconciler) ReconcileService(log logr.Logger) (bool, error) {
-	subtreeValidator := teranodev1alpha1.SubtreeValidator{}
-	if err := r.Get(r.Context, r.NamespacedName, &subtreeValidator); err != nil {
+// ReconcileService is the legacy service reconciler
+func (r *LegacyReconciler) ReconcileService(log logr.Logger) (bool, error) {
+	legacy := teranodev1alpha1.Legacy{}
+	if err := r.Get(r.Context, r.NamespacedName, &legacy); err != nil {
 		return false, err
 	}
 	svc := corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "subtree-validator",
+			Name:      "legacy",
 			Namespace: r.NamespacedName.Namespace,
 			Annotations: map[string]string{
 				"prometheus.io/port":   "9091",
@@ -26,7 +26,7 @@ func (r *SubtreeValidatorReconciler) ReconcileService(log logr.Logger) (bool, er
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &svc, func() error {
-		return r.updateService(&svc, &subtreeValidator)
+		return r.updateService(&svc, &legacy)
 	})
 	if err != nil {
 		return false, err
@@ -34,18 +34,18 @@ func (r *SubtreeValidatorReconciler) ReconcileService(log logr.Logger) (bool, er
 	return true, nil
 }
 
-func (r *SubtreeValidatorReconciler) updateService(svc *corev1.Service, subtreeValidator *teranodev1alpha1.SubtreeValidator) error {
-	err := controllerutil.SetControllerReference(subtreeValidator, svc, r.Scheme)
+func (r *LegacyReconciler) updateService(svc *corev1.Service, legacy *teranodev1alpha1.Legacy) error {
+	err := controllerutil.SetControllerReference(legacy, svc, r.Scheme)
 	if err != nil {
 		return err
 	}
-	svc.Spec = *defaultSubtreeValidatorServiceSpec()
+	svc.Spec = *defaultLegacyServiceSpec()
 	return nil
 }
 
-func defaultSubtreeValidatorServiceSpec() *corev1.ServiceSpec {
+func defaultLegacyServiceSpec() *corev1.ServiceSpec {
 	labels := map[string]string{
-		"app": "subtree-validator",
+		"app": "legacy",
 	}
 	ipFamily := corev1.IPFamilyPolicySingleStack
 	return &corev1.ServiceSpec{
@@ -57,9 +57,9 @@ func defaultSubtreeValidatorServiceSpec() *corev1.ServiceSpec {
 		},
 		Ports: []corev1.ServicePort{
 			{
-				Name:       "grpc",
-				Port:       int32(SubtreeValidatorGRPCPort),
-				TargetPort: intstr.FromInt32(SubtreeValidatorGRPCPort),
+				Name:       "http",
+				Port:       int32(LegacyHttpPort),
+				TargetPort: intstr.FromInt32(LegacyHttpPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{

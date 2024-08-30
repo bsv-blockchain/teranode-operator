@@ -20,6 +20,7 @@ import (
 	"context"
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
+	appsv1 "k8s.io/api/apps/v1"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -32,8 +33,8 @@ import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 )
 
-// ClusterReconciler reconciles a Cluster object
-type ClusterReconciler struct {
+// LegacyReconciler reconciles a Legacy object
+type LegacyReconciler struct {
 	client.Client
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
@@ -41,48 +42,37 @@ type ClusterReconciler struct {
 	Context        context.Context
 }
 
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=clusters,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=clusters/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=clusters/finalizers,verbs=update
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=legacies,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=legacies/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=legacies/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
 // TODO(user): Modify the Reconcile function to compare the state specified by
-// the Cluster object against the actual cluster state, and then
+// the Legacy object against the actual cluster state, and then
 // perform operations to make the cluster state reflect the state specified by
 // the user.
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
-func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *LegacyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	result := ctrl.Result{}
-	r.Log = log.FromContext(ctx).WithValues("cluster", req.NamespacedName)
+	r.Log = log.FromContext(ctx).WithValues("legacy", req.NamespacedName)
 	r.Context = ctx
 	r.NamespacedName = req.NamespacedName
-	cluster := teranodev1alpha1.Cluster{}
-	if err := r.Get(ctx, req.NamespacedName, &cluster); err != nil {
-		r.Log.Error(err, "unable to fetch cluster CR")
+	legacy := teranodev1alpha1.Legacy{}
+	if err := r.Get(ctx, req.NamespacedName, &legacy); err != nil {
+		r.Log.Error(err, "unable to fetch legacy CR")
 		return result, nil
 	}
 
 	_, err := utils.ReconcileBatch(r.Log,
-		//r.Validate,
-		r.ReconcileAsset,
-		r.ReconcileBlockAssembly,
-		r.ReconcileBlockPersister,
-		r.ReconcileBlockValidator,
-		r.ReconcileBlockchain,
-		r.ReconcileCoinbase,
-		r.ReconcileBootstrap,
-		r.ReconcileLegacy,
-		r.ReconcileMiner,
-		r.ReconcilePeer,
-		r.ReconcilePropagation,
-		r.ReconcileSubtreeValidator,
-		r.ReconcileValidator,
+		r.ReconcileDeployment,
+		r.ReconcileService,
 	)
+
 	if err != nil {
-		apimeta.SetStatusCondition(&cluster.Status.Conditions,
+		apimeta.SetStatusCondition(&legacy.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -91,7 +81,7 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 			},
 		)
 	} else {
-		apimeta.SetStatusCondition(&cluster.Status.Conditions,
+		apimeta.SetStatusCondition(&legacy.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,
@@ -101,7 +91,7 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		)
 	}
 
-	statusErr := r.Client.Status().Update(ctx, &cluster)
+	statusErr := r.Client.Status().Update(ctx, &legacy)
 	if err == nil {
 		err = statusErr
 	}
@@ -110,20 +100,9 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *ClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *LegacyReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&teranodev1alpha1.Cluster{}).
-		Owns(&teranodev1alpha1.Asset{}).
-		Owns(&teranodev1alpha1.BlockAssembly{}).
-		Owns(&teranodev1alpha1.Blockchain{}).
-		Owns(&teranodev1alpha1.BlockPersister{}).
-		Owns(&teranodev1alpha1.Bootstrap{}).
-		Owns(&teranodev1alpha1.Coinbase{}).
-		Owns(&teranodev1alpha1.Legacy{}).
-		Owns(&teranodev1alpha1.Miner{}).
-		Owns(&teranodev1alpha1.Peer{}).
-		Owns(&teranodev1alpha1.Propagation{}).
-		Owns(&teranodev1alpha1.SubtreeValidator{}).
-		Owns(&teranodev1alpha1.Validator{}).
+		For(&teranodev1alpha1.Legacy{}).
+		Owns(&appsv1.Deployment{}).
 		Complete(r)
 }

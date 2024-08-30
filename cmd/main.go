@@ -21,6 +21,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
@@ -223,6 +224,13 @@ func main() {
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "BlockValidator")
+		os.Exit(1)
+	}
+	if err = (&controller.LegacyReconciler{
+		Client: mgr.GetClient(),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Legacy")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder

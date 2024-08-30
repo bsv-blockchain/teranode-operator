@@ -62,6 +62,12 @@ type CoinbaseConfig struct {
 	Spec    *CoinbaseSpec `json:"spec"`
 }
 
+// LegacyConfig defines the legacy configuration
+type LegacyConfig struct {
+	Enabled bool        `json:"enabled"`
+	Spec    *LegacySpec `json:"spec"`
+}
+
 // MinerConfig defines the miner configuration
 type MinerConfig struct {
 	Enabled bool       `json:"enabled"`
@@ -104,6 +110,7 @@ type ClusterSpec struct {
 	BlockValidator   BlockValidatorConfig   `json:"blockValidator"`
 	Bootstrap        BootstrapConfig        `json:"bootstrap"`
 	Coinbase         CoinbaseConfig         `json:"coinbase"`
+	Legacy           LegacyConfig           `json:"legacy"`
 	Miner            MinerConfig            `json:"miner"`
 	Peer             PeerConfig             `json:"peer"`
 	Propagation      PropagationConfig      `json:"propagation"`
