@@ -175,9 +175,24 @@ func defaultValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},
+						VolumeMounts: []corev1.VolumeMount{
+							{
+								MountPath: "/data",
+								Name:      SharedPVCName,
+							},
+						},
 					},
 				},
-				Volumes: []corev1.Volume{},
+				Volumes: []corev1.Volume{
+					{
+						Name: SharedPVCName,
+						VolumeSource: corev1.VolumeSource{
+							PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
+								ClaimName: SharedPVCName,
+							},
+						},
+					},
+				},
 			},
 		},
 	}
