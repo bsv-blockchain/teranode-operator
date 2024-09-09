@@ -86,6 +86,16 @@ func (r *PropagationReconciler) updateDeployment(dep *appsv1.Deployment, propaga
 			},
 		})
 	}
+
+	// if user configures a custom command
+	if len(propagation.Spec.Command) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Command = propagation.Spec.Command
+	}
+
+	// if user configures custom arguments
+	if len(propagation.Spec.Args) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Args = propagation.Spec.Args
+	}
 	return nil
 }
 

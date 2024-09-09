@@ -44,6 +44,8 @@ type PropagationSpec struct {
 	ConfigMapName      string                       `json:"configMapName,omitempty"`
 	ServiceAnnotations map[string]string            `json:"serviceAnnotations,omitempty"`
 	Replicas           *int32                       `json:"replicas,omitempty"`
+	Command            []string                     `json:"command,omitempty"`
+	Args               []string                     `json:"args,omitempty"`
 }
 
 // PropagationStatus defines the observed state of Propagation

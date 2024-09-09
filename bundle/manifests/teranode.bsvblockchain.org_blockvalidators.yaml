@@ -34,6 +34,14 @@ spec:
           spec:
             description: BlockValidatorSpec defines the desired state of BlockValidator
             properties:
+              args:
+                items:
+                  type: string
+                type: array
+              command:
+                items:
+                  type: string
+                type: array
               configMapName:
                 type: string
               image:

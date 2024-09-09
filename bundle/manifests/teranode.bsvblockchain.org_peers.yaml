@@ -34,6 +34,14 @@ spec:
           spec:
             description: PeerSpec defines the desired state of Peer
             properties:
+              args:
+                items:
+                  type: string
+                type: array
+              command:
+                items:
+                  type: string
+                type: array
               configMapName:
                 type: string
               grpcIngress:

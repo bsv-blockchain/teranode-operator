@@ -34,6 +34,14 @@ spec:
           spec:
             description: BlockchainSpec defines the desired state of Blockchain
             properties:
+              args:
+                items:
+                  type: string
+                type: array
+              command:
+                items:
+                  type: string
+                type: array
               configMapName:
                 type: string
               image:

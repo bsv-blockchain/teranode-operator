@@ -68,6 +68,16 @@ func (r *PeerReconciler) updateDeployment(dep *appsv1.Deployment, peer *teranode
 			},
 		})
 	}
+
+	// if user configures a custom command
+	if len(peer.Spec.Command) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Command = peer.Spec.Command
+	}
+
+	// if user configures custom arguments
+	if len(peer.Spec.Args) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Args = peer.Spec.Args
+	}
 	return nil
 }
 

@@ -70,6 +70,16 @@ func (r *BlockchainReconciler) updateDeployment(dep *appsv1.Deployment, blockcha
 			},
 		})
 	}
+
+	// if user configures a custom command
+	if len(blockchain.Spec.Command) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Command = blockchain.Spec.Command
+	}
+
+	// if user configures custom arguments
+	if len(blockchain.Spec.Args) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Args = blockchain.Spec.Args
+	}
 	return nil
 }
 

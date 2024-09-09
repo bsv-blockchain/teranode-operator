@@ -85,6 +85,16 @@ func (r *LegacyReconciler) updateDeployment(dep *appsv1.Deployment, legacy *tera
 			},
 		})
 	}
+
+	// if user configures a custom command
+	if len(legacy.Spec.Command) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Command = legacy.Spec.Command
+	}
+
+	// if user configures custom arguments
+	if len(legacy.Spec.Args) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Args = legacy.Spec.Args
+	}
 	return nil
 }
 

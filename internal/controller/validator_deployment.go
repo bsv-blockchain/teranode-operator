@@ -86,6 +86,16 @@ func (r *ValidatorReconciler) updateDeployment(dep *appsv1.Deployment, validator
 			},
 		})
 	}
+
+	// if user configures a custom command
+	if len(validator.Spec.Command) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Command = validator.Spec.Command
+	}
+
+	// if user configures custom arguments
+	if len(validator.Spec.Args) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Args = validator.Spec.Args
+	}
 	return nil
 }
 

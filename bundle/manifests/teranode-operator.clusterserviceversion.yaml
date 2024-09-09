@@ -571,8 +571,8 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-08-29T22:25:03Z"
-    operators.operatorframework.io/builder: operator-sdk-v1.34.2
+    createdAt: "2024-09-09T01:59:56Z"
+    operators.operatorframework.io/builder: operator-sdk-v1.35.0
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
   name: teranode-operator.v0.0.1
   namespace: placeholder
@@ -1159,7 +1159,7 @@ spec:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.annotations['olm.targetNamespaces']
-                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.1.5
+                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.1.8
                 imagePullPolicy: Always
                 livenessProbe:
                   httpGet:

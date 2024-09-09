@@ -70,6 +70,16 @@ func (r *BlockValidatorReconciler) updateDeployment(dep *appsv1.Deployment, bloc
 			},
 		})
 	}
+
+	// if user configures a custom command
+	if len(blockValidator.Spec.Command) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Command = blockValidator.Spec.Command
+	}
+
+	// if user configures custom arguments
+	if len(blockValidator.Spec.Args) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Args = blockValidator.Spec.Args
+	}
 	return nil
 }
 

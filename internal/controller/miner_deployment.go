@@ -85,6 +85,16 @@ func (r *MinerReconciler) updateDeployment(dep *appsv1.Deployment, miner *terano
 			},
 		})
 	}
+
+	// if user configures a custom command
+	if len(miner.Spec.Command) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Command = miner.Spec.Command
+	}
+
+	// if user configures custom arguments
+	if len(miner.Spec.Args) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Args = miner.Spec.Args
+	}
 	return nil
 }
 

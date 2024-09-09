@@ -87,6 +87,16 @@ func (r *CoinbaseReconciler) updateDeployment(dep *appsv1.Deployment, coinbase *
 		})
 	}
 
+	// if user configures a custom command
+	if len(coinbase.Spec.Command) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Command = coinbase.Spec.Command
+	}
+
+	// if user configures custom arguments
+	if len(coinbase.Spec.Args) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Args = coinbase.Spec.Args
+	}
+
 	return nil
 }
 

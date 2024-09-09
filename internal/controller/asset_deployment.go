@@ -87,6 +87,16 @@ func (r *AssetReconciler) updateDeployment(dep *appsv1.Deployment, asset *terano
 		})
 	}
 
+	// if user configures a custom command
+	if len(asset.Spec.Command) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Command = asset.Spec.Command
+	}
+
+	// if user configures custom arguments
+	if len(asset.Spec.Args) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Args = asset.Spec.Args
+	}
+
 	return nil
 }
 

@@ -944,6 +944,14 @@ spec:
                                 type: array
                             type: object
                         type: object
+                      args:
+                        items:
+                          type: string
+                        type: array
+                      command:
+                        items:
+                          type: string
+                        type: array
                       configMapName:
                         type: string
                       grpcIngress:
@@ -2013,6 +2021,14 @@ spec:
                                 type: array
                             type: object
                         type: object
+                      args:
+                        items:
+                          type: string
+                        type: array
+                      command:
+                        items:
+                          type: string
+                        type: array
                       configMapName:
                         type: string
                       image:
@@ -3088,6 +3104,14 @@ spec:
                                 type: array
                             type: object
                         type: object
+                      args:
+                        items:
+                          type: string
+                        type: array
+                      command:
+                        items:
+                          type: string
+                        type: array
                       configMapName:
                         type: string
                       image:
@@ -3261,6 +3285,14 @@ spec:
                   spec:
                     description: BlockValidatorSpec defines the desired state of BlockValidator
                     properties:
+                      args:
+                        items:
+                          type: string
+                        type: array
+                      command:
+                        items:
+                          type: string
+                        type: array
                       configMapName:
                         type: string
                       image:
@@ -3337,6 +3369,14 @@ spec:
                   spec:
                     description: BlockchainSpec defines the desired state of Blockchain
                     properties:
+                      args:
+                        items:
+                          type: string
+                        type: array
+                      command:
+                        items:
+                          type: string
+                        type: array
                       configMapName:
                         type: string
                       image:
@@ -4392,6 +4432,14 @@ spec:
                                 type: array
                             type: object
                         type: object
+                      args:
+                        items:
+                          type: string
+                        type: array
+                      command:
+                        items:
+                          type: string
+                        type: array
                       configMapName:
                         type: string
                       grpcIngress:
@@ -5433,6 +5481,14 @@ spec:
                                 type: array
                             type: object
                         type: object
+                      args:
+                        items:
+                          type: string
+                        type: array
+                      command:
+                        items:
+                          type: string
+                        type: array
                       configMapName:
                         type: string
                       image:
@@ -6456,6 +6512,14 @@ spec:
                                 type: array
                             type: object
                         type: object
+                      args:
+                        items:
+                          type: string
+                        type: array
+                      command:
+                        items:
+                          type: string
+                        type: array
                       configMapName:
                         type: string
                       image:
@@ -6577,6 +6641,14 @@ spec:
                   spec:
                     description: PeerSpec defines the desired state of Peer
                     properties:
+                      args:
+                        items:
+                          type: string
+                        type: array
+                      command:
+                        items:
+                          type: string
+                        type: array
                       configMapName:
                         type: string
                       grpcIngress:
@@ -7598,6 +7670,14 @@ spec:
                                 type: array
                             type: object
                         type: object
+                      args:
+                        items:
+                          type: string
+                        type: array
+                      command:
+                        items:
+                          type: string
+                        type: array
                       configMapName:
                         type: string
                       delveIngress:
@@ -8696,6 +8776,14 @@ spec:
                                 type: array
                             type: object
                         type: object
+                      args:
+                        items:
+                          type: string
+                        type: array
+                      command:
+                        items:
+                          type: string
+                        type: array
                       configMapName:
                         type: string
                       image:
@@ -9777,6 +9865,14 @@ spec:
                                 type: array
                             type: object
                         type: object
+                      args:
+                        items:
+                          type: string
+                        type: array
+                      command:
+                        items:
+                          type: string
+                        type: array
                       configMapName:
                         type: string
                       image:

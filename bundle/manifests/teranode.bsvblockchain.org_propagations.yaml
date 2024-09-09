@@ -862,6 +862,14 @@ spec:
                         type: array
                     type: object
                 type: object
+              args:
+                items:
+                  type: string
+                type: array
+              command:
+                items:
+                  type: string
+                type: array
               configMapName:
                 type: string
               delveIngress:

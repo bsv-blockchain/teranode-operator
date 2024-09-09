@@ -87,6 +87,15 @@ func (r *BlockAssemblyReconciler) updateDeployment(dep *appsv1.Deployment, block
 		})
 	}
 
+	// if user configures a custom command
+	if len(blockAssembly.Spec.Command) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Command = blockAssembly.Spec.Command
+	}
+
+	// if user configures custom arguments
+	if len(blockAssembly.Spec.Args) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Args = blockAssembly.Spec.Args
+	}
 	return nil
 }
 

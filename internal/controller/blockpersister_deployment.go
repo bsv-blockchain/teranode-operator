@@ -86,6 +86,16 @@ func (r *BlockPersisterReconciler) updateDeployment(dep *appsv1.Deployment, bloc
 			},
 		})
 	}
+
+	// if user configures a custom command
+	if len(blockPersister.Spec.Command) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Command = blockPersister.Spec.Command
+	}
+
+	// if user configures custom arguments
+	if len(blockPersister.Spec.Args) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Args = blockPersister.Spec.Args
+	}
 	return nil
 }
 
