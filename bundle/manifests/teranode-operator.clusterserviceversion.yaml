@@ -18,7 +18,7 @@ metadata:
             "name": "asset-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -45,7 +45,7 @@ metadata:
             "name": "blockassembly-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -72,7 +72,7 @@ metadata:
             "name": "blockpersister-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -120,7 +120,7 @@ metadata:
             "name": "blockchain-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -373,7 +373,7 @@ metadata:
             "name": "coinbase-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -400,7 +400,7 @@ metadata:
             "name": "faucet-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -442,7 +442,7 @@ metadata:
             "name": "miner-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -469,7 +469,7 @@ metadata:
             "name": "peer-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -496,7 +496,7 @@ metadata:
             "name": "propagation-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -523,7 +523,7 @@ metadata:
             "name": "subtreevalidator-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -556,7 +556,7 @@ metadata:
             "name": "validator-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {

@@ -19,5 +19,5 @@ spec:
       memory: 2Gi
     limits:
       memory: 6Gi
-  image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22
+  image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68
   imagePullPolicy: Always

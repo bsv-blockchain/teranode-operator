@@ -7,7 +7,7 @@ const DefaultServiceAccountName = "service-runner"
 const SharedPVCName = "cluster-storage"
 
 // DefaultImage is the default teranode service image
-const DefaultImage = "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.22"
+const DefaultImage = "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68"
 
 // Ports for services
 const AssetGRPCPort = 8091

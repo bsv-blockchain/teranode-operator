@@ -2,156 +2,170 @@ apiVersion: teranode.bsvblockchain.org/v1alpha1
 kind: Cluster
 metadata:
   labels:
-    app.kubernetes.io/name: cluster
-    app.kubernetes.io/instance: cluster-sample
-    app.kubernetes.io/part-of: teranode-operator
-    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/created-by: teranode-operator
+    app.kubernetes.io/instance: cluster-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: cluster
+    app.kubernetes.io/part-of: teranode-operator
   name: cluster-sample
+  namespace: t2
 spec:
-  configMapName: "shared-config"
-  bootstrap:
-    enabled: false
-    spec: {}
   asset:
     enabled: true
     spec:
-      serviceAnnotations:
-        traefik.ingress.kubernetes.io/service.serversscheme: h2c
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
       grpcIngress:
-        className: &my-class traefik-internal
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: ast-grpc
-        host: &my-host t2.testing.ubsv.dev
+        className: traefik-internal
+        host: t2.testing.ubsv.dev
       httpIngress:
-        className: *my-class
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: web
-        host: *my-host
+        className: traefik-internal
+        host: t2.testing.ubsv.dev
       httpsIngress:
-        className: *my-class
         annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: websecure
           cert-manager.io/cluster-issuer: letsencrypt-prod
-        host: *my-host
-  blockValidator:
-    enabled: true
-    spec:
+          traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        className: traefik-internal
+        host: t2.testing.ubsv.dev
       resources:
+        limits:
+          memory: 2Gi
         requests:
           cpu: 1
           memory: 1Gi
-        limits:
-          memory: 2Gi
-  blockPersister:
-    enabled: true
-    spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
-      storageResources:
-        requests:
-          storage: 5Gi
-      storageClass: "fsx-sc"
-  blockchain:
-    enabled: true
-    spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
+      serviceAnnotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: h2c
   blockAssembly:
     enabled: true
     spec:
+      replicas: 1
       resources:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 2
+          memory: 1Gi
+  blockPersister:
+    enabled: true
+    spec:
+      replicas: 1
+      resources:
+        limits:
+          memory: 2Gi
         requests:
           cpu: 1
           memory: 1Gi
-        limits:
-          memory: 2Gi
-  miner:
-    enabled: true
-    spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
-  peer:
-    enabled: true
-    spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
-      grpcIngress:
-        className: *my-class
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: peer-grpc
-        host: *my-host
-      wsIngress:
-        className: *my-class
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: p2p-ws
-        host: *my-host
-      wssIngress:
-        className: *my-class
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: p2p-wss
-        host: *my-host
-  propagation:
-    enabled: true
-    spec:
-      serviceAnnotations:
-        traefik.ingress.kubernetes.io/service.serversscheme: h2c
-      grpcIngress:
-        className: *my-class
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: prop-grpc
-        host: *my-host
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
-  subtreeValidator:
-    enabled: true
-    spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 2Gi
-        limits:
-          memory: 6Gi
+      storageClass: fsx-sc
       storageResources:
         requests:
           storage: 5Gi
-      storageClass: "fsx-sc"
-      storageVolume: "shared-storage-2"
-  validator:
+  blockValidator:
+    enabled: true
+    spec:
+      replicas: 1
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 1
+          memory: 1Gi
+  blockchain:
+    enabled: true
+    spec:
+      replicas: 1
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 1
+          memory: 1Gi
+  bootstrap:
     enabled: false
     spec: {}
   coinbase:
     enabled: true
     spec:
+      replicas: 1
       resources:
+        limits:
+          memory: 2Gi
         requests:
           cpu: 1
           memory: 1Gi
+  configMapName: shared-config
+  miner:
+    enabled: true
+    spec:
+      replicas: 1
+      resources:
         limits:
           memory: 2Gi
+        requests:
+          cpu: 1
+          memory: 1Gi
+  peer:
+    enabled: true
+    spec:
+      grpcIngress:
+        annotations:
+          traefik.ingress.kubernetes.io/router.entrypoints: peer-grpc
+        className: traefik-internal
+        host: t2.testing.ubsv.dev
+      replicas: 1
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 1
+          memory: 1Gi
+      wsIngress:
+        annotations:
+          traefik.ingress.kubernetes.io/router.entrypoints: p2p-ws
+        className: traefik-internal
+        host: t2.testing.ubsv.dev
+      wssIngress:
+        annotations:
+          traefik.ingress.kubernetes.io/router.entrypoints: p2p-wss
+        className: traefik-internal
+        host: t2.testing.ubsv.dev
+  propagation:
+    enabled: true
+    spec:
+      grpcIngress:
+        annotations:
+          traefik.ingress.kubernetes.io/router.entrypoints: prop-grpc
+        className: traefik-internal
+        host: t2.testing.ubsv.dev
+      replicas: 1
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 1
+          memory: 1Gi
+      serviceAnnotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: h2c
+  subtreeValidator:
+    enabled: true
+    spec:
+      resources:
+        limits:
+          memory: 6Gi
+        requests:
+          cpu: 1
+          memory: 2Gi
+      storageClass: fsx-sc
+      storageResources:
+        requests:
+          storage: 5Gi
+  validator:
+    enabled: true
+    spec:
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 1
+          memory: 1Gi
