@@ -65,6 +65,50 @@ type Asset struct {
 	Status AssetStatus `json:"status,omitempty"`
 }
 
+func (in *Asset) NodeSelector() map[string]string {
+	return in.Spec.NodeSelector
+}
+
+func (in *Asset) Tolerations() *[]corev1.Toleration {
+	return in.Spec.Tolerations
+}
+
+func (in *Asset) Affinity() *corev1.Affinity {
+	return in.Spec.Affinity
+}
+
+func (in *Asset) Resources() *corev1.ResourceRequirements {
+	return in.Spec.Resources
+}
+
+func (in *Asset) Image() string {
+	return in.Spec.Image
+}
+
+func (in *Asset) ImagePullPolicy() corev1.PullPolicy {
+	return in.Spec.ImagePullPolicy
+}
+
+func (in *Asset) ServiceAccountName() string {
+	return in.Spec.ServiceAccount
+}
+
+func (in *Asset) Replicas() *int32 {
+	return in.Spec.Replicas
+}
+
+func (in *Asset) ConfigMapName() string {
+	return in.Spec.ConfigMapName
+}
+
+func (in *Asset) Command() []string {
+	return in.Spec.Command
+}
+
+func (in *Asset) Args() []string {
+	return in.Spec.Args
+}
+
 //+kubebuilder:object:root=true
 
 // AssetList contains a list of Asset

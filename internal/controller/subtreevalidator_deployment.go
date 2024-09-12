@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -39,67 +40,8 @@ func (r *SubtreeValidatorReconciler) updateDeployment(dep *appsv1.Deployment, su
 		return err
 	}
 	dep.Spec = *defaultSubtreeValidatorDeploymentSpec()
-	// If user configures a node selector
-	if subtreeValidator.Spec.NodeSelector != nil {
-		dep.Spec.Template.Spec.NodeSelector = subtreeValidator.Spec.NodeSelector
-	}
+	utils.SetDeploymentOverrides(dep, subtreeValidator)
 
-	// If user configures tolerations
-	if subtreeValidator.Spec.Tolerations != nil {
-		dep.Spec.Template.Spec.Tolerations = *subtreeValidator.Spec.Tolerations
-	}
-
-	// If user configures affinity
-	if subtreeValidator.Spec.Affinity != nil {
-		dep.Spec.Template.Spec.Affinity = subtreeValidator.Spec.Affinity
-	}
-
-	// if user configures resources requests
-	if subtreeValidator.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *subtreeValidator.Spec.Resources
-	}
-
-	// if user configures pod template annotations
-	if subtreeValidator.Spec.PodTemplateAnnotations != nil {
-		dep.Spec.Template.Annotations = subtreeValidator.Spec.PodTemplateAnnotations
-	}
-
-	// if user configures image overrides
-	if subtreeValidator.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = subtreeValidator.Spec.Image
-	}
-	if subtreeValidator.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = subtreeValidator.Spec.ImagePullPolicy
-	}
-
-	// if user configures a service account
-	if subtreeValidator.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = subtreeValidator.Spec.ServiceAccount
-	}
-
-	// if user configures replicas
-	if subtreeValidator.Spec.Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*subtreeValidator.Spec.Replicas)
-	}
-
-	// if user configures a config map name
-	if subtreeValidator.Spec.ConfigMapName != "" {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: subtreeValidator.Spec.ConfigMapName},
-			},
-		})
-	}
-
-	// if user configures a custom command
-	if len(subtreeValidator.Spec.Command) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = subtreeValidator.Spec.Command
-	}
-
-	// if user configures custom arguments
-	if len(subtreeValidator.Spec.Args) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = subtreeValidator.Spec.Args
-	}
 	return nil
 }
 

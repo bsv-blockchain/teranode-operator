@@ -68,6 +68,50 @@ type Propagation struct {
 	Status PropagationStatus `json:"status,omitempty"`
 }
 
+func (in *Propagation) NodeSelector() map[string]string {
+	return in.Spec.NodeSelector
+}
+
+func (in *Propagation) Tolerations() *[]corev1.Toleration {
+	return in.Spec.Tolerations
+}
+
+func (in *Propagation) Affinity() *corev1.Affinity {
+	return in.Spec.Affinity
+}
+
+func (in *Propagation) Resources() *corev1.ResourceRequirements {
+	return in.Spec.Resources
+}
+
+func (in *Propagation) Image() string {
+	return in.Spec.Image
+}
+
+func (in *Propagation) ImagePullPolicy() corev1.PullPolicy {
+	return in.Spec.ImagePullPolicy
+}
+
+func (in *Propagation) ServiceAccountName() string {
+	return in.Spec.ServiceAccount
+}
+
+func (in *Propagation) Replicas() *int32 {
+	return in.Spec.Replicas
+}
+
+func (in *Propagation) ConfigMapName() string {
+	return in.Spec.ConfigMapName
+}
+
+func (in *Propagation) Command() []string {
+	return in.Spec.Command
+}
+
+func (in *Propagation) Args() []string {
+	return in.Spec.Args
+}
+
 //+kubebuilder:object:root=true
 
 // PropagationList contains a list of Propagation

@@ -62,6 +62,50 @@ type Validator struct {
 	Status ValidatorStatus `json:"status,omitempty"`
 }
 
+func (in *Validator) NodeSelector() map[string]string {
+	return in.Spec.NodeSelector
+}
+
+func (in *Validator) Tolerations() *[]corev1.Toleration {
+	return in.Spec.Tolerations
+}
+
+func (in *Validator) Affinity() *corev1.Affinity {
+	return in.Spec.Affinity
+}
+
+func (in *Validator) Resources() *corev1.ResourceRequirements {
+	return in.Spec.Resources
+}
+
+func (in *Validator) Image() string {
+	return in.Spec.Image
+}
+
+func (in *Validator) ImagePullPolicy() corev1.PullPolicy {
+	return in.Spec.ImagePullPolicy
+}
+
+func (in *Validator) ServiceAccountName() string {
+	return in.Spec.ServiceAccount
+}
+
+func (in *Validator) Replicas() *int32 {
+	return in.Spec.Replicas
+}
+
+func (in *Validator) ConfigMapName() string {
+	return in.Spec.ConfigMapName
+}
+
+func (in *Validator) Command() []string {
+	return in.Spec.Command
+}
+
+func (in *Validator) Args() []string {
+	return in.Spec.Args
+}
+
 //+kubebuilder:object:root=true
 
 // ValidatorList contains a list of Validator

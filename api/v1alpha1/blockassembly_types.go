@@ -63,6 +63,50 @@ type BlockAssembly struct {
 	Status BlockAssemblyStatus `json:"status,omitempty"`
 }
 
+func (in *BlockAssembly) NodeSelector() map[string]string {
+	return in.Spec.NodeSelector
+}
+
+func (in *BlockAssembly) Tolerations() *[]corev1.Toleration {
+	return in.Spec.Tolerations
+}
+
+func (in *BlockAssembly) Affinity() *corev1.Affinity {
+	return in.Spec.Affinity
+}
+
+func (in *BlockAssembly) Resources() *corev1.ResourceRequirements {
+	return in.Spec.Resources
+}
+
+func (in *BlockAssembly) Image() string {
+	return in.Spec.Image
+}
+
+func (in *BlockAssembly) ImagePullPolicy() corev1.PullPolicy {
+	return in.Spec.ImagePullPolicy
+}
+
+func (in *BlockAssembly) ServiceAccountName() string {
+	return in.Spec.ServiceAccount
+}
+
+func (in *BlockAssembly) Replicas() *int32 {
+	return in.Spec.Replicas
+}
+
+func (in *BlockAssembly) ConfigMapName() string {
+	return in.Spec.ConfigMapName
+}
+
+func (in *BlockAssembly) Command() []string {
+	return in.Spec.Command
+}
+
+func (in *BlockAssembly) Args() []string {
+	return in.Spec.Args
+}
+
 //+kubebuilder:object:root=true
 
 // BlockAssemblyList contains a list of BlockAssembly

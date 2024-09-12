@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -41,61 +42,8 @@ func (r *ValidatorReconciler) updateDeployment(dep *appsv1.Deployment, validator
 	}
 	dep.Spec = *defaultValidatorDeploymentSpec()
 	// If user configures a node selector
-	if validator.Spec.NodeSelector != nil {
-		dep.Spec.Template.Spec.NodeSelector = validator.Spec.NodeSelector
-	}
+	utils.SetDeploymentOverrides(dep, validator)
 
-	// If user configures tolerations
-	if validator.Spec.Tolerations != nil {
-		dep.Spec.Template.Spec.Tolerations = *validator.Spec.Tolerations
-	}
-
-	// If user configures affinity
-	if validator.Spec.Affinity != nil {
-		dep.Spec.Template.Spec.Affinity = validator.Spec.Affinity
-	}
-
-	// if user configures resources requests
-	if validator.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *validator.Spec.Resources
-	}
-
-	// if user configures image overrides
-	if validator.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = validator.Spec.Image
-	}
-	if validator.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = validator.Spec.ImagePullPolicy
-	}
-
-	// if user configures a service account
-	if validator.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = validator.Spec.ServiceAccount
-	}
-
-	// if user configures replicas
-	if validator.Spec.Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*validator.Spec.Replicas)
-	}
-
-	// if user configures a config map name
-	if validator.Spec.ConfigMapName != "" {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: validator.Spec.ConfigMapName},
-			},
-		})
-	}
-
-	// if user configures a custom command
-	if len(validator.Spec.Command) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = validator.Spec.Command
-	}
-
-	// if user configures custom arguments
-	if len(validator.Spec.Args) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = validator.Spec.Args
-	}
 	return nil
 }
 

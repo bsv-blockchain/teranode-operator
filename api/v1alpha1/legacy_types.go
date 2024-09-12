@@ -61,6 +61,50 @@ type Legacy struct {
 	Status LegacyStatus `json:"status,omitempty"`
 }
 
+func (in *Legacy) NodeSelector() map[string]string {
+	return in.Spec.NodeSelector
+}
+
+func (in *Legacy) Tolerations() *[]corev1.Toleration {
+	return in.Spec.Tolerations
+}
+
+func (in *Legacy) Affinity() *corev1.Affinity {
+	return in.Spec.Affinity
+}
+
+func (in *Legacy) Resources() *corev1.ResourceRequirements {
+	return in.Spec.Resources
+}
+
+func (in *Legacy) Image() string {
+	return in.Spec.Image
+}
+
+func (in *Legacy) ImagePullPolicy() corev1.PullPolicy {
+	return in.Spec.ImagePullPolicy
+}
+
+func (in *Legacy) ServiceAccountName() string {
+	return in.Spec.ServiceAccount
+}
+
+func (in *Legacy) Replicas() *int32 {
+	return in.Spec.Replicas
+}
+
+func (in *Legacy) ConfigMapName() string {
+	return in.Spec.ConfigMapName
+}
+
+func (in *Legacy) Command() []string {
+	return in.Spec.Command
+}
+
+func (in *Legacy) Args() []string {
+	return in.Spec.Args
+}
+
 //+kubebuilder:object:root=true
 
 // LegacyList contains a list of Legacy

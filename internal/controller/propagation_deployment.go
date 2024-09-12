@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -40,62 +41,8 @@ func (r *PropagationReconciler) updateDeployment(dep *appsv1.Deployment, propaga
 		return err
 	}
 	dep.Spec = *defaultPropagationDeploymentSpec()
-	// If user configures a node selector
-	if propagation.Spec.NodeSelector != nil {
-		dep.Spec.Template.Spec.NodeSelector = propagation.Spec.NodeSelector
-	}
+	utils.SetDeploymentOverrides(dep, propagation)
 
-	// If user configures tolerations
-	if propagation.Spec.Tolerations != nil {
-		dep.Spec.Template.Spec.Tolerations = *propagation.Spec.Tolerations
-	}
-
-	// If user configures affinity
-	if propagation.Spec.Affinity != nil {
-		dep.Spec.Template.Spec.Affinity = propagation.Spec.Affinity
-	}
-
-	// if user configures resources requests
-	if propagation.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *propagation.Spec.Resources
-	}
-
-	// if user configures image overrides
-	if propagation.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = propagation.Spec.Image
-	}
-	if propagation.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = propagation.Spec.ImagePullPolicy
-	}
-
-	// if user configures a service account
-	if propagation.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = propagation.Spec.ServiceAccount
-	}
-
-	// if user configures replicas
-	if propagation.Spec.Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*propagation.Spec.Replicas)
-	}
-
-	// if user configures a config map name
-	if propagation.Spec.ConfigMapName != "" {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: propagation.Spec.ConfigMapName},
-			},
-		})
-	}
-
-	// if user configures a custom command
-	if len(propagation.Spec.Command) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = propagation.Spec.Command
-	}
-
-	// if user configures custom arguments
-	if len(propagation.Spec.Args) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = propagation.Spec.Args
-	}
 	return nil
 }
 

@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -40,62 +41,7 @@ func (r *CoinbaseReconciler) updateDeployment(dep *appsv1.Deployment, coinbase *
 		return err
 	}
 	dep.Spec = *defaultCoinbaseDeploymentSpec()
-	// If user configures a node selector
-	if coinbase.Spec.NodeSelector != nil {
-		dep.Spec.Template.Spec.NodeSelector = coinbase.Spec.NodeSelector
-	}
-
-	// If user configures tolerations
-	if coinbase.Spec.Tolerations != nil {
-		dep.Spec.Template.Spec.Tolerations = *coinbase.Spec.Tolerations
-	}
-
-	// If user configures affinity
-	if coinbase.Spec.Affinity != nil {
-		dep.Spec.Template.Spec.Affinity = coinbase.Spec.Affinity
-	}
-
-	// if user configures resources requests
-	if coinbase.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *coinbase.Spec.Resources
-	}
-
-	// if user configures replicas
-	if coinbase.Spec.Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*coinbase.Spec.Replicas)
-	}
-
-	// if user configures image overrides
-	if coinbase.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = coinbase.Spec.Image
-	}
-	if coinbase.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = coinbase.Spec.ImagePullPolicy
-	}
-
-	// if user configures a service account
-	if coinbase.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = coinbase.Spec.ServiceAccount
-	}
-
-	// if user configures a config map name
-	if coinbase.Spec.ConfigMapName != "" {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: coinbase.Spec.ConfigMapName},
-			},
-		})
-	}
-
-	// if user configures a custom command
-	if len(coinbase.Spec.Command) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = coinbase.Spec.Command
-	}
-
-	// if user configures custom arguments
-	if len(coinbase.Spec.Args) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = coinbase.Spec.Args
-	}
+	utils.SetDeploymentOverrides(dep, coinbase)
 
 	return nil
 }

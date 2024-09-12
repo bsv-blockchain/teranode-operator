@@ -21,14 +21,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // MinerSpec defines the desired state of Miner
 type MinerSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
 	NodeSelector    map[string]string            `json:"nodeSelector,omitempty"`
 	Tolerations     *[]corev1.Toleration         `json:"tolerations,omitempty"`
 	Affinity        *corev1.Affinity             `json:"affinity,omitempty"`
@@ -44,9 +38,6 @@ type MinerSpec struct {
 
 // MinerStatus defines the observed state of Miner
 type MinerStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
 }
 
@@ -60,6 +51,50 @@ type Miner struct {
 
 	Spec   MinerSpec   `json:"spec,omitempty"`
 	Status MinerStatus `json:"status,omitempty"`
+}
+
+func (in *Miner) NodeSelector() map[string]string {
+	return in.Spec.NodeSelector
+}
+
+func (in *Miner) Tolerations() *[]corev1.Toleration {
+	return in.Spec.Tolerations
+}
+
+func (in *Miner) Affinity() *corev1.Affinity {
+	return in.Spec.Affinity
+}
+
+func (in *Miner) Resources() *corev1.ResourceRequirements {
+	return in.Spec.Resources
+}
+
+func (in *Miner) Image() string {
+	return in.Spec.Image
+}
+
+func (in *Miner) ImagePullPolicy() corev1.PullPolicy {
+	return in.Spec.ImagePullPolicy
+}
+
+func (in *Miner) ServiceAccountName() string {
+	return in.Spec.ServiceAccount
+}
+
+func (in *Miner) Replicas() *int32 {
+	return in.Spec.Replicas
+}
+
+func (in *Miner) ConfigMapName() string {
+	return in.Spec.ConfigMapName
+}
+
+func (in *Miner) Command() []string {
+	return in.Spec.Command
+}
+
+func (in *Miner) Args() []string {
+	return in.Spec.Args
 }
 
 //+kubebuilder:object:root=true

@@ -63,6 +63,50 @@ type Coinbase struct {
 	Status CoinbaseStatus `json:"status,omitempty"`
 }
 
+func (in *Coinbase) NodeSelector() map[string]string {
+	return in.Spec.NodeSelector
+}
+
+func (in *Coinbase) Tolerations() *[]corev1.Toleration {
+	return in.Spec.Tolerations
+}
+
+func (in *Coinbase) Affinity() *corev1.Affinity {
+	return in.Spec.Affinity
+}
+
+func (in *Coinbase) Resources() *corev1.ResourceRequirements {
+	return in.Spec.Resources
+}
+
+func (in *Coinbase) Image() string {
+	return in.Spec.Image
+}
+
+func (in *Coinbase) ImagePullPolicy() corev1.PullPolicy {
+	return in.Spec.ImagePullPolicy
+}
+
+func (in *Coinbase) ServiceAccountName() string {
+	return in.Spec.ServiceAccount
+}
+
+func (in *Coinbase) Replicas() *int32 {
+	return in.Spec.Replicas
+}
+
+func (in *Coinbase) ConfigMapName() string {
+	return in.Spec.ConfigMapName
+}
+
+func (in *Coinbase) Command() []string {
+	return in.Spec.Command
+}
+
+func (in *Coinbase) Args() []string {
+	return in.Spec.Args
+}
+
 //+kubebuilder:object:root=true
 
 // CoinbaseList contains a list of Coinbase

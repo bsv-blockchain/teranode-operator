@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -42,44 +43,8 @@ func (r *BlockchainReconciler) updateDeployment(dep *appsv1.Deployment, blockcha
 		return err
 	}
 	dep.Spec = *defaultBlockchainDeploymentSpec()
-	if blockchain.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = blockchain.Spec.Image
-	}
-	if blockchain.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *blockchain.Spec.Resources
-	}
-	if blockchain.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = blockchain.Spec.ImagePullPolicy
-	}
+	utils.SetDeploymentOverrides(dep, blockchain)
 
-	// if a user configures a service account
-	if blockchain.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = blockchain.Spec.ServiceAccount
-	}
-
-	// if user configures replicas
-	if blockchain.Spec.Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*blockchain.Spec.Replicas)
-	}
-
-	// if user configures a config map name
-	if blockchain.Spec.ConfigMapName != "" {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: blockchain.Spec.ConfigMapName},
-			},
-		})
-	}
-
-	// if user configures a custom command
-	if len(blockchain.Spec.Command) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = blockchain.Spec.Command
-	}
-
-	// if user configures custom arguments
-	if len(blockchain.Spec.Args) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = blockchain.Spec.Args
-	}
 	return nil
 }
 

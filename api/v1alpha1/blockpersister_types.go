@@ -26,9 +26,6 @@ import (
 
 // BlockPersisterSpec defines the desired state of BlockPersister
 type BlockPersisterSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
 	NodeSelector     map[string]string            `json:"nodeSelector,omitempty"`
 	Tolerations      *[]corev1.Toleration         `json:"tolerations,omitempty"`
 	Affinity         *corev1.Affinity             `json:"affinity,omitempty"`
@@ -62,6 +59,50 @@ type BlockPersister struct {
 
 	Spec   BlockPersisterSpec   `json:"spec,omitempty"`
 	Status BlockPersisterStatus `json:"status,omitempty"`
+}
+
+func (in *BlockPersister) NodeSelector() map[string]string {
+	return in.Spec.NodeSelector
+}
+
+func (in *BlockPersister) Tolerations() *[]corev1.Toleration {
+	return in.Spec.Tolerations
+}
+
+func (in *BlockPersister) Affinity() *corev1.Affinity {
+	return in.Spec.Affinity
+}
+
+func (in *BlockPersister) Resources() *corev1.ResourceRequirements {
+	return in.Spec.Resources
+}
+
+func (in *BlockPersister) Image() string {
+	return in.Spec.Image
+}
+
+func (in *BlockPersister) ImagePullPolicy() corev1.PullPolicy {
+	return in.Spec.ImagePullPolicy
+}
+
+func (in *BlockPersister) ServiceAccountName() string {
+	return in.Spec.ServiceAccount
+}
+
+func (in *BlockPersister) Replicas() *int32 {
+	return in.Spec.Replicas
+}
+
+func (in *BlockPersister) ConfigMapName() string {
+	return in.Spec.ConfigMapName
+}
+
+func (in *BlockPersister) Command() []string {
+	return in.Spec.Command
+}
+
+func (in *BlockPersister) Args() []string {
+	return in.Spec.Args
 }
 
 //+kubebuilder:object:root=true

@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -40,44 +41,8 @@ func (r *PeerReconciler) updateDeployment(dep *appsv1.Deployment, peer *teranode
 		return err
 	}
 	dep.Spec = *defaultPeerDeploymentSpec()
-	if peer.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = peer.Spec.Image
-	}
-	if peer.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *peer.Spec.Resources
-	}
-	if peer.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = peer.Spec.ImagePullPolicy
-	}
+	utils.SetDeploymentOverrides(dep, peer)
 
-	// if user configures a service account
-	if peer.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = peer.Spec.ServiceAccount
-	}
-
-	// if user configures replicas
-	if peer.Spec.Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*peer.Spec.Replicas)
-	}
-
-	// if user configures a config map name
-	if peer.Spec.ConfigMapName != "" {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: peer.Spec.ConfigMapName},
-			},
-		})
-	}
-
-	// if user configures a custom command
-	if len(peer.Spec.Command) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = peer.Spec.Command
-	}
-
-	// if user configures custom arguments
-	if len(peer.Spec.Args) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = peer.Spec.Args
-	}
 	return nil
 }
 

@@ -28,7 +28,9 @@ import (
 type BlockValidatorSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
-
+	NodeSelector    map[string]string            `json:"nodeSelector,omitempty"`
+	Tolerations     *[]corev1.Toleration         `json:"tolerations,omitempty"`
+	Affinity        *corev1.Affinity             `json:"affinity,omitempty"`
 	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
 	Image           string                       `json:"image,omitempty"`
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
@@ -56,6 +58,50 @@ type BlockValidator struct {
 
 	Spec   BlockValidatorSpec   `json:"spec,omitempty"`
 	Status BlockValidatorStatus `json:"status,omitempty"`
+}
+
+func (in *BlockValidator) NodeSelector() map[string]string {
+	return in.Spec.NodeSelector
+}
+
+func (in *BlockValidator) Tolerations() *[]corev1.Toleration {
+	return in.Spec.Tolerations
+}
+
+func (in *BlockValidator) Affinity() *corev1.Affinity {
+	return in.Spec.Affinity
+}
+
+func (in *BlockValidator) Resources() *corev1.ResourceRequirements {
+	return in.Spec.Resources
+}
+
+func (in *BlockValidator) Image() string {
+	return in.Spec.Image
+}
+
+func (in *BlockValidator) ImagePullPolicy() corev1.PullPolicy {
+	return in.Spec.ImagePullPolicy
+}
+
+func (in *BlockValidator) ServiceAccountName() string {
+	return in.Spec.ServiceAccount
+}
+
+func (in *BlockValidator) Replicas() *int32 {
+	return in.Spec.Replicas
+}
+
+func (in *BlockValidator) ConfigMapName() string {
+	return in.Spec.ConfigMapName
+}
+
+func (in *BlockValidator) Command() []string {
+	return in.Spec.Command
+}
+
+func (in *BlockValidator) Args() []string {
+	return in.Spec.Args
 }
 
 //+kubebuilder:object:root=true

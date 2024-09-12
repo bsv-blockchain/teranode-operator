@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -39,62 +40,8 @@ func (r *MinerReconciler) updateDeployment(dep *appsv1.Deployment, miner *terano
 		return err
 	}
 	dep.Spec = *defaultMinerDeploymentSpec()
-	// If user configures a node selector
-	if miner.Spec.NodeSelector != nil {
-		dep.Spec.Template.Spec.NodeSelector = miner.Spec.NodeSelector
-	}
+	utils.SetDeploymentOverrides(dep, miner)
 
-	// If user configures tolerations
-	if miner.Spec.Tolerations != nil {
-		dep.Spec.Template.Spec.Tolerations = *miner.Spec.Tolerations
-	}
-
-	// If user configures affinity
-	if miner.Spec.Affinity != nil {
-		dep.Spec.Template.Spec.Affinity = miner.Spec.Affinity
-	}
-
-	// if user configures resources requests
-	if miner.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *miner.Spec.Resources
-	}
-
-	// if user configures image overrides
-	if miner.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = miner.Spec.Image
-	}
-	if miner.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = miner.Spec.ImagePullPolicy
-	}
-
-	// if user configures a service account
-	if miner.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = miner.Spec.ServiceAccount
-	}
-
-	// if user configures replicas
-	if miner.Spec.Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*miner.Spec.Replicas)
-	}
-
-	// if user configures a config map name
-	if miner.Spec.ConfigMapName != "" {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: miner.Spec.ConfigMapName},
-			},
-		})
-	}
-
-	// if user configures a custom command
-	if len(miner.Spec.Command) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = miner.Spec.Command
-	}
-
-	// if user configures custom arguments
-	if len(miner.Spec.Args) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = miner.Spec.Args
-	}
 	return nil
 }
 

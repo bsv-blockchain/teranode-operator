@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -40,62 +41,8 @@ func (r *BlockPersisterReconciler) updateDeployment(dep *appsv1.Deployment, bloc
 		return err
 	}
 	dep.Spec = *defaultBlockPersisterDeploymentSpec()
-	// If user configures a node selector
-	if blockPersister.Spec.NodeSelector != nil {
-		dep.Spec.Template.Spec.NodeSelector = blockPersister.Spec.NodeSelector
-	}
+	utils.SetDeploymentOverrides(dep, blockPersister)
 
-	// If user configures tolerations
-	if blockPersister.Spec.Tolerations != nil {
-		dep.Spec.Template.Spec.Tolerations = *blockPersister.Spec.Tolerations
-	}
-
-	// If user configures affinity
-	if blockPersister.Spec.Affinity != nil {
-		dep.Spec.Template.Spec.Affinity = blockPersister.Spec.Affinity
-	}
-
-	// if user configures resources requests
-	if blockPersister.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *blockPersister.Spec.Resources
-	}
-
-	// if user configures image overrides
-	if blockPersister.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = blockPersister.Spec.Image
-	}
-	if blockPersister.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = blockPersister.Spec.ImagePullPolicy
-	}
-
-	// if user configures a service account
-	if blockPersister.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = blockPersister.Spec.ServiceAccount
-	}
-
-	// if user configures replicas
-	if blockPersister.Spec.Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*blockPersister.Spec.Replicas)
-	}
-
-	// if user configures a config map name
-	if blockPersister.Spec.ConfigMapName != "" {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: blockPersister.Spec.ConfigMapName},
-			},
-		})
-	}
-
-	// if user configures a custom command
-	if len(blockPersister.Spec.Command) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = blockPersister.Spec.Command
-	}
-
-	// if user configures custom arguments
-	if len(blockPersister.Spec.Args) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = blockPersister.Spec.Args
-	}
 	return nil
 }
 

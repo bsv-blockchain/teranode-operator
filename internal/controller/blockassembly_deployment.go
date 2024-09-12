@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -40,62 +41,8 @@ func (r *BlockAssemblyReconciler) updateDeployment(dep *appsv1.Deployment, block
 		return err
 	}
 	dep.Spec = *defaultBlockAssemblyDeploymentSpec()
-	// If user configures a node selector
-	if blockAssembly.Spec.NodeSelector != nil {
-		dep.Spec.Template.Spec.NodeSelector = blockAssembly.Spec.NodeSelector
-	}
+	utils.SetDeploymentOverrides(dep, blockAssembly)
 
-	// If user configures tolerations
-	if blockAssembly.Spec.Tolerations != nil {
-		dep.Spec.Template.Spec.Tolerations = *blockAssembly.Spec.Tolerations
-	}
-
-	// If user configures affinity
-	if blockAssembly.Spec.Affinity != nil {
-		dep.Spec.Template.Spec.Affinity = blockAssembly.Spec.Affinity
-	}
-
-	// if user configures resources requests
-	if blockAssembly.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *blockAssembly.Spec.Resources
-	}
-
-	// if user configures image overrides
-	if blockAssembly.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = blockAssembly.Spec.Image
-	}
-	if blockAssembly.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = blockAssembly.Spec.ImagePullPolicy
-	}
-
-	// if user configures a service account
-	if blockAssembly.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = blockAssembly.Spec.ServiceAccount
-	}
-
-	// if user configures replicas
-	if blockAssembly.Spec.Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*blockAssembly.Spec.Replicas)
-	}
-
-	// if user configures a config map name
-	if blockAssembly.Spec.ConfigMapName != "" {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: blockAssembly.Spec.ConfigMapName},
-			},
-		})
-	}
-
-	// if user configures a custom command
-	if len(blockAssembly.Spec.Command) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = blockAssembly.Spec.Command
-	}
-
-	// if user configures custom arguments
-	if len(blockAssembly.Spec.Args) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = blockAssembly.Spec.Args
-	}
 	return nil
 }
 

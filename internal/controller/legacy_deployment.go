@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -39,62 +40,8 @@ func (r *LegacyReconciler) updateDeployment(dep *appsv1.Deployment, legacy *tera
 		return err
 	}
 	dep.Spec = *defaultLegacyDeploymentSpec()
-	// If user configures a node selector
-	if legacy.Spec.NodeSelector != nil {
-		dep.Spec.Template.Spec.NodeSelector = legacy.Spec.NodeSelector
-	}
+	utils.SetDeploymentOverrides(dep, legacy)
 
-	// If user configures tolerations
-	if legacy.Spec.Tolerations != nil {
-		dep.Spec.Template.Spec.Tolerations = *legacy.Spec.Tolerations
-	}
-
-	// If user configures affinity
-	if legacy.Spec.Affinity != nil {
-		dep.Spec.Template.Spec.Affinity = legacy.Spec.Affinity
-	}
-
-	// if user configures resources requests
-	if legacy.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *legacy.Spec.Resources
-	}
-
-	// if user configures image overrides
-	if legacy.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = legacy.Spec.Image
-	}
-	if legacy.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = legacy.Spec.ImagePullPolicy
-	}
-
-	// if user configures a service account
-	if legacy.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = legacy.Spec.ServiceAccount
-	}
-
-	// if user configures replicas
-	if legacy.Spec.Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*legacy.Spec.Replicas)
-	}
-
-	// if user configures a config map name
-	if legacy.Spec.ConfigMapName != "" {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: legacy.Spec.ConfigMapName},
-			},
-		})
-	}
-
-	// if user configures a custom command
-	if len(legacy.Spec.Command) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = legacy.Spec.Command
-	}
-
-	// if user configures custom arguments
-	if len(legacy.Spec.Args) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = legacy.Spec.Args
-	}
 	return nil
 }
 

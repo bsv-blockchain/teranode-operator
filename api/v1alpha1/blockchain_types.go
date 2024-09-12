@@ -32,6 +32,9 @@ type BlockchainSpec struct {
 	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
 	Image           string                       `json:"image,omitempty"`
 	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
+	NodeSelector    map[string]string            `json:"nodeSelector,omitempty"`
+	Tolerations     *[]corev1.Toleration         `json:"tolerations,omitempty"`
+	Affinity        *corev1.Affinity             `json:"affinity,omitempty"`
 	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
 	ConfigMapName   string                       `json:"configMapName,omitempty"`
 	Replicas        *int32                       `json:"replicas,omitempty"`
@@ -59,6 +62,50 @@ type Blockchain struct {
 
 	Spec   BlockchainSpec   `json:"spec,omitempty"`
 	Status BlockchainStatus `json:"status,omitempty"`
+}
+
+func (in *Blockchain) NodeSelector() map[string]string {
+	return in.Spec.NodeSelector
+}
+
+func (in *Blockchain) Tolerations() *[]corev1.Toleration {
+	return in.Spec.Tolerations
+}
+
+func (in *Blockchain) Affinity() *corev1.Affinity {
+	return in.Spec.Affinity
+}
+
+func (in *Blockchain) Resources() *corev1.ResourceRequirements {
+	return in.Spec.Resources
+}
+
+func (in *Blockchain) Image() string {
+	return in.Spec.Image
+}
+
+func (in *Blockchain) ImagePullPolicy() corev1.PullPolicy {
+	return in.Spec.ImagePullPolicy
+}
+
+func (in *Blockchain) ServiceAccountName() string {
+	return in.Spec.ServiceAccount
+}
+
+func (in *Blockchain) Replicas() *int32 {
+	return in.Spec.Replicas
+}
+
+func (in *Blockchain) ConfigMapName() string {
+	return in.Spec.ConfigMapName
+}
+
+func (in *Blockchain) Command() []string {
+	return in.Spec.Command
+}
+
+func (in *Blockchain) Args() []string {
+	return in.Spec.Args
 }
 
 //+kubebuilder:object:root=true

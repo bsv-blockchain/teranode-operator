@@ -66,6 +66,50 @@ type SubtreeValidator struct {
 	Status SubtreeValidatorStatus `json:"status,omitempty"`
 }
 
+func (in *SubtreeValidator) NodeSelector() map[string]string {
+	return in.Spec.NodeSelector
+}
+
+func (in *SubtreeValidator) Tolerations() *[]corev1.Toleration {
+	return in.Spec.Tolerations
+}
+
+func (in *SubtreeValidator) Affinity() *corev1.Affinity {
+	return in.Spec.Affinity
+}
+
+func (in *SubtreeValidator) Resources() *corev1.ResourceRequirements {
+	return in.Spec.Resources
+}
+
+func (in *SubtreeValidator) Image() string {
+	return in.Spec.Image
+}
+
+func (in *SubtreeValidator) ImagePullPolicy() corev1.PullPolicy {
+	return in.Spec.ImagePullPolicy
+}
+
+func (in *SubtreeValidator) ServiceAccountName() string {
+	return in.Spec.ServiceAccount
+}
+
+func (in *SubtreeValidator) Replicas() *int32 {
+	return in.Spec.Replicas
+}
+
+func (in *SubtreeValidator) ConfigMapName() string {
+	return in.Spec.ConfigMapName
+}
+
+func (in *SubtreeValidator) Command() []string {
+	return in.Spec.Command
+}
+
+func (in *SubtreeValidator) Args() []string {
+	return in.Spec.Args
+}
+
 //+kubebuilder:object:root=true
 
 // SubtreeValidatorList contains a list of SubtreeValidator

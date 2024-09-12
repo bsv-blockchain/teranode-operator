@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -42,44 +43,7 @@ func (r *BlockValidatorReconciler) updateDeployment(dep *appsv1.Deployment, bloc
 		return err
 	}
 	dep.Spec = *defaultBlockValidatorDeploymentSpec()
-	if blockValidator.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = blockValidator.Spec.Image
-	}
-	if blockValidator.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *blockValidator.Spec.Resources
-	}
-	if blockValidator.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = blockValidator.Spec.ImagePullPolicy
-	}
-
-	// if a user configures a service account
-	if blockValidator.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = blockValidator.Spec.ServiceAccount
-	}
-
-	// if user configures replicas
-	if blockValidator.Spec.Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*blockValidator.Spec.Replicas)
-	}
-
-	// if user configures a config map name
-	if blockValidator.Spec.ConfigMapName != "" {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: blockValidator.Spec.ConfigMapName},
-			},
-		})
-	}
-
-	// if user configures a custom command
-	if len(blockValidator.Spec.Command) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = blockValidator.Spec.Command
-	}
-
-	// if user configures custom arguments
-	if len(blockValidator.Spec.Args) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = blockValidator.Spec.Args
-	}
+	utils.SetDeploymentOverrides(dep, blockValidator)
 	return nil
 }
 

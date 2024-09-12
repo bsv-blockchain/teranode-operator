@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -40,62 +41,8 @@ func (r *AssetReconciler) updateDeployment(dep *appsv1.Deployment, asset *terano
 		return err
 	}
 	dep.Spec = *defaultAssetDeploymentSpec()
-	// If user configures a node selector
-	if asset.Spec.NodeSelector != nil {
-		dep.Spec.Template.Spec.NodeSelector = asset.Spec.NodeSelector
-	}
 
-	// If user configures tolerations
-	if asset.Spec.Tolerations != nil {
-		dep.Spec.Template.Spec.Tolerations = *asset.Spec.Tolerations
-	}
-
-	// If user configures affinity
-	if asset.Spec.Affinity != nil {
-		dep.Spec.Template.Spec.Affinity = asset.Spec.Affinity
-	}
-
-	// if user configures resources requests
-	if asset.Spec.Resources != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *asset.Spec.Resources
-	}
-
-	// if user configures replicas
-	if asset.Spec.Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*asset.Spec.Replicas)
-	}
-
-	// if user configures image or image pull policy
-	if asset.Spec.Image != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = asset.Spec.Image
-	}
-	if asset.Spec.ImagePullPolicy != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = asset.Spec.ImagePullPolicy
-	}
-
-	// if user configures a service account
-	if asset.Spec.ServiceAccount != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = asset.Spec.ServiceAccount
-	}
-
-	// if user configures a config map name
-	if asset.Spec.ConfigMapName != "" {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: asset.Spec.ConfigMapName},
-			},
-		})
-	}
-
-	// if user configures a custom command
-	if len(asset.Spec.Command) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = asset.Spec.Command
-	}
-
-	// if user configures custom arguments
-	if len(asset.Spec.Args) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = asset.Spec.Args
-	}
+	utils.SetDeploymentOverrides(dep, asset)
 
 	return nil
 }
