@@ -115,6 +115,16 @@ func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
 							FailureThreshold:    5,
 							TimeoutSeconds:      3,
 						},
+						StartupProbe: &corev1.Probe{
+							ProbeHandler: corev1.ProbeHandler{
+								HTTPGet: &corev1.HTTPGetAction{
+									Path: "/health",
+									Port: intstr.FromInt32(9091),
+								},
+							},
+							FailureThreshold: 30,
+							PeriodSeconds:    10,
+						},
 						Ports: []corev1.ContainerPort{
 							{
 								ContainerPort: BlockAssemblyPort,
