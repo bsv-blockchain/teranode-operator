@@ -40,7 +40,28 @@ var _ = Describe("Cluster Controller", func() {
 			Name:      resourceName,
 			Namespace: "default", // TODO(user):Modify as needed
 		}
-		cluster := &teranodev1alpha1.Cluster{}
+		cluster := &teranodev1alpha1.Cluster{
+			Spec: teranodev1alpha1.ClusterSpec{
+				Legacy: teranodev1alpha1.LegacyConfig{
+					Spec: &teranodev1alpha1.LegacySpec{},
+				},
+				Asset: teranodev1alpha1.AssetConfig{
+					Spec: &teranodev1alpha1.AssetSpec{},
+				},
+				BlockAssembly: teranodev1alpha1.BlockAssemblyConfig{
+					Spec: &teranodev1alpha1.BlockAssemblySpec{},
+				},
+				Blockchain: teranodev1alpha1.BlockchainConfig{
+					Spec: &teranodev1alpha1.BlockchainSpec{},
+				},
+				BlockPersister: teranodev1alpha1.BlockPersisterConfig{
+					Spec: &teranodev1alpha1.BlockPersisterSpec{},
+				},
+				BlockValidator: teranodev1alpha1.BlockValidatorConfig{
+					Spec: &teranodev1alpha1.BlockValidatorSpec{},
+				},
+			},
+		}
 
 		BeforeEach(func() {
 			By("creating the custom resource for the Kind Cluster")
@@ -50,6 +71,47 @@ var _ = Describe("Cluster Controller", func() {
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
+					},
+					Spec: teranodev1alpha1.ClusterSpec{
+						Legacy: teranodev1alpha1.LegacyConfig{
+							Spec: &teranodev1alpha1.LegacySpec{},
+						},
+						Asset: teranodev1alpha1.AssetConfig{
+							Spec: &teranodev1alpha1.AssetSpec{},
+						},
+						BlockAssembly: teranodev1alpha1.BlockAssemblyConfig{
+							Spec: &teranodev1alpha1.BlockAssemblySpec{},
+						},
+						Blockchain: teranodev1alpha1.BlockchainConfig{
+							Spec: &teranodev1alpha1.BlockchainSpec{},
+						},
+						BlockPersister: teranodev1alpha1.BlockPersisterConfig{
+							Spec: &teranodev1alpha1.BlockPersisterSpec{},
+						},
+						BlockValidator: teranodev1alpha1.BlockValidatorConfig{
+							Spec: &teranodev1alpha1.BlockValidatorSpec{},
+						},
+						Bootstrap: teranodev1alpha1.BootstrapConfig{
+							Spec: &teranodev1alpha1.BootstrapSpec{},
+						},
+						Coinbase: teranodev1alpha1.CoinbaseConfig{
+							Spec: &teranodev1alpha1.CoinbaseSpec{},
+						},
+						Miner: teranodev1alpha1.MinerConfig{
+							Spec: &teranodev1alpha1.MinerSpec{},
+						},
+						Peer: teranodev1alpha1.PeerConfig{
+							Spec: &teranodev1alpha1.PeerSpec{},
+						},
+						Propagation: teranodev1alpha1.PropagationConfig{
+							Spec: &teranodev1alpha1.PropagationSpec{},
+						},
+						SubtreeValidator: teranodev1alpha1.SubtreeValidatorConfig{
+							Spec: &teranodev1alpha1.SubtreeValidatorSpec{},
+						},
+						Validator: teranodev1alpha1.ValidatorConfig{
+							Spec: &teranodev1alpha1.ValidatorSpec{},
+						},
 					},
 					// TODO(user): Specify other spec details if needed.
 				}

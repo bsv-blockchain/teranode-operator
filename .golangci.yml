@@ -19,13 +19,17 @@ issues:
 linters:
   disable-all: true
   enable:
+    - asciicheck
     - dupl
     - errcheck
     - exportloopref
+    - gocognit
     - goconst
+    - gocritic
     - gocyclo
     - gofmt
     - goimports
+    - gosec
     - gosimple
     - govet
     - ineffassign
@@ -34,7 +38,9 @@ linters:
     - nakedret
     - prealloc
     - staticcheck
+    - stylecheck
     - typecheck
     - unconvert
     - unparam
     - unused
+    - whitespace
