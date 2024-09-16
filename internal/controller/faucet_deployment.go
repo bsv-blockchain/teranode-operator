@@ -128,31 +128,6 @@ func defaultFaucetDeploymentSpec() *appsv1.DeploymentSpec {
 								corev1.ResourceMemory: resource.MustParse("5Gi"),
 							},
 						},
-						// TODO: faucet doesn't seem to have /health endpoint currently
-						//ReadinessProbe: &corev1.Probe{
-						//	ProbeHandler: corev1.ProbeHandler{
-						//		HTTPGet: &corev1.HTTPGetAction{
-						//			Path: "/health",
-						//			Port: intstr.FromInt(9091),
-						//		},
-						//	},
-						//	InitialDelaySeconds: 1,
-						//	PeriodSeconds:       10,
-						//	FailureThreshold:    5,
-						//	TimeoutSeconds:      3,
-						//},
-						//LivenessProbe: &corev1.Probe{
-						//	ProbeHandler: corev1.ProbeHandler{
-						//		HTTPGet: &corev1.HTTPGetAction{
-						//			Path: "/health",
-						//			Port: intstr.FromInt(9091),
-						//		},
-						//	},
-						//	InitialDelaySeconds: 1,
-						//	PeriodSeconds:       10,
-						//	FailureThreshold:    5,
-						//	TimeoutSeconds:      3,
-						//},
 						Ports: []corev1.ContainerPort{
 							{
 								ContainerPort: 4040,

@@ -26,7 +26,7 @@ type AssetConfig struct {
 	Spec    *AssetSpec `json:"spec"`
 }
 
-// BlockAssembly defines the blockassembly configuration
+// BlockAssemblyConfig defines the blockassembly configuration
 type BlockAssemblyConfig struct {
 	Enabled bool               `json:"enabled"`
 	Spec    *BlockAssemblySpec `json:"spec"`

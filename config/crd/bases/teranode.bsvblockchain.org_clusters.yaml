@@ -992,7 +992,7 @@ spec:
                 - spec
                 type: object
               blockAssembly:
-                description: BlockAssembly defines the blockassembly configuration
+                description: BlockAssemblyConfig defines the blockassembly configuration
                 properties:
                   enabled:
                     type: boolean

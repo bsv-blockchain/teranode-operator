@@ -58,8 +58,8 @@ func defaultLegacyServiceSpec() *corev1.ServiceSpec {
 		Ports: []corev1.ServicePort{
 			{
 				Name:       "http",
-				Port:       int32(LegacyHttpPort),
-				TargetPort: intstr.FromInt32(LegacyHttpPort),
+				Port:       int32(LegacyHTTPPort),
+				TargetPort: intstr.FromInt32(LegacyHTTPPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{

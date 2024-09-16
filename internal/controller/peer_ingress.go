@@ -10,7 +10,6 @@ import (
 
 // ReconcileGrpcIngress is the ingress for the peer grpc server
 func (r *PeerReconciler) ReconcileGrpcIngress(log logr.Logger) (bool, error) {
-
 	peer := teranodev1alpha1.Peer{}
 	if err := r.Get(r.Context, r.NamespacedName, &peer); err != nil {
 		return false, err
@@ -83,7 +82,6 @@ func (r *PeerReconciler) updateGrpcIngress(ingress *v1.Ingress, peer *teranodev1
 
 // ReconcileWsIngress is the ingress for the peer ws server
 func (r *PeerReconciler) ReconcileWsIngress(log logr.Logger) (bool, error) {
-
 	peer := teranodev1alpha1.Peer{}
 	if err := r.Get(r.Context, r.NamespacedName, &peer); err != nil {
 		return false, err
@@ -157,7 +155,6 @@ func (r *PeerReconciler) updateWsIngress(ingress *v1.Ingress, peer *teranodev1al
 
 // ReconcileWssIngress is the ingress for the peer wss server
 func (r *PeerReconciler) ReconcileWssIngress(log logr.Logger) (bool, error) {
-
 	peer := teranodev1alpha1.Peer{}
 	if err := r.Get(r.Context, r.NamespacedName, &peer); err != nil {
 		return false, err

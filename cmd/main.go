@@ -111,7 +111,7 @@ func main() {
 		},
 		Cache: cache.Options{
 			DefaultNamespaces: map[string]cache.Config{
-				watchNamespace: cache.Config{},
+				watchNamespace: {},
 			},
 		},
 		WebhookServer:          webhookServer,

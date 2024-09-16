@@ -10,7 +10,6 @@ import (
 
 // ReconcileGrpcIngress is the ingress for the propagation grpc server
 func (r *PropagationReconciler) ReconcileGrpcIngress(log logr.Logger) (bool, error) {
-
 	propagation := teranodev1alpha1.Propagation{}
 	if err := r.Get(r.Context, r.NamespacedName, &propagation); err != nil {
 		return false, err

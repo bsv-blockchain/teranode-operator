@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -69,7 +70,7 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	}
 
 	_, err := utils.ReconcileBatch(r.Log,
-		//r.Validate,
+		// r.Validate,
 		r.ReconcileDeployment,
 		r.ReconcileService,
 	)

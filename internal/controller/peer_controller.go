@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
@@ -68,7 +69,7 @@ func (r *PeerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 		return result, nil
 	}
 	_, err := utils.ReconcileBatch(r.Log,
-		//r.Validate,
+		// r.Validate,
 		r.ReconcileDeployment,
 		r.ReconcileService,
 		r.ReconcileGrpcIngress,

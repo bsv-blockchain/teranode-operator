@@ -8,10 +8,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
-// TODO: Test that this actually works
 // ReconcileGrpcIngress is the ingress for the coinbase grpc server
 func (r *CoinbaseReconciler) ReconcileGrpcIngress(log logr.Logger) (bool, error) {
-
 	coinbase := teranodev1alpha1.Coinbase{}
 	if err := r.Get(r.Context, r.NamespacedName, &coinbase); err != nil {
 		return false, err

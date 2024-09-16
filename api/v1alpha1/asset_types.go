@@ -34,8 +34,8 @@ type AssetSpec struct {
 	Affinity           *corev1.Affinity             `json:"affinity,omitempty"`
 	Resources          *corev1.ResourceRequirements `json:"resources,omitempty"`
 	GrpcIngress        *IngressDef                  `json:"grpcIngress,omitempty"`
-	HttpIngress        *IngressDef                  `json:"httpIngress,omitempty"`
-	HttpsIngress       *IngressDef                  `json:"httpsIngress,omitempty"`
+	HTTPIngress        *IngressDef                  `json:"httpIngress,omitempty"`
+	HTTPSIngress       *IngressDef                  `json:"httpsIngress,omitempty"`
 	Image              string                       `json:"image,omitempty"`
 	ImagePullPolicy    corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
 	ServiceAccount     string                       `json:"serviceAccount,omitempty"`

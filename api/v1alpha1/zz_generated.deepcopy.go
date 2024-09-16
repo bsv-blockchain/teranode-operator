@@ -141,13 +141,13 @@ func (in *AssetSpec) DeepCopyInto(out *AssetSpec) {
 		*out = new(IngressDef)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.HttpIngress != nil {
-		in, out := &in.HttpIngress, &out.HttpIngress
+	if in.HTTPIngress != nil {
+		in, out := &in.HTTPIngress, &out.HTTPIngress
 		*out = new(IngressDef)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.HttpsIngress != nil {
-		in, out := &in.HttpsIngress, &out.HttpsIngress
+	if in.HTTPSIngress != nil {
+		in, out := &in.HTTPSIngress, &out.HTTPSIngress
 		*out = new(IngressDef)
 		(*in).DeepCopyInto(*out)
 	}
@@ -2020,8 +2020,8 @@ func (in *PropagationSpec) DeepCopyInto(out *PropagationSpec) {
 		*out = new(IngressDef)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.HttpIngress != nil {
-		in, out := &in.HttpIngress, &out.HttpIngress
+	if in.HTTPIngress != nil {
+		in, out := &in.HTTPIngress, &out.HTTPIngress
 		*out = new(IngressDef)
 		(*in).DeepCopyInto(*out)
 	}

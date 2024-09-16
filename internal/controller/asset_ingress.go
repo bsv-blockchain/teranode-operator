@@ -8,15 +8,14 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
-// ReconcileHttpIngress is the ingress for the asset grpc server
-func (r *AssetReconciler) ReconcileHttpIngress(log logr.Logger) (bool, error) {
-
+// ReconcileHTTPIngress is the ingress for the asset grpc server
+func (r *AssetReconciler) ReconcileHTTPIngress(log logr.Logger) (bool, error) {
 	asset := teranodev1alpha1.Asset{}
 	if err := r.Get(r.Context, r.NamespacedName, &asset); err != nil {
 		return false, err
 	}
-	// Skip if HttpIngress isn't set
-	if asset.Spec.HttpIngress == nil {
+	// Skip if HTTPIngress isn't set
+	if asset.Spec.HTTPIngress == nil {
 		return false, nil
 	}
 	labels := getAppLabels()
@@ -25,7 +24,7 @@ func (r *AssetReconciler) ReconcileHttpIngress(log logr.Logger) (bool, error) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        "asset-http",
 			Namespace:   r.NamespacedName.Namespace,
-			Annotations: asset.Spec.HttpIngress.Annotations,
+			Annotations: asset.Spec.HTTPIngress.Annotations,
 			Labels:      labels,
 		},
 		Spec: v1.IngressSpec{
@@ -56,7 +55,7 @@ func (r *AssetReconciler) ReconcileHttpIngress(log logr.Logger) (bool, error) {
 	}
 
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, ingress, func() error {
-		return r.updateHttpIngress(ingress, &asset)
+		return r.updateHTTPIngress(ingress, &asset)
 	})
 	if err != nil {
 		return false, err
@@ -64,33 +63,32 @@ func (r *AssetReconciler) ReconcileHttpIngress(log logr.Logger) (bool, error) {
 	return true, nil
 }
 
-func (r *AssetReconciler) updateHttpIngress(ingress *v1.Ingress, asset *teranodev1alpha1.Asset) error {
+func (r *AssetReconciler) updateHTTPIngress(ingress *v1.Ingress, asset *teranodev1alpha1.Asset) error {
 	err := controllerutil.SetControllerReference(asset, ingress, r.Scheme)
 	if err != nil {
 		return err
 	}
-	if asset.Spec.HttpIngress == nil {
+	if asset.Spec.HTTPIngress == nil {
 		return nil
 	}
-	if asset.Spec.HttpIngress.Annotations == nil {
-		ingress.Annotations = asset.Spec.HttpIngress.Annotations
+	if asset.Spec.HTTPIngress.Annotations == nil {
+		ingress.Annotations = asset.Spec.HTTPIngress.Annotations
 	}
-	if asset.Spec.HttpIngress.ClassName != nil {
-		ingress.Spec.IngressClassName = asset.Spec.HttpIngress.ClassName
+	if asset.Spec.HTTPIngress.ClassName != nil {
+		ingress.Spec.IngressClassName = asset.Spec.HTTPIngress.ClassName
 	}
 
 	return nil
 }
 
-// ReconcileHttpsIngress is the ingress for the asset grpc server
-func (r *AssetReconciler) ReconcileHttpsIngress(log logr.Logger) (bool, error) {
-
+// ReconcileHTTPSIngress is the ingress for the asset grpc server
+func (r *AssetReconciler) ReconcileHTTPSIngress(log logr.Logger) (bool, error) {
 	asset := teranodev1alpha1.Asset{}
 	if err := r.Get(r.Context, r.NamespacedName, &asset); err != nil {
 		return false, err
 	}
 	// Skip if domain isn't set
-	if asset.Spec.HttpsIngress == nil {
+	if asset.Spec.HTTPSIngress == nil {
 		return false, nil
 	}
 
@@ -100,7 +98,7 @@ func (r *AssetReconciler) ReconcileHttpsIngress(log logr.Logger) (bool, error) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        "asset-https",
 			Namespace:   r.NamespacedName.Namespace,
-			Annotations: asset.Spec.HttpsIngress.Annotations,
+			Annotations: asset.Spec.HTTPSIngress.Annotations,
 			Labels:      labels,
 		},
 		Spec: v1.IngressSpec{
@@ -129,7 +127,7 @@ func (r *AssetReconciler) ReconcileHttpsIngress(log logr.Logger) (bool, error) {
 			},
 			TLS: []v1.IngressTLS{
 				{
-					Hosts:      []string{asset.Spec.HttpsIngress.Host},
+					Hosts:      []string{asset.Spec.HTTPSIngress.Host},
 					SecretName: "asset-tls",
 				},
 			},
@@ -137,7 +135,7 @@ func (r *AssetReconciler) ReconcileHttpsIngress(log logr.Logger) (bool, error) {
 	}
 
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, ingress, func() error {
-		return r.updateHttpsIngress(ingress, &asset)
+		return r.updateHTTPSIngress(ingress, &asset)
 	})
 	if err != nil {
 		return false, err
@@ -145,19 +143,19 @@ func (r *AssetReconciler) ReconcileHttpsIngress(log logr.Logger) (bool, error) {
 	return true, nil
 }
 
-func (r *AssetReconciler) updateHttpsIngress(ingress *v1.Ingress, asset *teranodev1alpha1.Asset) error {
+func (r *AssetReconciler) updateHTTPSIngress(ingress *v1.Ingress, asset *teranodev1alpha1.Asset) error {
 	err := controllerutil.SetControllerReference(asset, ingress, r.Scheme)
 	if err != nil {
 		return err
 	}
-	if asset.Spec.HttpsIngress == nil {
+	if asset.Spec.HTTPSIngress == nil {
 		return nil
 	}
-	if asset.Spec.HttpsIngress.Annotations == nil {
-		ingress.Annotations = asset.Spec.HttpsIngress.Annotations
+	if asset.Spec.HTTPSIngress.Annotations == nil {
+		ingress.Annotations = asset.Spec.HTTPSIngress.Annotations
 	}
-	if asset.Spec.HttpsIngress.ClassName != nil {
-		ingress.Spec.IngressClassName = asset.Spec.HttpsIngress.ClassName
+	if asset.Spec.HTTPSIngress.ClassName != nil {
+		ingress.Spec.IngressClassName = asset.Spec.HTTPSIngress.ClassName
 	}
 
 	return nil

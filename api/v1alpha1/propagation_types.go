@@ -36,7 +36,7 @@ type PropagationSpec struct {
 	DelveIngress       *IngressDef                  `json:"delveIngress,omitempty"`
 	QuicIngress        *IngressDef                  `json:"quicIngress,omitempty"`
 	GrpcIngress        *IngressDef                  `json:"grpcIngress,omitempty"`
-	HttpIngress        *IngressDef                  `json:"httpIngress,omitempty"`
+	HTTPIngress        *IngressDef                  `json:"httpIngress,omitempty"`
 	ProfilerIngress    *IngressDef                  `json:"httpsIngress,omitempty"`
 	Image              string                       `json:"image,omitempty"`
 	ImagePullPolicy    corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`

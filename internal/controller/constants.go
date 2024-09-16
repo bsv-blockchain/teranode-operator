@@ -1,3 +1,4 @@
+// Package controller implements all reconciler logic
 package controller
 
 // DefaultServiceAccountName defines the name of the service acount created by the bundle
@@ -10,6 +11,7 @@ const SharedPVCName = "cluster-storage"
 const DefaultImage = "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68"
 
 // Ports for services
+
 const AssetGRPCPort = 8091
 const AssetHTTPPort = 8090
 const BlockAssemblyPort = 8085
@@ -27,6 +29,6 @@ const PropagationGRPCPort = 8084
 const PropagationHTTPPort = 8833
 const PropagationQuicPort = 8384
 const SubtreeValidatorGRPCPort = 8086
-const LegacyHttpPort = 8098
+const LegacyHTTPPort = 8098
 const ProfilerPort = 9091
 const DebuggerPort = 4040

@@ -64,7 +64,7 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 		Selector: metav1.SetAsLabelSelector(labels),
 		//Strategy: appsv1.DeploymentStrategy{ // TODO: verify if no strategy should be used by default
 		//	Type: appsv1.RecreateDeploymentStrategyType,
-		//},
+		// },
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
 				CreationTimestamp: metav1.Time{},

@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"

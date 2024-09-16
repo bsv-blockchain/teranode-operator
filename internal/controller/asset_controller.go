@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
@@ -69,13 +70,10 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 	}
 
 	_, err := utils.ReconcileBatch(r.Log,
-		//r.Validate,
-		// TODO: Come back and determine how to more appropriately handle overriding the configmap for each service
-		//r.ReconcileConfigMap,
 		r.ReconcileDeployment,
 		r.ReconcileService,
-		r.ReconcileHttpIngress,
-		r.ReconcileHttpsIngress,
+		r.ReconcileHTTPIngress,
+		r.ReconcileHTTPSIngress,
 	)
 
 	if err != nil {

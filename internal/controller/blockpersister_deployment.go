@@ -68,7 +68,7 @@ func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 		Selector: metav1.SetAsLabelSelector(labels),
 		//Strategy: appsv1.DeploymentStrategy{ // TODO: confirm the lack of defined update strategy
 		//	Type: appsv1.RecreateDeploymentStrategyType,
-		//},
+		// },
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
 				CreationTimestamp: metav1.Time{},
