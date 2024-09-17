@@ -11,7 +11,7 @@ $ operator-sdk olm install
 ```
 Run the bundle to install teranode operator on the cluster:
 ```bash
-$ operator-sdk run bundle 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.0.2 --install-mode OwnNamespace -n <namespace>
+$ operator-sdk run bundle 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.2.0 --install-mode OwnNamespace -n <namespace>
 ```
 
 ## Running a node

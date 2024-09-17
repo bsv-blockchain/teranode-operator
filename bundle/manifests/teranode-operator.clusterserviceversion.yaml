@@ -571,10 +571,10 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-09-09T01:59:56Z"
-    operators.operatorframework.io/builder: operator-sdk-v1.35.0
+    createdAt: "2024-09-17T17:24:54Z"
+    operators.operatorframework.io/builder: operator-sdk-v1.37.0
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
-  name: teranode-operator.v0.0.1
+  name: teranode-operator.v0.2.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1159,7 +1159,7 @@ spec:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.annotations['olm.targetNamespaces']
-                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.1.8
+                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.2.0
                 imagePullPolicy: Always
                 livenessProbe:
                   httpGet:
@@ -1261,4 +1261,4 @@ spec:
   maturity: alpha
   provider:
     name: BSV Association
-  version: 0.0.1
+  version: 0.2.0
