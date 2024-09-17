@@ -1,0 +1,10 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: teranode-operator-stable
+spec:
+  channel: stable
+  name: teranode-operator
+  source: bsva-catalog
+  sourceNamespace: olm
+  installPlanApproval: Automatic

@@ -1,0 +1,13 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: bsva-catalog
+  namespace: olm
+spec:
+  sourceType: grpc
+  image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/bsva/catalog
+  displayName: BSVA Catalog
+  publisher: BSV Blockchain
+  updateStrategy:
+    registryPoll:
+      interval: 10m

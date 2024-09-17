@@ -1,0 +1,9 @@
+Schema: olm.semver
+GenerateMajorChannels: true
+GenerateMinorChannels: false
+stable:
+  Bundles:
+  - Image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.2.0
+fast:
+  Bundles:
+  - Image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.2.0

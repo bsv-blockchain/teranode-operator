@@ -4,7 +4,39 @@ An operator to manage the Teranode services for Kubernetes
 ## Description
 This operator controls the management of each microservice associated with a Teranode cluster. It currently supports deployment via bundle.
 
-## Installation 
+# Installation
+
+## Installation via BSVA Catalog (Recommended)
+Ensure OLM is installed:
+```bash
+$ operator-sdk olm install
+```
+
+Create BSVA CatalogSource in the OLM namespace
+```bash
+$ kubectl create -f olm/catalog-source.yaml
+```
+
+Create the target installation namespace for the operator (Example uses namespace `teranode-operator`)
+```bash
+$ kubectl create namespace teranode-operator
+```
+
+Create OperatorGroup and Subscription in installation namespace 
+
+(Optional) If you are deploying to a namespace other than `teranode-operator`, modify the OperatorGroup to specify your installation namespace:
+```bash
+$ echo "  - <namespace>" >> olm/og.yaml
+```
+
+Create the resources:
+```bash
+$ kubectl create -f olm/og.yaml -n teranode-operator
+$ kubectl create -f olm/subscription.yaml -n teranode-operator
+```
+
+This installs the Teranode Operator from the `stable` published channel in the BSVA Catalog. This will include automatic upgrades for minor releases published to this channel. If you want to change channels or the upgrade policy, modify `olm/subscription.yaml`.
+## Installation via operator-sdk
 Ensure OLM is installed:
 ```bash
 $ operator-sdk olm install
