@@ -92,6 +92,12 @@ type SubtreeValidatorConfig struct {
 	Spec    *SubtreeValidatorSpec `json:"spec"`
 }
 
+// UtxoPersisterConfig defines the utxo persister configuration
+type UtxoPersisterConfig struct {
+	Enabled bool               `json:"enabled"`
+	Spec    *UtxoPersisterSpec `json:"spec"`
+}
+
 // ValidatorConfig defines the validator configuration
 type ValidatorConfig struct {
 	Enabled bool           `json:"enabled"`
@@ -115,6 +121,7 @@ type ClusterSpec struct {
 	Peer             PeerConfig             `json:"peer"`
 	Propagation      PropagationConfig      `json:"propagation"`
 	SubtreeValidator SubtreeValidatorConfig `json:"subtreeValidator"`
+	UtxoPersister    UtxoPersisterConfig    `json:"utxoPersister"`
 	Validator        ValidatorConfig        `json:"validator"`
 
 	ConfigMapName string `json:"configMapName"`

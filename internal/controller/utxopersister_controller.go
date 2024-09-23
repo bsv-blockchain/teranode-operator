@@ -18,13 +18,12 @@ package controller
 
 import (
 	"context"
+
 	"time"
 
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
-	corev1 "k8s.io/api/core/v1"
-	networkingv1 "k8s.io/api/networking/v1"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -37,8 +36,8 @@ import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 )
 
-// PropagationReconciler reconciles a Propagation object
-type PropagationReconciler struct {
+// UtxoPersisterReconciler reconciles a UtxoPersister object
+type UtxoPersisterReconciler struct {
 	client.Client
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
@@ -46,38 +45,32 @@ type PropagationReconciler struct {
 	Context        context.Context
 }
 
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=propagations,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=propagations/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=propagations/finalizers,verbs=update
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=utxopersisters,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=utxopersisters/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=utxopersisters/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
-// TODO(user): Modify the Reconcile function to compare the state specified by
-// the Propagation object against the actual cluster state, and then
-// perform operations to make the cluster state reflect the state specified by
-// the user.
 //
 // For more details, check Reconcile and its Result here:
-// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
-func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.17.3/pkg/reconcile
+func (r *UtxoPersisterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	result := ctrl.Result{}
-	r.Log = log.FromContext(ctx).WithValues("propagation", req.NamespacedName)
+	r.Log = log.FromContext(ctx).WithValues("utxo-persister", req.NamespacedName)
 	r.Context = ctx
 	r.NamespacedName = req.NamespacedName
-	propagation := teranodev1alpha1.Propagation{}
-	if err := r.Get(ctx, req.NamespacedName, &propagation); err != nil {
-		r.Log.Error(err, "unable to fetch propagation CR")
+	up := teranodev1alpha1.UtxoPersister{}
+	if err := r.Get(ctx, req.NamespacedName, &up); err != nil {
+		r.Log.Error(err, "unable to fetch utxo persister CR")
 		return result, nil
 	}
 
 	_, err := utils.ReconcileBatch(r.Log,
 		r.ReconcileDeployment,
-		r.ReconcileService,
-		r.ReconcileGrpcIngress,
 	)
 
 	if err != nil {
-		apimeta.SetStatusCondition(&propagation.Status.Conditions,
+		apimeta.SetStatusCondition(&up.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -85,10 +78,10 @@ func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 				Message: err.Error(),
 			},
 		)
-		_ = r.Client.Status().Update(ctx, &propagation)
+		_ = r.Client.Status().Update(ctx, &up)
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
-		apimeta.SetStatusCondition(&propagation.Status.Conditions,
+		apimeta.SetStatusCondition(&up.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,
@@ -97,17 +90,14 @@ func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 			},
 		)
 	}
-
-	err = r.Client.Status().Update(ctx, &propagation)
+	err = r.Client.Status().Update(ctx, &up)
 	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *PropagationReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *UtxoPersisterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&teranodev1alpha1.Propagation{}).
+		For(&teranodev1alpha1.UtxoPersister{}).
 		Owns(&appsv1.Deployment{}).
-		Owns(&networkingv1.Ingress{}).
-		Owns(&corev1.Service{}).
 		Complete(r)
 }

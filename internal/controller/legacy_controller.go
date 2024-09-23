@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"time"
 
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
@@ -81,6 +82,8 @@ func (r *LegacyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 				Message: err.Error(),
 			},
 		)
+		_ = r.Client.Status().Update(ctx, &legacy)
+		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
 		apimeta.SetStatusCondition(&legacy.Status.Conditions,
 			metav1.Condition{
@@ -92,11 +95,7 @@ func (r *LegacyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		)
 	}
 
-	statusErr := r.Client.Status().Update(ctx, &legacy)
-	if err == nil {
-		err = statusErr
-	}
-
+	err = r.Client.Status().Update(ctx, &legacy)
 	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
 }
 

@@ -14,4 +14,5 @@ resources:
 - teranode_v1alpha1_blockassembly.yaml
 - teranode_v1alpha1_blockvalidator.yaml
 - teranode_v1alpha1_legacy.yaml
+- teranode_v1alpha1_utxopersister.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"time"
 
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
@@ -82,6 +83,8 @@ func (r *ValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 				Message: err.Error(),
 			},
 		)
+		_ = r.Client.Status().Update(ctx, &validator)
+		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
 		apimeta.SetStatusCondition(&validator.Status.Conditions,
 			metav1.Condition{
@@ -93,11 +96,7 @@ func (r *ValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 		)
 	}
 
-	statusErr := r.Client.Status().Update(ctx, &validator)
-	if err == nil {
-		err = statusErr
-	}
-
+	err = r.Client.Status().Update(ctx, &validator)
 	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
 }
 

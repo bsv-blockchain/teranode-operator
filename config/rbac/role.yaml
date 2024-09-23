@@ -405,6 +405,32 @@ rules:
 - apiGroups:
   - teranode.bsvblockchain.org
   resources:
+  - utxopersisters
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - utxopersisters/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - utxopersisters/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
   - validators
   verbs:
   - create

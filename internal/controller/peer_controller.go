@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"time"
 
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
@@ -76,6 +77,7 @@ func (r *PeerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 		r.ReconcileWsIngress,
 		r.ReconcileWssIngress,
 	)
+
 	if err != nil {
 		apimeta.SetStatusCondition(&peer.Status.Conditions,
 			metav1.Condition{
@@ -85,6 +87,8 @@ func (r *PeerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 				Message: err.Error(),
 			},
 		)
+		_ = r.Client.Status().Update(ctx, &peer)
+		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
 		apimeta.SetStatusCondition(&peer.Status.Conditions,
 			metav1.Condition{
@@ -96,11 +100,7 @@ func (r *PeerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 		)
 	}
 
-	statusErr := r.Client.Status().Update(ctx, &peer)
-	if err == nil {
-		err = statusErr
-	}
-
+	err = r.Client.Status().Update(ctx, &peer)
 	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
 }
 

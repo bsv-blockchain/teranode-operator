@@ -47,6 +47,10 @@ var (
 	setupLog = ctrl.Log.WithName("setup")
 )
 
+const (
+	CreateControllerError = "unable to create controller"
+)
+
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
@@ -139,98 +143,105 @@ func main() {
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Cluster")
+		setupLog.Error(err, CreateControllerError, "controller", "Cluster")
 		os.Exit(1)
 	}
 	if err = (&controller.AssetReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Asset")
+		setupLog.Error(err, CreateControllerError, "controller", "Asset")
 		os.Exit(1)
 	}
 	if err = (&controller.BlockchainReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Blockchain")
+		setupLog.Error(err, CreateControllerError, "controller", "Blockchain")
 		os.Exit(1)
 	}
 	if err = (&controller.PeerReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Peer")
+		setupLog.Error(err, CreateControllerError, "controller", "Peer")
 		os.Exit(1)
 	}
 	if err = (&controller.SubtreeValidatorReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "SubtreeValidator")
+		setupLog.Error(err, CreateControllerError, "controller", "SubtreeValidator")
 		os.Exit(1)
 	}
 	if err = (&controller.BlockPersisterReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "BlockPersister")
+		setupLog.Error(err, CreateControllerError, "controller", "BlockPersister")
 		os.Exit(1)
 	}
 	if err = (&controller.PropagationReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Propagation")
+		setupLog.Error(err, CreateControllerError, "controller", "Propagation")
 		os.Exit(1)
 	}
 	if err = (&controller.MinerReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Miner")
+		setupLog.Error(err, CreateControllerError, "controller", "Miner")
 		os.Exit(1)
 	}
 	if err = (&controller.ValidatorReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Validator")
+		setupLog.Error(err, CreateControllerError, "controller", "Validator")
 		os.Exit(1)
 	}
 	if err = (&controller.CoinbaseReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Coinbase")
+		setupLog.Error(err, CreateControllerError, "controller", "Coinbase")
 		os.Exit(1)
 	}
 	if err = (&controller.BootstrapReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Bootstrap")
+		setupLog.Error(err, CreateControllerError, "controller", "Bootstrap")
 		os.Exit(1)
 	}
 	if err = (&controller.BlockAssemblyReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "BlockAssembly")
+		setupLog.Error(err, CreateControllerError, "controller", "BlockAssembly")
 		os.Exit(1)
 	}
 	if err = (&controller.BlockValidatorReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "BlockValidator")
+		setupLog.Error(err, CreateControllerError, "controller", "BlockValidator")
 		os.Exit(1)
 	}
 	if err = (&controller.LegacyReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Legacy")
+		setupLog.Error(err, CreateControllerError, "controller", "Legacy")
+		os.Exit(1)
+	}
+	if err = (&controller.UtxoPersisterReconciler{
+		Client: mgr.GetClient(),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, CreateControllerError, "controller", "UtxoPersister")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder

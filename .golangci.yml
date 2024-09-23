@@ -9,9 +9,13 @@ issues:
   # restore some of the defaults
   # (fill in the rest as needed)
   exclude-rules:
+    - path: test/
+      text: "ST1001: should not use dot imports"
+      linters: ["stylecheck"]
     - path: "api/*"
       linters:
         - lll
+        - dupl
     - path: "internal/*"
       linters:
         - dupl

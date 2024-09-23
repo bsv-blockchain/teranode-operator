@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"time"
 
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
@@ -81,6 +82,8 @@ func (r *BootstrapReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 				Message: err.Error(),
 			},
 		)
+		_ = r.Client.Status().Update(ctx, &bs)
+		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
 		apimeta.SetStatusCondition(&bs.Status.Conditions,
 			metav1.Condition{
@@ -92,11 +95,7 @@ func (r *BootstrapReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 		)
 	}
 
-	statusErr := r.Client.Status().Update(ctx, &bs)
-	if err == nil {
-		err = statusErr
-	}
-
+	err = r.Client.Status().Update(ctx, &bs)
 	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
 }
 

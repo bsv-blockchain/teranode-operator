@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"time"
 
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
@@ -49,10 +50,6 @@ type MinerReconciler struct {
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
-// TODO(user): Modify the Reconcile function to compare the state specified by
-// the Miner object against the actual cluster state, and then
-// perform operations to make the cluster state reflect the state specified by
-// the user.
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
@@ -80,6 +77,8 @@ func (r *MinerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 				Message: err.Error(),
 			},
 		)
+		_ = r.Client.Status().Update(ctx, &miner)
+		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
 		apimeta.SetStatusCondition(&miner.Status.Conditions,
 			metav1.Condition{
@@ -91,11 +90,7 @@ func (r *MinerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		)
 	}
 
-	statusErr := r.Client.Status().Update(ctx, &miner)
-	if err == nil {
-		err = statusErr
-	}
-
+	err = r.Client.Status().Update(ctx, &miner)
 	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
 }
 
