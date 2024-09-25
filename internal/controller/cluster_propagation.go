@@ -2,6 +2,8 @@ package controller
 
 import (
 	"fmt"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/types"
 
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
@@ -15,9 +17,6 @@ func (r *ClusterReconciler) ReconcilePropagation(log logr.Logger) (bool, error) 
 	if err := r.Get(r.Context, r.NamespacedName, &cluster); err != nil {
 		return false, err
 	}
-	if !cluster.Spec.Propagation.Enabled {
-		return true, nil
-	}
 	propagation := teranodev1alpha1.Propagation{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-propagation", cluster.Name),
@@ -25,6 +24,22 @@ func (r *ClusterReconciler) ReconcilePropagation(log logr.Logger) (bool, error) 
 			Labels:    getAppLabels(),
 		},
 	}
+
+	// Delete resource if we are disabling it
+	if !cluster.Spec.Propagation.Enabled {
+		namespacedName := types.NamespacedName{
+			Name:      propagation.Name,
+			Namespace: propagation.Namespace,
+		}
+		err := r.Get(r.Context, namespacedName, &propagation)
+		if k8serrors.IsNotFound(err) {
+			return true, nil
+		}
+		// attempt to delete the resource
+		err = r.Delete(r.Context, &propagation)
+		return true, err
+	}
+
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &propagation, func() error {
 		return r.updatePropagation(&propagation, &cluster)
 	})

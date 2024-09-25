@@ -2,6 +2,8 @@ package controller
 
 import (
 	"fmt"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/types"
 
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
@@ -15,9 +17,6 @@ func (r *ClusterReconciler) ReconcileSubtreeValidator(log logr.Logger) (bool, er
 	if err := r.Get(r.Context, r.NamespacedName, &cluster); err != nil {
 		return false, err
 	}
-	if !cluster.Spec.SubtreeValidator.Enabled {
-		return true, nil
-	}
 	subtreeValidator := teranodev1alpha1.SubtreeValidator{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-subtreevalidator", cluster.Name),
@@ -25,6 +24,22 @@ func (r *ClusterReconciler) ReconcileSubtreeValidator(log logr.Logger) (bool, er
 			Labels:    getAppLabels(),
 		},
 	}
+
+	// Delete resource if we are disabling it
+	if !cluster.Spec.SubtreeValidator.Enabled {
+		namespacedName := types.NamespacedName{
+			Name:      subtreeValidator.Name,
+			Namespace: subtreeValidator.Namespace,
+		}
+		err := r.Get(r.Context, namespacedName, &subtreeValidator)
+		if k8serrors.IsNotFound(err) {
+			return true, nil
+		}
+		// attempt to delete the resource
+		err = r.Delete(r.Context, &subtreeValidator)
+		return true, err
+	}
+
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &subtreeValidator, func() error {
 		return r.updateSubtreeValidator(&subtreeValidator, &cluster)
 	})

@@ -2,6 +2,8 @@ package controller
 
 import (
 	"fmt"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/types"
 
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
@@ -15,9 +17,6 @@ func (r *ClusterReconciler) ReconcileUtxoPersister(log logr.Logger) (bool, error
 	if err := r.Get(r.Context, r.NamespacedName, &cluster); err != nil {
 		return false, err
 	}
-	if !cluster.Spec.UtxoPersister.Enabled {
-		return true, nil
-	}
 	up := teranodev1alpha1.UtxoPersister{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-utxo-persister", cluster.Name),
@@ -25,6 +24,22 @@ func (r *ClusterReconciler) ReconcileUtxoPersister(log logr.Logger) (bool, error
 			Labels:    getAppLabels(),
 		},
 	}
+
+	// Delete resource if we are disabling it
+	if !cluster.Spec.UtxoPersister.Enabled {
+		namespacedName := types.NamespacedName{
+			Name:      up.Name,
+			Namespace: up.Namespace,
+		}
+		err := r.Get(r.Context, namespacedName, &up)
+		if k8serrors.IsNotFound(err) {
+			return true, nil
+		}
+		// attempt to delete the resource
+		err = r.Delete(r.Context, &up)
+		return true, err
+	}
+
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &up, func() error {
 		return r.updateUtxoPersister(&up, &cluster)
 	})

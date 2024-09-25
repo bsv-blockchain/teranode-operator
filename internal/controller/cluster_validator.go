@@ -2,6 +2,8 @@ package controller
 
 import (
 	"fmt"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/types"
 
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
@@ -15,9 +17,6 @@ func (r *ClusterReconciler) ReconcileValidator(log logr.Logger) (bool, error) {
 	if err := r.Get(r.Context, r.NamespacedName, &cluster); err != nil {
 		return false, err
 	}
-	if !cluster.Spec.Validator.Enabled {
-		return true, nil
-	}
 	validator := teranodev1alpha1.Validator{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-validator", cluster.Name),
@@ -25,6 +24,22 @@ func (r *ClusterReconciler) ReconcileValidator(log logr.Logger) (bool, error) {
 			Labels:    getAppLabels(),
 		},
 	}
+
+	// Delete resource if we are disabling it
+	if !cluster.Spec.Validator.Enabled {
+		namespacedName := types.NamespacedName{
+			Name:      validator.Name,
+			Namespace: validator.Namespace,
+		}
+		err := r.Get(r.Context, namespacedName, &validator)
+		if k8serrors.IsNotFound(err) {
+			return true, nil
+		}
+		// attempt to delete the resource
+		err = r.Delete(r.Context, &validator)
+		return true, err
+	}
+
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &validator, func() error {
 		return r.updateValidator(&validator, &cluster)
 	})

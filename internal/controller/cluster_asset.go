@@ -2,10 +2,11 @@ package controller
 
 import (
 	"fmt"
-
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
@@ -15,9 +16,6 @@ func (r *ClusterReconciler) ReconcileAsset(log logr.Logger) (bool, error) {
 	if err := r.Get(r.Context, r.NamespacedName, &cluster); err != nil {
 		return false, err
 	}
-	if !cluster.Spec.Asset.Enabled {
-		return true, nil
-	}
 	asset := teranodev1alpha1.Asset{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-asset", cluster.Name),
@@ -25,6 +23,22 @@ func (r *ClusterReconciler) ReconcileAsset(log logr.Logger) (bool, error) {
 			Labels:    getAppLabels(),
 		},
 	}
+
+	// Delete resource if we are disabling it
+	if !cluster.Spec.Asset.Enabled {
+		namespacedName := types.NamespacedName{
+			Name:      asset.Name,
+			Namespace: asset.Namespace,
+		}
+		err := r.Get(r.Context, namespacedName, &asset)
+		if k8serrors.IsNotFound(err) {
+			return true, nil
+		}
+		// attempt to delete the resource
+		err = r.Delete(r.Context, &asset)
+		return true, err
+	}
+
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &asset, func() error {
 		return r.updateAsset(&asset, &cluster)
 	})

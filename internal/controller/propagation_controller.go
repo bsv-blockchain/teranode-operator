@@ -86,7 +86,10 @@ func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 			},
 		)
 		_ = r.Client.Status().Update(ctx, &propagation)
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
+		// Since error is written on the status, let's log it and requeue
+		// Returning error here is redundant
+		r.Log.Error(err, "requeuing object for reconciliation")
+		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, nil
 	} else {
 		apimeta.SetStatusCondition(&propagation.Status.Conditions,
 			metav1.Condition{

@@ -2,6 +2,8 @@ package controller
 
 import (
 	"fmt"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/types"
 
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
@@ -15,9 +17,6 @@ func (r *ClusterReconciler) ReconcileCoinbase(log logr.Logger) (bool, error) {
 	if err := r.Get(r.Context, r.NamespacedName, &cluster); err != nil {
 		return false, err
 	}
-	if !cluster.Spec.Coinbase.Enabled {
-		return true, nil
-	}
 	coinbase := teranodev1alpha1.Coinbase{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-coinbase", cluster.Name),
@@ -25,6 +24,22 @@ func (r *ClusterReconciler) ReconcileCoinbase(log logr.Logger) (bool, error) {
 			Labels:    getAppLabels(),
 		},
 	}
+
+	// Delete resource if we are disabling it
+	if !cluster.Spec.Coinbase.Enabled {
+		namespacedName := types.NamespacedName{
+			Name:      coinbase.Name,
+			Namespace: coinbase.Namespace,
+		}
+		err := r.Get(r.Context, namespacedName, &coinbase)
+		if k8serrors.IsNotFound(err) {
+			return true, nil
+		}
+		// attempt to delete the resource
+		err = r.Delete(r.Context, &coinbase)
+		return true, err
+	}
+
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &coinbase, func() error {
 		return r.updateCoinbase(&coinbase, &cluster)
 	})

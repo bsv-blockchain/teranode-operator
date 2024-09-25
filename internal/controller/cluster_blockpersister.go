@@ -2,6 +2,8 @@ package controller
 
 import (
 	"fmt"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/types"
 
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
@@ -15,9 +17,6 @@ func (r *ClusterReconciler) ReconcileBlockPersister(log logr.Logger) (bool, erro
 	if err := r.Get(r.Context, r.NamespacedName, &cluster); err != nil {
 		return false, err
 	}
-	if !cluster.Spec.BlockPersister.Enabled {
-		return true, nil
-	}
 	blockPersister := teranodev1alpha1.BlockPersister{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-blockpersister", cluster.Name),
@@ -25,6 +24,22 @@ func (r *ClusterReconciler) ReconcileBlockPersister(log logr.Logger) (bool, erro
 			Labels:    getAppLabels(),
 		},
 	}
+
+	// Delete resource if we are disabling it
+	if !cluster.Spec.BlockPersister.Enabled {
+		namespacedName := types.NamespacedName{
+			Name:      blockPersister.Name,
+			Namespace: blockPersister.Namespace,
+		}
+		err := r.Get(r.Context, namespacedName, &blockPersister)
+		if k8serrors.IsNotFound(err) {
+			return true, nil
+		}
+		// attempt to delete the resource
+		err = r.Delete(r.Context, &blockPersister)
+		return true, err
+	}
+
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &blockPersister, func() error {
 		return r.updateBlockPersister(&blockPersister, &cluster)
 	})

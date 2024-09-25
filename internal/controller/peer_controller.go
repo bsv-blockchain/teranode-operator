@@ -88,6 +88,9 @@ func (r *PeerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 			},
 		)
 		_ = r.Client.Status().Update(ctx, &peer)
+		// Since error is written on the status, let's log it and requeue
+		// Returning error here is redundant
+		r.Log.Error(err, "requeuing object for reconciliation")
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
 		apimeta.SetStatusCondition(&peer.Status.Conditions,

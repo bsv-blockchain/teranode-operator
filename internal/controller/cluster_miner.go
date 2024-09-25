@@ -2,6 +2,8 @@ package controller
 
 import (
 	"fmt"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/types"
 
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
@@ -15,9 +17,6 @@ func (r *ClusterReconciler) ReconcileMiner(log logr.Logger) (bool, error) {
 	if err := r.Get(r.Context, r.NamespacedName, &cluster); err != nil {
 		return false, err
 	}
-	if !cluster.Spec.Miner.Enabled {
-		return true, nil
-	}
 	miner := teranodev1alpha1.Miner{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-miner", cluster.Name),
@@ -25,6 +24,22 @@ func (r *ClusterReconciler) ReconcileMiner(log logr.Logger) (bool, error) {
 			Labels:    getAppLabels(),
 		},
 	}
+
+	// Delete resource if we are disabling it
+	if !cluster.Spec.Miner.Enabled {
+		namespacedName := types.NamespacedName{
+			Name:      miner.Name,
+			Namespace: miner.Namespace,
+		}
+		err := r.Get(r.Context, namespacedName, &miner)
+		if k8serrors.IsNotFound(err) {
+			return true, nil
+		}
+		// attempt to delete the resource
+		err = r.Delete(r.Context, &miner)
+		return true, err
+	}
+
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &miner, func() error {
 		return r.updateMiner(&miner, &cluster)
 	})

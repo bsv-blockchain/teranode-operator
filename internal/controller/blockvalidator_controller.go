@@ -84,7 +84,7 @@ func (r *BlockValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 			},
 		)
 		_ = r.Client.Status().Update(ctx, &blockValidator)
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
+		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, nil
 	} else {
 		apimeta.SetStatusCondition(&blockValidator.Status.Conditions,
 			metav1.Condition{

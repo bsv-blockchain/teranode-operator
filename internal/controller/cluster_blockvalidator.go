@@ -2,6 +2,8 @@ package controller
 
 import (
 	"fmt"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/types"
 
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
@@ -15,9 +17,6 @@ func (r *ClusterReconciler) ReconcileBlockValidator(log logr.Logger) (bool, erro
 	if err := r.Get(r.Context, r.NamespacedName, &cluster); err != nil {
 		return false, err
 	}
-	if !cluster.Spec.BlockValidator.Enabled {
-		return true, nil
-	}
 	blockValidator := teranodev1alpha1.BlockValidator{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-blockvalidator", cluster.Name),
@@ -25,6 +24,22 @@ func (r *ClusterReconciler) ReconcileBlockValidator(log logr.Logger) (bool, erro
 			Labels:    getAppLabels(),
 		},
 	}
+
+	// Delete resource if we are disabling it
+	if !cluster.Spec.BlockValidator.Enabled {
+		namespacedName := types.NamespacedName{
+			Name:      blockValidator.Name,
+			Namespace: blockValidator.Namespace,
+		}
+		err := r.Get(r.Context, namespacedName, &blockValidator)
+		if k8serrors.IsNotFound(err) {
+			return true, nil
+		}
+		// attempt to delete the resource
+		err = r.Delete(r.Context, &blockValidator)
+		return true, err
+	}
+
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &blockValidator, func() error {
 		return r.updateBlockValidator(&blockValidator, &cluster)
 	})
