@@ -4,20 +4,20 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
   creationTimestamp: null
-  name: subtreevalidators.teranode.bsvblockchain.org
+  name: utxopersisters.teranode.bsvblockchain.org
 spec:
   group: teranode.bsvblockchain.org
   names:
-    kind: SubtreeValidator
-    listKind: SubtreeValidatorList
-    plural: subtreevalidators
-    singular: subtreevalidator
+    kind: UtxoPersister
+    listKind: UtxoPersisterList
+    plural: utxopersisters
+    singular: utxopersister
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: SubtreeValidator is the Schema for the subtreevalidators API
+        description: UtxoPersister is the Schema for the utxopersisters API
         properties:
           apiVersion:
             description: |-
@@ -37,7 +37,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: SubtreeValidatorSpec defines the desired state of SubtreeValidator
+            description: UtxoPersisterSpec defines the desired state of UtxoPersister
             properties:
               deploymentOverrides:
                 description: DeploymentOverrides defines all the overrides for the
@@ -987,77 +987,11 @@ spec:
                       type: object
                     type: array
                 type: object
-              podTemplateAnnotations:
-                additionalProperties:
-                  type: string
-                type: object
-              storageClass:
-                type: string
-              storageResources:
-                description: ResourceRequirements describes the compute resource requirements.
-                properties:
-                  claims:
-                    description: |-
-                      Claims lists the names of resources, defined in spec.resourceClaims,
-                      that are used by this container.
-
-
-                      This is an alpha field and requires enabling the
-                      DynamicResourceAllocation feature gate.
-
-
-                      This field is immutable. It can only be set for containers.
-                    items:
-                      description: ResourceClaim references one entry in PodSpec.ResourceClaims.
-                      properties:
-                        name:
-                          description: |-
-                            Name must match the name of one entry in pod.spec.resourceClaims of
-                            the Pod where this field is used. It makes that resource available
-                            inside a container.
-                          type: string
-                      required:
-                      - name
-                      type: object
-                    type: array
-                    x-kubernetes-list-map-keys:
-                    - name
-                    x-kubernetes-list-type: map
-                  limits:
-                    additionalProperties:
-                      anyOf:
-                      - type: integer
-                      - type: string
-                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                      x-kubernetes-int-or-string: true
-                    description: |-
-                      Limits describes the maximum amount of compute resources allowed.
-                      More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-                    type: object
-                  requests:
-                    additionalProperties:
-                      anyOf:
-                      - type: integer
-                      - type: string
-                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                      x-kubernetes-int-or-string: true
-                    description: |-
-                      Requests describes the minimum amount of compute resources required.
-                      If Requests is omitted for a container, it defaults to Limits if that is explicitly specified,
-                      otherwise to an implementation-defined value. Requests cannot exceed Limits.
-                      More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-                    type: object
-                type: object
-              storageVolume:
-                type: string
             type: object
           status:
-            description: SubtreeValidatorStatus defines the observed state of SubtreeValidator
+            description: UtxoPersisterStatus defines the observed state of UtxoPersister
             properties:
               conditions:
-                description: |-
-                  INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-                  Important: Run "make" to regenerate code after modifying this file
                 items:
                   description: "Condition contains details for one aspect of the current
                     state of this API Resource.\n---\nThis struct is intended for

@@ -80,6 +80,11 @@ spec:
       kind: SubtreeValidator
       name: subtreevalidators.teranode.bsvblockchain.org
       version: v1alpha1
+    - description: UtxoPersister is the Schema for the utxopersisters API
+      displayName: Utxo Persister
+      kind: UtxoPersister
+      name: utxopersisters.teranode.bsvblockchain.org
+      version: v1alpha1
     - description: Validator is the Schema for the validators API
       displayName: Validator
       kind: Validator

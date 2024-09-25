@@ -544,6 +544,30 @@ metadata:
         },
         {
           "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "UtxoPersister",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "teranode-operator"
+            },
+            "name": "utxopersister-sample"
+          },
+          "spec": {
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
+            "imagePullPolicy": "Always",
+            "resources": {
+              "limits": {
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": 1,
+                "memory": "1Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
           "kind": "Validator",
           "metadata": {
             "labels": {
@@ -571,8 +595,8 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-09-17T17:24:54Z"
-    operators.operatorframework.io/builder: operator-sdk-v1.37.0
+    createdAt: "2024-09-25T04:13:18Z"
+    operators.operatorframework.io/builder: operator-sdk-v1.36.1
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
   name: teranode-operator.v0.2.0
   namespace: placeholder
@@ -649,6 +673,11 @@ spec:
       displayName: Subtree Validator
       kind: SubtreeValidator
       name: subtreevalidators.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: UtxoPersister is the Schema for the utxopersisters API
+      displayName: Utxo Persister
+      kind: UtxoPersister
+      name: utxopersisters.teranode.bsvblockchain.org
       version: v1alpha1
     - description: Validator is the Schema for the validators API
       displayName: Validator
@@ -1058,6 +1087,32 @@ spec:
           - teranode.bsvblockchain.org
           resources:
           - subtreevalidators/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - utxopersisters
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - utxopersisters/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - utxopersisters/status
           verbs:
           - get
           - patch
