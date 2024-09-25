@@ -41,15 +41,18 @@ func (r *ClusterReconciler) updateBlockPersister(blockPersister *teranodev1alpha
 	}
 	blockPersister.Spec = *defaultBlockPersisterSpec()
 
-	// if user configures a config map name
+	// if user configures a spec
 	if cluster.Spec.BlockPersister.Spec != nil {
 		blockPersister.Spec = *cluster.Spec.BlockPersister.Spec
 	}
+	if blockPersister.Spec.DeploymentOverrides == nil {
+		blockPersister.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+	}
 	if cluster.Spec.Image != "" {
-		blockPersister.Spec.Image = cluster.Spec.Image
+		blockPersister.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ConfigMapName != "" {
-		blockPersister.Spec.ConfigMapName = cluster.Spec.ConfigMapName
+		blockPersister.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }

@@ -17,36 +17,16 @@ limitations under the License.
 package v1alpha1
 
 import (
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // ValidatorSpec defines the desired state of Validator
 type ValidatorSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
-	NodeSelector    map[string]string            `json:"nodeSelector,omitempty"`
-	Tolerations     *[]corev1.Toleration         `json:"tolerations,omitempty"`
-	Affinity        *corev1.Affinity             `json:"affinity,omitempty"`
-	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
-	Image           string                       `json:"image,omitempty"`
-	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
-	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
-	ConfigMapName   string                       `json:"configMapName,omitempty"`
-	Replicas        *int32                       `json:"replicas,omitempty"`
-	Command         []string                     `json:"command,omitempty"`
-	Args            []string                     `json:"args,omitempty"`
+	DeploymentOverrides *DeploymentOverrides `json:"deploymentOverrides,omitempty"`
 }
 
 // ValidatorStatus defines the observed state of Validator
 type ValidatorStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
 }
 
@@ -62,48 +42,8 @@ type Validator struct {
 	Status ValidatorStatus `json:"status,omitempty"`
 }
 
-func (in *Validator) NodeSelector() map[string]string {
-	return in.Spec.NodeSelector
-}
-
-func (in *Validator) Tolerations() *[]corev1.Toleration {
-	return in.Spec.Tolerations
-}
-
-func (in *Validator) Affinity() *corev1.Affinity {
-	return in.Spec.Affinity
-}
-
-func (in *Validator) Resources() *corev1.ResourceRequirements {
-	return in.Spec.Resources
-}
-
-func (in *Validator) Image() string {
-	return in.Spec.Image
-}
-
-func (in *Validator) ImagePullPolicy() corev1.PullPolicy {
-	return in.Spec.ImagePullPolicy
-}
-
-func (in *Validator) ServiceAccountName() string {
-	return in.Spec.ServiceAccount
-}
-
-func (in *Validator) Replicas() *int32 {
-	return in.Spec.Replicas
-}
-
-func (in *Validator) ConfigMapName() string {
-	return in.Spec.ConfigMapName
-}
-
-func (in *Validator) Command() []string {
-	return in.Spec.Command
-}
-
-func (in *Validator) Args() []string {
-	return in.Spec.Args
+func (v *Validator) DeploymentOverrides() *DeploymentOverrides {
+	return v.Spec.DeploymentOverrides
 }
 
 //+kubebuilder:object:root=true

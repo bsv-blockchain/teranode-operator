@@ -21,33 +21,15 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // BlockAssemblySpec defines the desired state of BlockAssembly
 type BlockAssemblySpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
-	NodeSelector     map[string]string            `json:"nodeSelector,omitempty"`
-	Tolerations      *[]corev1.Toleration         `json:"tolerations,omitempty"`
-	Affinity         *corev1.Affinity             `json:"affinity,omitempty"`
-	Resources        *corev1.ResourceRequirements `json:"resources,omitempty"`
-	StorageClass     string                       `json:"storageClass,omitempty"`
-	StorageResources *corev1.ResourceRequirements `json:"storageResources,omitempty"`
-	Image            string                       `json:"image,omitempty"`
-	ImagePullPolicy  corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
-	ServiceAccount   string                       `json:"serviceAccount,omitempty"`
-	ConfigMapName    string                       `json:"configMapName,omitempty"`
-	Replicas         *int32                       `json:"replicas,omitempty"`
-	Command          []string                     `json:"command,omitempty"`
-	Args             []string                     `json:"args,omitempty"`
+	DeploymentOverrides *DeploymentOverrides         `json:"deploymentOverrides,omitempty"`
+	StorageClass        string                       `json:"storageClass,omitempty"`
+	StorageResources    *corev1.ResourceRequirements `json:"storageResources,omitempty"`
 }
 
 // BlockAssemblyStatus defines the observed state of BlockAssembly
 type BlockAssemblyStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
 }
 
@@ -63,48 +45,8 @@ type BlockAssembly struct {
 	Status BlockAssemblyStatus `json:"status,omitempty"`
 }
 
-func (in *BlockAssembly) NodeSelector() map[string]string {
-	return in.Spec.NodeSelector
-}
-
-func (in *BlockAssembly) Tolerations() *[]corev1.Toleration {
-	return in.Spec.Tolerations
-}
-
-func (in *BlockAssembly) Affinity() *corev1.Affinity {
-	return in.Spec.Affinity
-}
-
-func (in *BlockAssembly) Resources() *corev1.ResourceRequirements {
-	return in.Spec.Resources
-}
-
-func (in *BlockAssembly) Image() string {
-	return in.Spec.Image
-}
-
-func (in *BlockAssembly) ImagePullPolicy() corev1.PullPolicy {
-	return in.Spec.ImagePullPolicy
-}
-
-func (in *BlockAssembly) ServiceAccountName() string {
-	return in.Spec.ServiceAccount
-}
-
-func (in *BlockAssembly) Replicas() *int32 {
-	return in.Spec.Replicas
-}
-
-func (in *BlockAssembly) ConfigMapName() string {
-	return in.Spec.ConfigMapName
-}
-
-func (in *BlockAssembly) Command() []string {
-	return in.Spec.Command
-}
-
-func (in *BlockAssembly) Args() []string {
-	return in.Spec.Args
+func (ba *BlockAssembly) DeploymentOverrides() *DeploymentOverrides {
+	return ba.Spec.DeploymentOverrides
 }
 
 //+kubebuilder:object:root=true

@@ -24,60 +24,67 @@ import (
 )
 
 func SetDeploymentOverrides(dep *appsv1.Deployment, cr v1alpha1.TeranodeService) {
+	if cr.DeploymentOverrides() == nil {
+		return
+	}
 	// If user configures a node selector
-	if cr.NodeSelector() != nil {
-		dep.Spec.Template.Spec.NodeSelector = cr.NodeSelector()
+	if cr.DeploymentOverrides().NodeSelector != nil {
+		dep.Spec.Template.Spec.NodeSelector = cr.DeploymentOverrides().NodeSelector
 	}
 
 	// If user configures tolerations
-	if cr.Tolerations() != nil {
-		dep.Spec.Template.Spec.Tolerations = *cr.Tolerations()
+	if cr.DeploymentOverrides().Tolerations != nil {
+		dep.Spec.Template.Spec.Tolerations = *cr.DeploymentOverrides().Tolerations
 	}
 
 	// If user configures affinity
-	if cr.Affinity() != nil {
-		dep.Spec.Template.Spec.Affinity = cr.Affinity()
+	if cr.DeploymentOverrides().Affinity != nil {
+		dep.Spec.Template.Spec.Affinity = cr.DeploymentOverrides().Affinity
 	}
 
 	// if user configures resources requests
-	if cr.Resources() != nil {
-		dep.Spec.Template.Spec.Containers[0].Resources = *cr.Resources()
+	if cr.DeploymentOverrides().Resources != nil {
+		dep.Spec.Template.Spec.Containers[0].Resources = *cr.DeploymentOverrides().Resources
 	}
 
 	// if user configures replicas
-	if cr.Replicas() != nil {
-		dep.Spec.Replicas = pointer.Int32(*cr.Replicas())
+	if cr.DeploymentOverrides().Replicas != nil {
+		dep.Spec.Replicas = pointer.Int32(*cr.DeploymentOverrides().Replicas)
 	}
 
 	// if user configures image or image pull policy
-	if cr.Image() != "" {
-		dep.Spec.Template.Spec.Containers[0].Image = cr.Image()
+	if cr.DeploymentOverrides().Image != "" {
+		dep.Spec.Template.Spec.Containers[0].Image = cr.DeploymentOverrides().Image
 	}
-	if cr.ImagePullPolicy() != "" {
-		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = cr.ImagePullPolicy()
+	if cr.DeploymentOverrides().ImagePullPolicy != "" {
+		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = cr.DeploymentOverrides().ImagePullPolicy
 	}
 
 	// if user configures a service account
-	if cr.ServiceAccountName() != "" {
-		dep.Spec.Template.Spec.ServiceAccountName = cr.ServiceAccountName()
+	if cr.DeploymentOverrides().ServiceAccount != "" {
+		dep.Spec.Template.Spec.ServiceAccountName = cr.DeploymentOverrides().ServiceAccount
 	}
 
 	// if user configures a config map name
-	if cr.ConfigMapName() != "" {
+	if cr.DeploymentOverrides().ConfigMapName != "" {
 		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
 			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{Name: cr.ConfigMapName()},
+				LocalObjectReference: corev1.LocalObjectReference{Name: cr.DeploymentOverrides().ConfigMapName},
 			},
 		})
 	}
 
 	// if user configures a custom command
-	if len(cr.Command()) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Command = cr.Command()
+	if len(cr.DeploymentOverrides().Command) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Command = cr.DeploymentOverrides().Command
 	}
 
 	// if user configures custom arguments
-	if len(cr.Args()) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Args = cr.Args()
+	if len(cr.DeploymentOverrides().Args) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Args = cr.DeploymentOverrides().Args
+	}
+
+	if cr.DeploymentOverrides().Strategy != nil {
+		dep.Spec.Strategy = *cr.DeploymentOverrides().Strategy
 	}
 }

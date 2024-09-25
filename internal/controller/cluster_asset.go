@@ -41,15 +41,18 @@ func (r *ClusterReconciler) updateAsset(asset *teranodev1alpha1.Asset, cluster *
 	}
 	asset.Spec = *defaultAssetSpec()
 
-	// if user configures a config map name
+	// if user configures a spec
 	if cluster.Spec.Asset.Spec != nil {
 		asset.Spec = *cluster.Spec.Asset.Spec
 	}
+	if asset.Spec.DeploymentOverrides == nil {
+		asset.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+	}
 	if cluster.Spec.Image != "" {
-		asset.Spec.Image = cluster.Spec.Image
+		asset.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ConfigMapName != "" {
-		asset.Spec.ConfigMapName = cluster.Spec.ConfigMapName
+		asset.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }

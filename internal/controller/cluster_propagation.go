@@ -41,15 +41,18 @@ func (r *ClusterReconciler) updatePropagation(propagation *teranodev1alpha1.Prop
 	}
 	propagation.Spec = *defaultPropagationSpec()
 
-	// if user configures a config map name
+	// if user configures a spec
 	if cluster.Spec.Propagation.Spec != nil {
 		propagation.Spec = *cluster.Spec.Propagation.Spec
 	}
+	if propagation.Spec.DeploymentOverrides == nil {
+		propagation.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+	}
 	if cluster.Spec.Image != "" {
-		propagation.Spec.Image = cluster.Spec.Image
+		propagation.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ConfigMapName != "" {
-		propagation.Spec.ConfigMapName = cluster.Spec.ConfigMapName
+		propagation.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }

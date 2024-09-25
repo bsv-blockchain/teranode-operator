@@ -45,11 +45,14 @@ func (r *ClusterReconciler) updateUtxoPersister(up *teranodev1alpha1.UtxoPersist
 	if cluster.Spec.UtxoPersister.Spec != nil {
 		up.Spec = *cluster.Spec.UtxoPersister.Spec
 	}
+	if up.Spec.DeploymentOverrides == nil {
+		up.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+	}
 	if cluster.Spec.Image != "" {
-		up.Spec.Image = cluster.Spec.Image
+		up.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ConfigMapName != "" {
-		up.Spec.ConfigMapName = cluster.Spec.ConfigMapName
+		up.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }

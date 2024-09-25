@@ -17,7 +17,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -26,21 +25,8 @@ import (
 
 // CoinbaseSpec defines the desired state of Coinbase
 type CoinbaseSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
-	NodeSelector    map[string]string            `json:"nodeSelector,omitempty"`
-	Tolerations     *[]corev1.Toleration         `json:"tolerations,omitempty"`
-	Affinity        *corev1.Affinity             `json:"affinity,omitempty"`
-	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
-	GrpcIngress     *IngressDef                  `json:"grpcIngress,omitempty"`
-	Image           string                       `json:"image,omitempty"`
-	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
-	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
-	ConfigMapName   string                       `json:"configMapName,omitempty"`
-	Replicas        *int32                       `json:"replicas,omitempty"`
-	Command         []string                     `json:"command,omitempty"`
-	Args            []string                     `json:"args,omitempty"`
+	GrpcIngress         *IngressDef          `json:"grpcIngress,omitempty"`
+	DeploymentOverrides *DeploymentOverrides `json:"deploymentOverrides,omitempty"`
 }
 
 // CoinbaseStatus defines the observed state of Coinbase
@@ -63,48 +49,8 @@ type Coinbase struct {
 	Status CoinbaseStatus `json:"status,omitempty"`
 }
 
-func (in *Coinbase) NodeSelector() map[string]string {
-	return in.Spec.NodeSelector
-}
-
-func (in *Coinbase) Tolerations() *[]corev1.Toleration {
-	return in.Spec.Tolerations
-}
-
-func (in *Coinbase) Affinity() *corev1.Affinity {
-	return in.Spec.Affinity
-}
-
-func (in *Coinbase) Resources() *corev1.ResourceRequirements {
-	return in.Spec.Resources
-}
-
-func (in *Coinbase) Image() string {
-	return in.Spec.Image
-}
-
-func (in *Coinbase) ImagePullPolicy() corev1.PullPolicy {
-	return in.Spec.ImagePullPolicy
-}
-
-func (in *Coinbase) ServiceAccountName() string {
-	return in.Spec.ServiceAccount
-}
-
-func (in *Coinbase) Replicas() *int32 {
-	return in.Spec.Replicas
-}
-
-func (in *Coinbase) ConfigMapName() string {
-	return in.Spec.ConfigMapName
-}
-
-func (in *Coinbase) Command() []string {
-	return in.Spec.Command
-}
-
-func (in *Coinbase) Args() []string {
-	return in.Spec.Args
+func (cb *Coinbase) DeploymentOverrides() *DeploymentOverrides {
+	return cb.Spec.DeploymentOverrides
 }
 
 //+kubebuilder:object:root=true

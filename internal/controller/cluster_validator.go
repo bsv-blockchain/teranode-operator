@@ -45,11 +45,14 @@ func (r *ClusterReconciler) updateValidator(validator *teranodev1alpha1.Validato
 	if cluster.Spec.Validator.Spec != nil {
 		validator.Spec = *cluster.Spec.Validator.Spec
 	}
+	if validator.Spec.DeploymentOverrides == nil {
+		validator.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+	}
 	if cluster.Spec.Image != "" {
-		validator.Spec.Image = cluster.Spec.Image
+		validator.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ConfigMapName != "" {
-		validator.Spec.ConfigMapName = cluster.Spec.ConfigMapName
+		validator.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }

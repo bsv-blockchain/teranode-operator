@@ -41,15 +41,18 @@ func (r *ClusterReconciler) updateCoinbase(coinbase *teranodev1alpha1.Coinbase, 
 	}
 	coinbase.Spec = *defaultCoinbaseSpec()
 
-	// if user configures a config map name
+	// if user configures a spec
 	if cluster.Spec.Coinbase.Spec != nil {
 		coinbase.Spec = *cluster.Spec.Coinbase.Spec
 	}
+	if coinbase.Spec.DeploymentOverrides == nil {
+		coinbase.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+	}
 	if cluster.Spec.Image != "" {
-		coinbase.Spec.Image = cluster.Spec.Image
+		coinbase.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ConfigMapName != "" {
-		coinbase.Spec.ConfigMapName = cluster.Spec.ConfigMapName
+		coinbase.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }

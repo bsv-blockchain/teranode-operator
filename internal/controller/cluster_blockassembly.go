@@ -41,15 +41,18 @@ func (r *ClusterReconciler) updateBlockAssembly(blockAssembly *teranodev1alpha1.
 	}
 	blockAssembly.Spec = *defaultBlockAssemblySpec()
 
-	// if user configures a config map name
+	// if user configures a spec
 	if cluster.Spec.BlockAssembly.Spec != nil {
 		blockAssembly.Spec = *cluster.Spec.BlockAssembly.Spec
 	}
+	if blockAssembly.Spec.DeploymentOverrides == nil {
+		blockAssembly.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+	}
 	if cluster.Spec.Image != "" {
-		blockAssembly.Spec.Image = cluster.Spec.Image
+		blockAssembly.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ConfigMapName != "" {
-		blockAssembly.Spec.ConfigMapName = cluster.Spec.ConfigMapName
+		blockAssembly.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }

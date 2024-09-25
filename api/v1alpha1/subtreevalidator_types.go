@@ -21,30 +21,13 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // SubtreeValidatorSpec defines the desired state of SubtreeValidator
 type SubtreeValidatorSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
-	// Foo is an example field of SubtreeValidator. Edit subtreevalidator_types.go to remove/update
-	Resources              *corev1.ResourceRequirements `json:"resources,omitempty"`
+	DeploymentOverrides    *DeploymentOverrides         `json:"deploymentOverrides,omitempty"`
 	StorageResources       *corev1.ResourceRequirements `json:"storageResources,omitempty"`
-	NodeSelector           map[string]string            `json:"nodeSelector,omitempty"`
-	Tolerations            *[]corev1.Toleration         `json:"tolerations,omitempty"`
-	Affinity               *corev1.Affinity             `json:"affinity,omitempty"`
 	PodTemplateAnnotations map[string]string            `json:"podTemplateAnnotations,omitempty"`
 	StorageClass           string                       `json:"storageClass,omitempty"`
 	StorageVolume          string                       `json:"storageVolume,omitempty"`
-	Image                  string                       `json:"image,omitempty"`
-	ImagePullPolicy        corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
-	ServiceAccount         string                       `json:"serviceAccount,omitempty"`
-	ConfigMapName          string                       `json:"configMapName,omitempty"`
-	Replicas               *int32                       `json:"replicas,omitempty"`
-	Command                []string                     `json:"command,omitempty"`
-	Args                   []string                     `json:"args,omitempty"`
 }
 
 // SubtreeValidatorStatus defines the observed state of SubtreeValidator
@@ -66,48 +49,8 @@ type SubtreeValidator struct {
 	Status SubtreeValidatorStatus `json:"status,omitempty"`
 }
 
-func (in *SubtreeValidator) NodeSelector() map[string]string {
-	return in.Spec.NodeSelector
-}
-
-func (in *SubtreeValidator) Tolerations() *[]corev1.Toleration {
-	return in.Spec.Tolerations
-}
-
-func (in *SubtreeValidator) Affinity() *corev1.Affinity {
-	return in.Spec.Affinity
-}
-
-func (in *SubtreeValidator) Resources() *corev1.ResourceRequirements {
-	return in.Spec.Resources
-}
-
-func (in *SubtreeValidator) Image() string {
-	return in.Spec.Image
-}
-
-func (in *SubtreeValidator) ImagePullPolicy() corev1.PullPolicy {
-	return in.Spec.ImagePullPolicy
-}
-
-func (in *SubtreeValidator) ServiceAccountName() string {
-	return in.Spec.ServiceAccount
-}
-
-func (in *SubtreeValidator) Replicas() *int32 {
-	return in.Spec.Replicas
-}
-
-func (in *SubtreeValidator) ConfigMapName() string {
-	return in.Spec.ConfigMapName
-}
-
-func (in *SubtreeValidator) Command() []string {
-	return in.Spec.Command
-}
-
-func (in *SubtreeValidator) Args() []string {
-	return in.Spec.Args
+func (stv *SubtreeValidator) DeploymentOverrides() *DeploymentOverrides {
+	return stv.Spec.DeploymentOverrides
 }
 
 //+kubebuilder:object:root=true

@@ -41,15 +41,18 @@ func (r *ClusterReconciler) updateBlockchain(blockchain *teranodev1alpha1.Blockc
 	}
 	blockchain.Spec = *defaultBlockchainSpec()
 
-	// if user configures a config map name
+	// if user configures a spec
 	if cluster.Spec.Blockchain.Spec != nil {
 		blockchain.Spec = *cluster.Spec.Blockchain.Spec
 	}
+	if blockchain.Spec.DeploymentOverrides == nil {
+		blockchain.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+	}
 	if cluster.Spec.Image != "" {
-		blockchain.Spec.Image = cluster.Spec.Image
+		blockchain.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ConfigMapName != "" {
-		blockchain.Spec.ConfigMapName = cluster.Spec.ConfigMapName
+		blockchain.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }

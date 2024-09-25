@@ -45,11 +45,14 @@ func (r *ClusterReconciler) updateMiner(miner *teranodev1alpha1.Miner, cluster *
 	if cluster.Spec.Miner.Spec != nil {
 		miner.Spec = *cluster.Spec.Miner.Spec
 	}
+	if miner.Spec.DeploymentOverrides == nil {
+		miner.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+	}
 	if cluster.Spec.Image != "" {
-		miner.Spec.Image = cluster.Spec.Image
+		miner.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ConfigMapName != "" {
-		miner.Spec.ConfigMapName = cluster.Spec.ConfigMapName
+		miner.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }

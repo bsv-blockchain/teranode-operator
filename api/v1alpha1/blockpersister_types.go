@@ -26,19 +26,9 @@ import (
 
 // BlockPersisterSpec defines the desired state of BlockPersister
 type BlockPersisterSpec struct {
-	NodeSelector     map[string]string            `json:"nodeSelector,omitempty"`
-	Tolerations      *[]corev1.Toleration         `json:"tolerations,omitempty"`
-	Affinity         *corev1.Affinity             `json:"affinity,omitempty"`
-	Resources        *corev1.ResourceRequirements `json:"resources,omitempty"`
-	StorageClass     string                       `json:"storageClass,omitempty"`
-	StorageResources *corev1.ResourceRequirements `json:"storageResources,omitempty"`
-	Image            string                       `json:"image,omitempty"`
-	ImagePullPolicy  corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
-	ServiceAccount   string                       `json:"serviceAccount,omitempty"`
-	ConfigMapName    string                       `json:"configMapName,omitempty"`
-	Replicas         *int32                       `json:"replicas,omitempty"`
-	Command          []string                     `json:"command,omitempty"`
-	Args             []string                     `json:"args,omitempty"`
+	DeploymentOverrides *DeploymentOverrides         `json:"deploymentOverrides,omitempty"`
+	StorageClass        string                       `json:"storageClass,omitempty"`
+	StorageResources    *corev1.ResourceRequirements `json:"storageResources,omitempty"`
 }
 
 // BlockPersisterStatus defines the observed state of BlockPersister
@@ -61,48 +51,8 @@ type BlockPersister struct {
 	Status BlockPersisterStatus `json:"status,omitempty"`
 }
 
-func (in *BlockPersister) NodeSelector() map[string]string {
-	return in.Spec.NodeSelector
-}
-
-func (in *BlockPersister) Tolerations() *[]corev1.Toleration {
-	return in.Spec.Tolerations
-}
-
-func (in *BlockPersister) Affinity() *corev1.Affinity {
-	return in.Spec.Affinity
-}
-
-func (in *BlockPersister) Resources() *corev1.ResourceRequirements {
-	return in.Spec.Resources
-}
-
-func (in *BlockPersister) Image() string {
-	return in.Spec.Image
-}
-
-func (in *BlockPersister) ImagePullPolicy() corev1.PullPolicy {
-	return in.Spec.ImagePullPolicy
-}
-
-func (in *BlockPersister) ServiceAccountName() string {
-	return in.Spec.ServiceAccount
-}
-
-func (in *BlockPersister) Replicas() *int32 {
-	return in.Spec.Replicas
-}
-
-func (in *BlockPersister) ConfigMapName() string {
-	return in.Spec.ConfigMapName
-}
-
-func (in *BlockPersister) Command() []string {
-	return in.Spec.Command
-}
-
-func (in *BlockPersister) Args() []string {
-	return in.Spec.Args
+func (bp *BlockPersister) DeploymentOverrides() *DeploymentOverrides {
+	return bp.Spec.DeploymentOverrides
 }
 
 //+kubebuilder:object:root=true

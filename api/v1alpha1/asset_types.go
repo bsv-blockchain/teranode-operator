@@ -17,33 +17,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // AssetSpec defines the desired state of Asset
 type AssetSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
-	NodeSelector       map[string]string            `json:"nodeSelector,omitempty"`
-	Tolerations        *[]corev1.Toleration         `json:"tolerations,omitempty"`
-	Affinity           *corev1.Affinity             `json:"affinity,omitempty"`
-	Resources          *corev1.ResourceRequirements `json:"resources,omitempty"`
-	GrpcIngress        *IngressDef                  `json:"grpcIngress,omitempty"`
-	HTTPIngress        *IngressDef                  `json:"httpIngress,omitempty"`
-	HTTPSIngress       *IngressDef                  `json:"httpsIngress,omitempty"`
-	Image              string                       `json:"image,omitempty"`
-	ImagePullPolicy    corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
-	ServiceAccount     string                       `json:"serviceAccount,omitempty"`
-	ConfigMapName      string                       `json:"configMapName,omitempty"`
-	ServiceAnnotations map[string]string            `json:"serviceAnnotations,omitempty"`
-	Replicas           *int32                       `json:"replicas,omitempty"`
-	Command            []string                     `json:"command,omitempty"`
-	Args               []string                     `json:"args,omitempty"`
+	DeploymentOverrides *DeploymentOverrides `json:"deploymentOverrides,omitempty"`
+	GrpcIngress         *IngressDef          `json:"grpcIngress,omitempty"`
+	HTTPIngress         *IngressDef          `json:"httpIngress,omitempty"`
+	HTTPSIngress        *IngressDef          `json:"httpsIngress,omitempty"`
 }
 
 // AssetStatus defines the observed state of Asset
@@ -65,48 +47,8 @@ type Asset struct {
 	Status AssetStatus `json:"status,omitempty"`
 }
 
-func (in *Asset) NodeSelector() map[string]string {
-	return in.Spec.NodeSelector
-}
-
-func (in *Asset) Tolerations() *[]corev1.Toleration {
-	return in.Spec.Tolerations
-}
-
-func (in *Asset) Affinity() *corev1.Affinity {
-	return in.Spec.Affinity
-}
-
-func (in *Asset) Resources() *corev1.ResourceRequirements {
-	return in.Spec.Resources
-}
-
-func (in *Asset) Image() string {
-	return in.Spec.Image
-}
-
-func (in *Asset) ImagePullPolicy() corev1.PullPolicy {
-	return in.Spec.ImagePullPolicy
-}
-
-func (in *Asset) ServiceAccountName() string {
-	return in.Spec.ServiceAccount
-}
-
-func (in *Asset) Replicas() *int32 {
-	return in.Spec.Replicas
-}
-
-func (in *Asset) ConfigMapName() string {
-	return in.Spec.ConfigMapName
-}
-
-func (in *Asset) Command() []string {
-	return in.Spec.Command
-}
-
-func (in *Asset) Args() []string {
-	return in.Spec.Args
+func (a *Asset) DeploymentOverrides() *DeploymentOverrides {
+	return a.Spec.DeploymentOverrides
 }
 
 //+kubebuilder:object:root=true

@@ -63,9 +63,6 @@ func defaultValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 	return &appsv1.DeploymentSpec{
 		Replicas: pointer.Int32(1), // TODO: verify if this number is valid ;)
 		Selector: metav1.SetAsLabelSelector(labels),
-		//Strategy: appsv1.DeploymentStrategy{ // TODO: verify no defined deployment strategy
-		//	Type: appsv1.RecreateDeploymentStrategyType,
-		// },
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
 				CreationTimestamp: metav1.Time{},

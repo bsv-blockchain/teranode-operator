@@ -17,32 +17,19 @@ limitations under the License.
 package v1alpha1
 
 import (
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // PeerSpec defines the desired state of Peer
 type PeerSpec struct {
-	NodeSelector    map[string]string            `json:"nodeSelector,omitempty"`
-	Tolerations     *[]corev1.Toleration         `json:"tolerations,omitempty"`
-	Affinity        *corev1.Affinity             `json:"affinity,omitempty"`
-	Resources       *corev1.ResourceRequirements `json:"resources,omitempty"`
-	Image           string                       `json:"image,omitempty"`
-	ImagePullPolicy corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
-	ServiceAccount  string                       `json:"serviceAccount,omitempty"`
-	ConfigMapName   string                       `json:"configMapName,omitempty"`
-	GrpcIngress     *IngressDef                  `json:"grpcIngress,omitempty"`
-	WsIngress       *IngressDef                  `json:"wsIngress,omitempty"`
-	WssIngress      *IngressDef                  `json:"wssIngress,omitempty"`
-	Replicas        *int32                       `json:"replicas,omitempty"`
-	Command         []string                     `json:"command,omitempty"`
-	Args            []string                     `json:"args,omitempty"`
+	DeploymentOverrides *DeploymentOverrides `json:"deploymentOverrides,omitempty"`
+	GrpcIngress         *IngressDef          `json:"grpcIngress,omitempty"`
+	WsIngress           *IngressDef          `json:"wsIngress,omitempty"`
+	WssIngress          *IngressDef          `json:"wssIngress,omitempty"`
 }
 
 // PeerStatus defines the observed state of Peer
 type PeerStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
 }
 
@@ -58,48 +45,8 @@ type Peer struct {
 	Status PeerStatus `json:"status,omitempty"`
 }
 
-func (in *Peer) NodeSelector() map[string]string {
-	return in.Spec.NodeSelector
-}
-
-func (in *Peer) Tolerations() *[]corev1.Toleration {
-	return in.Spec.Tolerations
-}
-
-func (in *Peer) Affinity() *corev1.Affinity {
-	return in.Spec.Affinity
-}
-
-func (in *Peer) Resources() *corev1.ResourceRequirements {
-	return in.Spec.Resources
-}
-
-func (in *Peer) Image() string {
-	return in.Spec.Image
-}
-
-func (in *Peer) ImagePullPolicy() corev1.PullPolicy {
-	return in.Spec.ImagePullPolicy
-}
-
-func (in *Peer) ServiceAccountName() string {
-	return in.Spec.ServiceAccount
-}
-
-func (in *Peer) Replicas() *int32 {
-	return in.Spec.Replicas
-}
-
-func (in *Peer) ConfigMapName() string {
-	return in.Spec.ConfigMapName
-}
-
-func (in *Peer) Command() []string {
-	return in.Spec.Command
-}
-
-func (in *Peer) Args() []string {
-	return in.Spec.Args
+func (p *Peer) DeploymentOverrides() *DeploymentOverrides {
+	return p.Spec.DeploymentOverrides
 }
 
 //+kubebuilder:object:root=true

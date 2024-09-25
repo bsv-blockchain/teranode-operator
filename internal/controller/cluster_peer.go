@@ -45,11 +45,14 @@ func (r *ClusterReconciler) updatePeer(peer *teranodev1alpha1.Peer, cluster *ter
 	if cluster.Spec.Peer.Spec != nil {
 		peer.Spec = *cluster.Spec.Peer.Spec
 	}
+	if peer.Spec.DeploymentOverrides == nil {
+		peer.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+	}
 	if cluster.Spec.Image != "" {
-		peer.Spec.Image = cluster.Spec.Image
+		peer.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ConfigMapName != "" {
-		peer.Spec.ConfigMapName = cluster.Spec.ConfigMapName
+		peer.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }

@@ -45,11 +45,14 @@ func (r *ClusterReconciler) updateSubtreeValidator(subtreeValidator *teranodev1a
 	if cluster.Spec.SubtreeValidator.Spec != nil {
 		subtreeValidator.Spec = *cluster.Spec.SubtreeValidator.Spec
 	}
+	if subtreeValidator.Spec.DeploymentOverrides == nil {
+		subtreeValidator.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+	}
 	if cluster.Spec.Image != "" {
-		subtreeValidator.Spec.Image = cluster.Spec.Image
+		subtreeValidator.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ConfigMapName != "" {
-		subtreeValidator.Spec.ConfigMapName = cluster.Spec.ConfigMapName
+		subtreeValidator.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }

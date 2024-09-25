@@ -41,15 +41,18 @@ func (r *ClusterReconciler) updateLegacy(legacy *teranodev1alpha1.Legacy, cluste
 	}
 	legacy.Spec = *defaultLegacySpec()
 
-	// if user configures a config map name
+	// if user configures a spec
 	if cluster.Spec.Legacy.Spec != nil {
 		legacy.Spec = *cluster.Spec.Legacy.Spec
 	}
+	if legacy.Spec.DeploymentOverrides == nil {
+		legacy.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+	}
 	if cluster.Spec.Image != "" {
-		legacy.Spec.Image = cluster.Spec.Image
+		legacy.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ConfigMapName != "" {
-		legacy.Spec.ConfigMapName = cluster.Spec.ConfigMapName
+		legacy.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
 	}
 	return nil
 }
