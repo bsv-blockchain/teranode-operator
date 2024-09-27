@@ -3,7 +3,7 @@ kind: Subscription
 metadata:
   name: teranode-operator-stable
 spec:
-  channel: stable
+  channel: stable-v0
   name: teranode-operator
   source: bsva-catalog
   sourceNamespace: olm
