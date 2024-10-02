@@ -88,18 +88,18 @@ func defaultValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 								corev1.ResourceMemory: resource.MustParse("2Gi"),
 							},
 						},
-						/*ReadinessProbe: &corev1.Probe{
+						ReadinessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health",
-									Port: intstr.FromInt32(9091),
+									Port: intstr.FromInt32(8000),
 								},
 							},
 							InitialDelaySeconds: 1,
 							PeriodSeconds:       10,
 							FailureThreshold:    5,
 							TimeoutSeconds:      3,
-						},*/
+						},
 						LivenessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
