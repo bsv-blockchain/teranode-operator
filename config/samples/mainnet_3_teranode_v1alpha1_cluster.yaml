@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/name: cluster
     app.kubernetes.io/part-of: teranode-operator
     k8slens-edit-resource-version: v1alpha1
-  name: mainnet-2
-  namespace: mainnet-2
+  name: mainnet-3
+  namespace: mainnet-3
 spec:
   asset:
     enabled: true
@@ -19,18 +19,18 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: ast-grpc
         className: traefik-internal
-        host: euw1-teranode-main-net-2-prod.ubsv.dev
+        host: euw1-teranode-main-net-3-prod.ubsv.dev
       httpIngress:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: web
         className: traefik-internal
-        host: euw1-teranode-main-net-2-prod.ubsv.dev
+        host: euw1-teranode-main-net-3-prod.ubsv.dev
       httpsIngress:
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-prod
           traefik.ingress.kubernetes.io/router.entrypoints: websecure
         className: traefik-internal
-        host: euw1-teranode-main-net-2-prod.ubsv.dev
+        host: euw1-teranode-main-net-3-prod.ubsv.dev
       deploymentOverrides:
         replicas: 1
         resources:
@@ -116,7 +116,7 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: peer-grpc
         className: traefik-internal
-        host: euw1-teranode-main-net-2-prod.ubsv.dev
+        host: euw1-teranode-main-net-3-prod.ubsv.dev
       deploymentOverrides:
         replicas: 1
         resources:
@@ -127,12 +127,12 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: p2p-ws
         className: traefik-internal
-        host: euw1-teranode-main-net-2-prod.ubsv.dev
+        host: euw1-teranode-main-net-3-prod.ubsv.dev
       wssIngress:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: p2p-wss
         className: traefik-internal
-        host: euw1-teranode-main-net-2-prod.ubsv.dev
+        host: euw1-teranode-main-net-3-prod.ubsv.dev
   propagation:
     enabled: true
     spec:
@@ -140,7 +140,7 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: prop-grpc
         className: traefik-internal
-        host: euw1-teranode-main-net-2-prod.ubsv.dev
+        host: euw1-teranode-main-net-3-prod.ubsv.dev
       deploymentOverrides:
         replicas: 1
         resources:
@@ -166,7 +166,7 @@ spec:
     enabled: false
     spec:
       deploymentOverrides:
-        replicas: 1
+        replicas: 0
         resources:
           requests:
             cpu: 1
