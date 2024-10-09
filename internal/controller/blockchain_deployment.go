@@ -122,13 +122,25 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 						ReadinessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health",
+									Path: "/health/readiness",
 									Port: intstr.FromInt32(8000),
 								},
 							},
 							InitialDelaySeconds: 1,
-							PeriodSeconds:       10,
-							FailureThreshold:    5,
+							PeriodSeconds:       5,
+							FailureThreshold:    2,
+							TimeoutSeconds:      3,
+						},
+						LivenessProbe: &corev1.Probe{
+							ProbeHandler: corev1.ProbeHandler{
+								HTTPGet: &corev1.HTTPGetAction{
+									Path: "/health/liveness",
+									Port: intstr.FromInt32(8000),
+								},
+							},
+							InitialDelaySeconds: 1,
+							PeriodSeconds:       5,
+							FailureThreshold:    2,
 							TimeoutSeconds:      3,
 						},
 						TerminationMessagePolicy: corev1.TerminationMessageFallbackToLogsOnError,

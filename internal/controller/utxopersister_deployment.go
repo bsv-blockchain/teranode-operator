@@ -93,32 +93,32 @@ func defaultUtxoPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 						ReadinessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health",
+									Path: "/health/readiness",
 									Port: intstr.FromInt32(8000),
 								},
 							},
 							InitialDelaySeconds: 1,
-							PeriodSeconds:       10,
-							FailureThreshold:    5,
+							PeriodSeconds:       5,
+							FailureThreshold:    2,
 							TimeoutSeconds:      3,
 						},
 						LivenessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health",
-									Port: intstr.FromInt32(9091),
+									Path: "/health/liveness",
+									Port: intstr.FromInt32(8000),
 								},
 							},
 							InitialDelaySeconds: 1,
-							PeriodSeconds:       10,
-							FailureThreshold:    5,
+							PeriodSeconds:       5,
+							FailureThreshold:    2,
 							TimeoutSeconds:      3,
 						},
 						StartupProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health",
-									Port: intstr.FromInt32(9091),
+									Path: "/health/readiness",
+									Port: intstr.FromInt32(8000),
 								},
 							},
 							FailureThreshold: 30,
