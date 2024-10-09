@@ -2,7 +2,7 @@
 package controller
 
 // DefaultServiceAccountName defines the name of the service acount created by the bundle
-const DefaultServiceAccountName = "service-runner"
+const DefaultServiceAccountName = "teranode-operator-service-runner"
 
 // SharedPVCName is the PVC name for shared storage
 const SharedPVCName = "cluster-storage"

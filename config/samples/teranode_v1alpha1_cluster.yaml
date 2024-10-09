@@ -2,150 +2,161 @@ apiVersion: teranode.bsvblockchain.org/v1alpha1
 kind: Cluster
 metadata:
   labels:
-    app.kubernetes.io/name: cluster
-    app.kubernetes.io/instance: cluster-sample
-    app.kubernetes.io/part-of: teranode-operator
-    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/created-by: teranode-operator
+    app.kubernetes.io/instance: cluster-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: cluster
+    app.kubernetes.io/part-of: teranode-operator
   name: cluster-sample
 spec:
-  configMapName: "shared-config"
-  bootstrap:
-    enabled: false
-    spec: {}
+  image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.102
+  configMapName: teranode-operator-config
   asset:
     enabled: true
     spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
       grpcIngress:
-        className: &my-class traefik-internal
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: ast-grpc
-        host: &my-host t3.testing.ubsv.dev
+        className: nginx
+        host: cluster.example.com
       httpIngress:
-        className: *my-class
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: web
-        host: *my-host
+        className: nginx
+        host: cluster.example.com
       httpsIngress:
-        className: *my-class
         annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        host: *my-host
-  blockValidator:
+          cert-manager.io/cluster-issuer: letsencrypt-prod
+        className: nginx
+        host: cluster.example.com
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+  utxoPersister:
+    enabled: false
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 2
+            memory: 1Gi
+  legacy:
     enabled: true
     spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
-  blockPersister:
-    enabled: true
-    spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
-      storageResources:
-        requests:
-          storage: 5Gi
-      storageClass: "fsx-sc"
-  blockchain:
-    enabled: true
-    spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 2
+            memory: 1Gi
   blockAssembly:
     enabled: true
     spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
-  miner:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 2
+            memory: 1Gi
+  blockPersister:
     enabled: true
     spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
-  peer:
-    enabled: true
-    spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
-      grpcIngress:
-        className: *my-class
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: peer-grpc
-        host: *my-host
-      wsIngress:
-        className: *my-class
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: p2p-ws
-        host: *my-host
-      wssIngress:
-        className: *my-class
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: p2p-wss
-        host: *my-host
-  propagation:
-    enabled: true
-    spec:
-      grpcIngress:
-        className: *my-class
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: prop-grpc
-        host: *my-host
-      resources:
-        requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
-  subtreeValidator:
-    enabled: true
-    spec:
-      resources:
-        requests:
-          cpu: 1
-          memory: 2Gi
-        limits:
-          memory: 6Gi
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+      storageClass: standard
       storageResources:
         requests:
           storage: 5Gi
-      storageClass: "fsx-sc"
-  validator:
+  blockValidator:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+  blockchain:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+  bootstrap:
     enabled: false
     spec: {}
   coinbase:
     enabled: true
     spec:
-      resources:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+  miner:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+  peer:
+    enabled: true
+    spec:
+      grpcIngress:
+        className: nginx
+        host: cluster.example.com
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+      wsIngress:
+        className: nginx
+        host: cluster.example.com
+      wssIngress:
+        className: nginx
+        host: cluster.example.com
+  propagation:
+    enabled: true
+    spec:
+      grpcIngress:
+        className: nginx
+        host: cluster.example.com
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+  subtreeValidator:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        resources:
+          requests:
+            cpu: 1
+            memory: 2Gi
+      storageClass: standard
+      storageResources:
         requests:
-          cpu: 1
-          memory: 1Gi
-        limits:
-          memory: 2Gi
+          storage: 5Gi
+  validator:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
