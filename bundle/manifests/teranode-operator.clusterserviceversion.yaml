@@ -150,48 +150,42 @@ metadata:
             "asset": {
               "enabled": true,
               "spec": {
+                "deploymentOverrides": {
+                  "replicas": 1,
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memory": "1Gi"
+                    }
+                  }
+                },
                 "grpcIngress": {
-                  "annotations": {
-                    "traefik.ingress.kubernetes.io/router.entrypoints": "ast-grpc"
-                  },
-                  "className": "traefik-internal",
-                  "host": "t3.testing.ubsv.dev"
+                  "className": "nginx",
+                  "host": "cluster.example.com"
                 },
                 "httpIngress": {
-                  "annotations": {
-                    "traefik.ingress.kubernetes.io/router.entrypoints": "web"
-                  },
-                  "className": "traefik-internal",
-                  "host": "t3.testing.ubsv.dev"
+                  "className": "nginx",
+                  "host": "cluster.example.com"
                 },
                 "httpsIngress": {
                   "annotations": {
-                    "traefik.ingress.kubernetes.io/router.entrypoints": "websecure"
+                    "cert-manager.io/cluster-issuer": "letsencrypt-prod"
                   },
-                  "className": "traefik-internal",
-                  "host": "t3.testing.ubsv.dev"
-                },
-                "resources": {
-                  "limits": {
-                    "memory": "2Gi"
-                  },
-                  "requests": {
-                    "cpu": 1,
-                    "memory": "1Gi"
-                  }
+                  "className": "nginx",
+                  "host": "cluster.example.com"
                 }
               }
             },
             "blockAssembly": {
               "enabled": true,
               "spec": {
-                "resources": {
-                  "limits": {
-                    "memory": "2Gi"
-                  },
-                  "requests": {
-                    "cpu": 1,
-                    "memory": "1Gi"
+                "deploymentOverrides": {
+                  "replicas": 1,
+                  "resources": {
+                    "requests": {
+                      "cpu": 2,
+                      "memory": "1Gi"
+                    }
                   }
                 }
               }
@@ -199,16 +193,16 @@ metadata:
             "blockPersister": {
               "enabled": true,
               "spec": {
-                "resources": {
-                  "limits": {
-                    "memory": "2Gi"
-                  },
-                  "requests": {
-                    "cpu": 1,
-                    "memory": "1Gi"
+                "deploymentOverrides": {
+                  "replicas": 1,
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memory": "1Gi"
+                    }
                   }
                 },
-                "storageClass": "fsx-sc",
+                "storageClass": "standard",
                 "storageResources": {
                   "requests": {
                     "storage": "5Gi"
@@ -219,13 +213,13 @@ metadata:
             "blockValidator": {
               "enabled": true,
               "spec": {
-                "resources": {
-                  "limits": {
-                    "memory": "2Gi"
-                  },
-                  "requests": {
-                    "cpu": 1,
-                    "memory": "1Gi"
+                "deploymentOverrides": {
+                  "replicas": 1,
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memory": "1Gi"
+                    }
                   }
                 }
               }
@@ -233,13 +227,13 @@ metadata:
             "blockchain": {
               "enabled": true,
               "spec": {
-                "resources": {
-                  "limits": {
-                    "memory": "2Gi"
-                  },
-                  "requests": {
-                    "cpu": 1,
-                    "memory": "1Gi"
+                "deploymentOverrides": {
+                  "replicas": 1,
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memory": "1Gi"
+                    }
                   }
                 }
               }
@@ -251,28 +245,43 @@ metadata:
             "coinbase": {
               "enabled": true,
               "spec": {
-                "resources": {
-                  "limits": {
-                    "memory": "2Gi"
-                  },
-                  "requests": {
-                    "cpu": 1,
-                    "memory": "1Gi"
+                "deploymentOverrides": {
+                  "replicas": 1,
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memory": "1Gi"
+                    }
                   }
                 }
               }
             },
-            "configMapName": "shared-config",
+            "configMapName": "teranode-operator-config",
+            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.102",
+            "legacy": {
+              "enabled": true,
+              "spec": {
+                "deploymentOverrides": {
+                  "replicas": 1,
+                  "resources": {
+                    "requests": {
+                      "cpu": 2,
+                      "memory": "1Gi"
+                    }
+                  }
+                }
+              }
+            },
             "miner": {
               "enabled": true,
               "spec": {
-                "resources": {
-                  "limits": {
-                    "memory": "2Gi"
-                  },
-                  "requests": {
-                    "cpu": 1,
-                    "memory": "1Gi"
+                "deploymentOverrides": {
+                  "replicas": 1,
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memory": "1Gi"
+                    }
                   }
                 }
               }
@@ -280,72 +289,59 @@ metadata:
             "peer": {
               "enabled": true,
               "spec": {
-                "grpcIngress": {
-                  "annotations": {
-                    "traefik.ingress.kubernetes.io/router.entrypoints": "peer-grpc"
-                  },
-                  "className": "traefik-internal",
-                  "host": "t3.testing.ubsv.dev"
-                },
-                "resources": {
-                  "limits": {
-                    "memory": "2Gi"
-                  },
-                  "requests": {
-                    "cpu": 1,
-                    "memory": "1Gi"
+                "deploymentOverrides": {
+                  "replicas": 1,
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memory": "1Gi"
+                    }
                   }
                 },
+                "grpcIngress": {
+                  "className": "nginx",
+                  "host": "cluster.example.com"
+                },
                 "wsIngress": {
-                  "annotations": {
-                    "traefik.ingress.kubernetes.io/router.entrypoints": "p2p-ws"
-                  },
-                  "className": "traefik-internal",
-                  "host": "t3.testing.ubsv.dev"
+                  "className": "nginx",
+                  "host": "cluster.example.com"
                 },
                 "wssIngress": {
-                  "annotations": {
-                    "traefik.ingress.kubernetes.io/router.entrypoints": "p2p-wss"
-                  },
-                  "className": "traefik-internal",
-                  "host": "t3.testing.ubsv.dev"
+                  "className": "nginx",
+                  "host": "cluster.example.com"
                 }
               }
             },
             "propagation": {
               "enabled": true,
               "spec": {
-                "grpcIngress": {
-                  "annotations": {
-                    "traefik.ingress.kubernetes.io/router.entrypoints": "prop-grpc"
-                  },
-                  "className": "traefik-internal",
-                  "host": "t3.testing.ubsv.dev"
-                },
-                "resources": {
-                  "limits": {
-                    "memory": "2Gi"
-                  },
-                  "requests": {
-                    "cpu": 1,
-                    "memory": "1Gi"
+                "deploymentOverrides": {
+                  "replicas": 1,
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memory": "1Gi"
+                    }
                   }
+                },
+                "grpcIngress": {
+                  "className": "nginx",
+                  "host": "cluster.example.com"
                 }
               }
             },
             "subtreeValidator": {
               "enabled": true,
               "spec": {
-                "resources": {
-                  "limits": {
-                    "memory": "6Gi"
-                  },
-                  "requests": {
-                    "cpu": 1,
-                    "memory": "2Gi"
+                "deploymentOverrides": {
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memory": "2Gi"
+                    }
                   }
                 },
-                "storageClass": "fsx-sc",
+                "storageClass": "standard",
                 "storageResources": {
                   "requests": {
                     "storage": "5Gi"
@@ -353,9 +349,32 @@ metadata:
                 }
               }
             },
-            "validator": {
+            "utxoPersister": {
               "enabled": false,
-              "spec": {}
+              "spec": {
+                "deploymentOverrides": {
+                  "replicas": 1,
+                  "resources": {
+                    "requests": {
+                      "cpu": 2,
+                      "memory": "1Gi"
+                    }
+                  }
+                }
+              }
+            },
+            "validator": {
+              "enabled": true,
+              "spec": {
+                "deploymentOverrides": {
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memory": "1Gi"
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -595,10 +614,10 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-09-25T12:38:17Z"
-    operators.operatorframework.io/builder: operator-sdk-v1.37.0
+    createdAt: "2024-10-10T16:08:33Z"
+    operators.operatorframework.io/builder: operator-sdk-v1.36.1
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
-  name: teranode-operator.v0.2.1
+  name: teranode-operator.v0.2.2
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1214,7 +1233,7 @@ spec:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.annotations['olm.targetNamespaces']
-                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.2.1
+                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.2.2
                 imagePullPolicy: Always
                 livenessProbe:
                   httpGet:
@@ -1250,20 +1269,6 @@ spec:
         - apiGroups:
           - ""
           resources:
-          - persistentvolumeclaims
-          - deployments
-          - configmaps
-          - secrets
-          - endpoints
-          verbs:
-          - get
-          - list
-          - watch
-        serviceAccountName: service-runner
-      - rules:
-        - apiGroups:
-          - ""
-          resources:
           - configmaps
           verbs:
           - get
@@ -1293,6 +1298,20 @@ spec:
           - create
           - patch
         serviceAccountName: teranode-operator-controller-manager
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - persistentvolumeclaims
+          - deployments
+          - configmaps
+          - secrets
+          - endpoints
+          verbs:
+          - get
+          - list
+          - watch
+        serviceAccountName: teranode-operator-service-runner
     strategy: deployment
   installModes:
   - supported: true
@@ -1316,4 +1335,4 @@ spec:
   maturity: alpha
   provider:
     name: BSV Association
-  version: 0.2.1
+  version: 0.2.2

@@ -10,4 +10,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: teranode-operator-service-runner
-  namespace: teranode-operator-system
+  namespace: teranode
