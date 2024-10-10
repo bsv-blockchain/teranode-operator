@@ -89,6 +89,12 @@ func defaultPropagationServiceSpec() *corev1.ServiceSpec {
 				TargetPort: intstr.FromInt32(ProfilerPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
+			{
+				Name:       "health",
+				Port:       int32(HealthPort),
+				TargetPort: intstr.FromInt32(HealthPort),
+				Protocol:   corev1.ProtocolTCP,
+			},
 		},
 	}
 }

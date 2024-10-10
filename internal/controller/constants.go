@@ -32,3 +32,4 @@ const SubtreeValidatorGRPCPort = 8086
 const LegacyHTTPPort = 8098
 const ProfilerPort = 9091
 const DebuggerPort = 4040
+const HealthPort = 8000

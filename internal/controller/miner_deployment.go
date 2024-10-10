@@ -94,7 +94,7 @@ func defaultMinerDeploymentSpec() *appsv1.DeploymentSpec {
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health/readiness",
-									Port: intstr.FromInt32(8000),
+									Port: intstr.FromInt32(HealthPort),
 								},
 							},
 							InitialDelaySeconds: 1,
@@ -106,7 +106,7 @@ func defaultMinerDeploymentSpec() *appsv1.DeploymentSpec {
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health/liveness",
-									Port: intstr.FromInt32(8000),
+									Port: intstr.FromInt32(HealthPort),
 								},
 							},
 							InitialDelaySeconds: 1,
@@ -118,7 +118,7 @@ func defaultMinerDeploymentSpec() *appsv1.DeploymentSpec {
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health/readiness",
-									Port: intstr.FromInt32(8000),
+									Port: intstr.FromInt32(HealthPort),
 								},
 							},
 							FailureThreshold: 30,
@@ -143,6 +143,10 @@ func defaultMinerDeploymentSpec() *appsv1.DeploymentSpec {
 							},
 							{
 								ContainerPort: ProfilerPort,
+								Protocol:      corev1.ProtocolTCP,
+							},
+							{
+								ContainerPort: HealthPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},
