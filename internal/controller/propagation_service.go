@@ -38,6 +38,9 @@ func (r *PropagationReconciler) updateService(svc *corev1.Service, propagation *
 		return err
 	}
 	svc.Spec = *defaultPropagationServiceSpec()
+	if svc.Annotations == nil {
+		svc.Annotations = map[string]string{}
+	}
 	for k, v := range propagation.Spec.ServiceAnnotations {
 		svc.Annotations[k] = v
 	}
