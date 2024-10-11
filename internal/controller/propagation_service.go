@@ -2,6 +2,7 @@ package controller
 
 import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -19,10 +20,7 @@ func (r *PropagationReconciler) ReconcileService(log logr.Logger) (bool, error) 
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "propagation",
 			Namespace: r.NamespacedName.Namespace,
-			Annotations: map[string]string{
-				"prometheus.io/port":   "9091",
-				"prometheus.io/scrape": "true",
-			},
+			Labels:    utils.GetPrometheusLabels(),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &svc, func() error {
