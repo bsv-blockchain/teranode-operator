@@ -4,7 +4,6 @@ import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
-	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
@@ -24,12 +23,14 @@ func (r *SubtreeValidatorReconciler) ReconcilePVC(log logr.Logger) (bool, error)
 		},
 	}
 
-	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &pvc, func() error {
+	_, _ = controllerutil.CreateOrUpdate(r.Context, r.Client, &pvc, func() error {
 		return r.updatePVC(&pvc, &subtreeValidator)
 	})
-	if err != nil && !k8serrors.IsForbidden(err) {
-		return false, err
-	}
+	/*
+		// Ignore this check for right now until we properly implement resizing
+		if err != nil && !k8serrors.IsForbidden(err) {
+			return false, err
+		}*/
 	return true, nil
 }
 
