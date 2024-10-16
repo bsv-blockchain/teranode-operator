@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/types"
 
@@ -66,9 +67,7 @@ func (r *ClusterReconciler) updateMiner(miner *teranodev1alpha1.Miner, cluster *
 	if cluster.Spec.Image != "" {
 		miner.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
-	if cluster.Spec.ConfigMapName != "" {
-		miner.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
-	}
+
 	return nil
 }
 

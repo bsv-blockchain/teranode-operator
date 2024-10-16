@@ -52,6 +52,7 @@ type SubtreeValidator struct {
 func (stv *SubtreeValidator) DeploymentOverrides() *DeploymentOverrides {
 	return stv.Spec.DeploymentOverrides
 }
+func (stv *SubtreeValidator) Metadata() metav1.ObjectMeta { return stv.ObjectMeta }
 
 //+kubebuilder:object:root=true
 

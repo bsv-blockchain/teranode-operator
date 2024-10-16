@@ -54,6 +54,7 @@ type BlockPersister struct {
 func (bp *BlockPersister) DeploymentOverrides() *DeploymentOverrides {
 	return bp.Spec.DeploymentOverrides
 }
+func (bp *BlockPersister) Metadata() metav1.ObjectMeta { return bp.ObjectMeta }
 
 //+kubebuilder:object:root=true
 

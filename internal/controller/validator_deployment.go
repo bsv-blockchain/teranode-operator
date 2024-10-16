@@ -42,7 +42,7 @@ func (r *ValidatorReconciler) updateDeployment(dep *appsv1.Deployment, validator
 	}
 	dep.Spec = *defaultValidatorDeploymentSpec()
 	// If user configures a node selector
-	utils.SetDeploymentOverrides(dep, validator)
+	utils.SetDeploymentOverrides(r.Client, dep, validator)
 
 	return nil
 }

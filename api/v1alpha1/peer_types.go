@@ -48,6 +48,7 @@ type Peer struct {
 func (p *Peer) DeploymentOverrides() *DeploymentOverrides {
 	return p.Spec.DeploymentOverrides
 }
+func (p *Peer) Metadata() metav1.ObjectMeta { return p.ObjectMeta }
 
 //+kubebuilder:object:root=true
 

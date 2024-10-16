@@ -17,13 +17,16 @@ limitations under the License.
 package utils
 
 import (
+	"context"
+
 	"github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/utils/pointer"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func SetDeploymentOverrides(dep *appsv1.Deployment, cr v1alpha1.TeranodeService) {
+func SetDeploymentOverrides(client client.Client, dep *appsv1.Deployment, cr v1alpha1.TeranodeService) {
 	if cr.DeploymentOverrides() == nil {
 		return
 	}
@@ -65,7 +68,19 @@ func SetDeploymentOverrides(dep *appsv1.Deployment, cr v1alpha1.TeranodeService)
 		dep.Spec.Template.Spec.ServiceAccountName = cr.DeploymentOverrides().ServiceAccount
 	}
 
-	// if user configures a config map name
+	// if parent cluster CR has a configmap set, append it first
+	clusterOwner := GetClusterOwner(client, context.Background(), cr.Metadata())
+	if clusterOwner != nil {
+		if clusterOwner.Spec.ConfigMapName != "" {
+			dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
+				ConfigMapRef: &corev1.ConfigMapEnvSource{
+					LocalObjectReference: corev1.LocalObjectReference{Name: clusterOwner.Spec.ConfigMapName},
+				},
+			})
+		}
+	}
+
+	// if user configures a config map for the service, append it next
 	if cr.DeploymentOverrides().ConfigMapName != "" {
 		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
 			ConfigMapRef: &corev1.ConfigMapEnvSource{

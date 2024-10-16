@@ -48,9 +48,7 @@ func (r *ClusterReconciler) updateBootstrap(bootstrap *teranodev1alpha1.Bootstra
 	if cluster.Spec.Image != "" {
 		bootstrap.Spec.Image = cluster.Spec.Image
 	}
-	if cluster.Spec.ConfigMapName != "" {
-		bootstrap.Spec.ConfigMapName = cluster.Spec.ConfigMapName
-	}
+
 	return nil
 }
 

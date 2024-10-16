@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/types"
 
@@ -66,9 +67,7 @@ func (r *ClusterReconciler) updateValidator(validator *teranodev1alpha1.Validato
 	if cluster.Spec.Image != "" {
 		validator.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
-	if cluster.Spec.ConfigMapName != "" {
-		validator.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
-	}
+
 	return nil
 }
 

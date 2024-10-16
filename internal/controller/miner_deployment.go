@@ -41,7 +41,7 @@ func (r *MinerReconciler) updateDeployment(dep *appsv1.Deployment, miner *terano
 		return err
 	}
 	dep.Spec = *defaultMinerDeploymentSpec()
-	utils.SetDeploymentOverrides(dep, miner)
+	utils.SetDeploymentOverrides(r.Client, dep, miner)
 
 	return nil
 }

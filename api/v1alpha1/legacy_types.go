@@ -45,6 +45,7 @@ type Legacy struct {
 func (l *Legacy) DeploymentOverrides() *DeploymentOverrides {
 	return l.Spec.DeploymentOverrides
 }
+func (l *Legacy) Metadata() metav1.ObjectMeta { return l.ObjectMeta }
 
 //+kubebuilder:object:root=true
 

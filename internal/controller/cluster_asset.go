@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
@@ -65,9 +66,7 @@ func (r *ClusterReconciler) updateAsset(asset *teranodev1alpha1.Asset, cluster *
 	if cluster.Spec.Image != "" {
 		asset.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
-	if cluster.Spec.ConfigMapName != "" {
-		asset.Spec.DeploymentOverrides.ConfigMapName = cluster.Spec.ConfigMapName
-	}
+
 	return nil
 }
 

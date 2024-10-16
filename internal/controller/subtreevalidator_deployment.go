@@ -41,7 +41,7 @@ func (r *SubtreeValidatorReconciler) updateDeployment(dep *appsv1.Deployment, su
 		return err
 	}
 	dep.Spec = *defaultSubtreeValidatorDeploymentSpec()
-	utils.SetDeploymentOverrides(dep, subtreeValidator)
+	utils.SetDeploymentOverrides(r.Client, dep, subtreeValidator)
 
 	return nil
 }

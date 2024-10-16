@@ -41,7 +41,7 @@ func (r *PeerReconciler) updateDeployment(dep *appsv1.Deployment, peer *teranode
 		return err
 	}
 	dep.Spec = *defaultPeerDeploymentSpec()
-	utils.SetDeploymentOverrides(dep, peer)
+	utils.SetDeploymentOverrides(r.Client, dep, peer)
 
 	return nil
 }

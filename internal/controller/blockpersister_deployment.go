@@ -41,7 +41,7 @@ func (r *BlockPersisterReconciler) updateDeployment(dep *appsv1.Deployment, bloc
 		return err
 	}
 	dep.Spec = *defaultBlockPersisterDeploymentSpec()
-	utils.SetDeploymentOverrides(dep, blockPersister)
+	utils.SetDeploymentOverrides(r.Client, dep, blockPersister)
 
 	return nil
 }

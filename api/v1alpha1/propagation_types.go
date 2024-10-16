@@ -51,6 +51,7 @@ type Propagation struct {
 func (p *Propagation) DeploymentOverrides() *DeploymentOverrides {
 	return p.Spec.DeploymentOverrides
 }
+func (p *Propagation) Metadata() metav1.ObjectMeta { return p.ObjectMeta }
 
 //+kubebuilder:object:root=true
 

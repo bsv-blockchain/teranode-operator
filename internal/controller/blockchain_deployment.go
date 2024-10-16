@@ -43,7 +43,7 @@ func (r *BlockchainReconciler) updateDeployment(dep *appsv1.Deployment, blockcha
 		return err
 	}
 	dep.Spec = *defaultBlockchainDeploymentSpec()
-	utils.SetDeploymentOverrides(dep, blockchain)
+	utils.SetDeploymentOverrides(r.Client, dep, blockchain)
 
 	return nil
 }

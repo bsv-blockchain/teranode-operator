@@ -45,6 +45,7 @@ type BlockValidator struct {
 func (bv *BlockValidator) DeploymentOverrides() *DeploymentOverrides {
 	return bv.Spec.DeploymentOverrides
 }
+func (bv *BlockValidator) Metadata() metav1.ObjectMeta { return bv.ObjectMeta }
 
 //+kubebuilder:object:root=true
 

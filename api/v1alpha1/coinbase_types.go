@@ -52,6 +52,7 @@ type Coinbase struct {
 func (cb *Coinbase) DeploymentOverrides() *DeploymentOverrides {
 	return cb.Spec.DeploymentOverrides
 }
+func (cb *Coinbase) Metadata() metav1.ObjectMeta { return cb.ObjectMeta }
 
 //+kubebuilder:object:root=true
 

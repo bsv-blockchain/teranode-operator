@@ -45,6 +45,7 @@ type UtxoPersister struct {
 func (up *UtxoPersister) DeploymentOverrides() *DeploymentOverrides {
 	return up.Spec.DeploymentOverrides
 }
+func (up *UtxoPersister) Metadata() metav1.ObjectMeta { return up.ObjectMeta }
 
 //+kubebuilder:object:root=true
 

@@ -45,6 +45,7 @@ type Miner struct {
 func (m *Miner) DeploymentOverrides() *DeploymentOverrides {
 	return m.Spec.DeploymentOverrides
 }
+func (m *Miner) Metadata() metav1.ObjectMeta { return m.ObjectMeta }
 
 //+kubebuilder:object:root=true
 

@@ -41,7 +41,7 @@ func (r *PropagationReconciler) updateDeployment(dep *appsv1.Deployment, propaga
 		return err
 	}
 	dep.Spec = *defaultPropagationDeploymentSpec()
-	utils.SetDeploymentOverrides(dep, propagation)
+	utils.SetDeploymentOverrides(r.Client, dep, propagation)
 
 	return nil
 }
