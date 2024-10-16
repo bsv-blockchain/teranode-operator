@@ -70,6 +70,7 @@ func (r *BlockPersisterReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 
 	_, err := utils.ReconcileBatch(r.Log,
 		r.ReconcileDeployment,
+		r.ReconcileService,
 	)
 
 	if err != nil {

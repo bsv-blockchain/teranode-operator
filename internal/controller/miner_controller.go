@@ -66,6 +66,7 @@ func (r *MinerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 
 	_, err := utils.ReconcileBatch(r.Log,
 		r.ReconcileDeployment,
+		r.ReconcileService,
 	)
 
 	if err != nil {
