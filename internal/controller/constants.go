@@ -10,6 +10,10 @@ const SharedPVCName = "cluster-storage"
 // DefaultImage is the default teranode service image
 const DefaultImage = "434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-public:v0.4.2"
 
+// Service Names
+
+const BlockchainServiceName = "blockchain"
+
 // Ports for services
 
 const AssetGRPCPort = 8091

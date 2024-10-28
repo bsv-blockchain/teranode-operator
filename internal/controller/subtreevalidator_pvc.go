@@ -62,7 +62,7 @@ func defaultPVCSpec() *corev1.PersistentVolumeClaimSpec {
 			corev1.ReadWriteMany,
 		},
 		StorageClassName: &emptyStorageClass,
-		Resources: corev1.ResourceRequirements{
+		Resources: corev1.VolumeResourceRequirements{
 			Requests: corev1.ResourceList{
 				"storage": resource.MustParse("2400Gi"),
 			},

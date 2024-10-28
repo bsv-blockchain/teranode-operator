@@ -52,3 +52,5 @@ linters-settings:
   gosec:
     excludes:
       - G204
+exclude:
+  - "^github.com/bitcoin-sv/ubsv"

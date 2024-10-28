@@ -22,7 +22,14 @@ import (
 
 // BlockchainSpec defines the desired state of Blockchain
 type BlockchainSpec struct {
-	DeploymentOverrides *DeploymentOverrides `json:"deploymentOverrides,omitempty"`
+	DeploymentOverrides *DeploymentOverrides        `json:"deploymentOverrides,omitempty"`
+	FiniteStateMachine  *FiniteStateMachineSettings `json:"finiteStateMachine,omitempty"`
+}
+
+// FiniteStateMachineSettings defines the configuration of the FSM
+type FiniteStateMachineSettings struct {
+	Host         string           `json:"host,omitempty"`
+	PollInterval *metav1.Duration `json:"pollInterval,omitempty"`
 }
 
 // BlockchainStatus defines the observed state of Blockchain
@@ -30,6 +37,7 @@ type BlockchainStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
+	FSMState   string             `json:"fsmState,omitempty"`
 }
 
 //+kubebuilder:object:root=true

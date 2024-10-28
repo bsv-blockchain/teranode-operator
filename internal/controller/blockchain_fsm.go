@@ -1,0 +1,78 @@
+package controller
+
+import (
+	"fmt"
+	"os"
+
+	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bitcoin-sv/ubsv/services/blockchain"
+	"github.com/bitcoin-sv/ubsv/ulogger"
+	"github.com/go-logr/logr"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/types"
+)
+
+// GetFSMState gets the current state of the FSM
+func (r *BlockchainReconciler) GetFSMState(log logr.Logger) (*blockchain.FSMStateType, error) {
+	b := teranodev1alpha1.Blockchain{}
+	if err := r.Get(r.Context, r.NamespacedName, &b); err != nil {
+		return nil, err
+	}
+	if r.BlockchainClient == nil {
+		uLog := ulogger.New("fsm")
+		blockchainHost := fmt.Sprintf("%s:%d", BlockchainServiceName, BlockchainGRPCPort)
+		err := os.Setenv("blockchain_grpcAddress", blockchainHost)
+		if err != nil {
+			return nil, err
+		}
+		bClient, err := blockchain.NewClient(r.Context, uLog, blockchainHost)
+		if err != nil {
+			return nil, err
+		}
+		r.BlockchainClient = bClient
+	}
+
+	return r.BlockchainClient.GetFSMCurrentState(r.Context)
+}
+
+func (r *BlockchainReconciler) IsLegacyEnabled() (bool, error) {
+	b := teranodev1alpha1.Blockchain{}
+	if err := r.Get(r.Context, r.NamespacedName, &b); err != nil {
+		return false, err
+	}
+	legacyEnabled := false
+	// Attempt to get the parent Cluster CR to know service configuration
+	ownerRefs := b.GetOwnerReferences()
+	for _, ownerRef := range ownerRefs {
+		if ownerRef.Kind == "Cluster" {
+			cluster := teranodev1alpha1.Cluster{}
+			if err := r.Get(
+				r.Context,
+				types.NamespacedName{
+					Name:      ownerRef.Name,
+					Namespace: r.NamespacedName.Namespace,
+				}, &cluster); err != nil && !k8serrors.IsNotFound(err) {
+				return false, err
+			}
+			legacyEnabled = cluster.Spec.Legacy.Enabled
+		}
+	}
+	return legacyEnabled, nil
+}
+
+func (r *BlockchainReconciler) ReconcileState(state blockchain.FSMStateType) error {
+	switch state {
+	case blockchain.FSMStateRUNNING:
+		break
+	case blockchain.FSMStateSTOPPED:
+		legacyEnabled, err := r.IsLegacyEnabled()
+		if err != nil {
+			// lets just break for now because we don't know if we are supposed to be doing anything
+			return err
+		}
+		if !legacyEnabled {
+			return r.BlockchainClient.Run(r.Context)
+		}
+	}
+	return nil
+}

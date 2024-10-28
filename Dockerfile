@@ -1,9 +1,15 @@
 # Build the manager binary
-FROM golang:1.20 AS builder
+FROM golang:1.23 AS builder
 ARG TARGETOS
 ARG TARGETARCH
+ARG GOPRIVATE="github.com/bitcoin-sv/ubsv"
+ARG UBSV_READER_TOKEN
 
 WORKDIR /workspace
+
+# Add github token for reading ubsv repo
+RUN echo "machine github.com login bitcoin-sv password ${UBSV_READER_TOKEN}" >> ~/.netrc
+
 # Copy the Go Modules manifests
 COPY go.mod go.mod
 COPY go.sum go.sum

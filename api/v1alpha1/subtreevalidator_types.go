@@ -23,11 +23,11 @@ import (
 
 // SubtreeValidatorSpec defines the desired state of SubtreeValidator
 type SubtreeValidatorSpec struct {
-	DeploymentOverrides    *DeploymentOverrides         `json:"deploymentOverrides,omitempty"`
-	StorageResources       *corev1.ResourceRequirements `json:"storageResources,omitempty"`
-	PodTemplateAnnotations map[string]string            `json:"podTemplateAnnotations,omitempty"`
-	StorageClass           string                       `json:"storageClass,omitempty"`
-	StorageVolume          string                       `json:"storageVolume,omitempty"`
+	DeploymentOverrides    *DeploymentOverrides               `json:"deploymentOverrides,omitempty"`
+	StorageResources       *corev1.VolumeResourceRequirements `json:"storageResources,omitempty"`
+	PodTemplateAnnotations map[string]string                  `json:"podTemplateAnnotations,omitempty"`
+	StorageClass           string                             `json:"storageClass,omitempty"`
+	StorageVolume          string                             `json:"storageVolume,omitempty"`
 }
 
 // SubtreeValidatorStatus defines the observed state of SubtreeValidator

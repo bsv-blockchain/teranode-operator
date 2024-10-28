@@ -22,7 +22,6 @@ import (
 	"github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
-	"k8s.io/utils/pointer"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -52,7 +51,7 @@ func SetDeploymentOverrides(client client.Client, dep *appsv1.Deployment, cr v1a
 
 	// if user configures replicas
 	if cr.DeploymentOverrides().Replicas != nil {
-		dep.Spec.Replicas = pointer.Int32(*cr.DeploymentOverrides().Replicas)
+		dep.Spec.Replicas = cr.DeploymentOverrides().Replicas
 	}
 
 	// if user configures image or image pull policy

@@ -18,7 +18,7 @@ func (r *BlockchainReconciler) ReconcileService(log logr.Logger) (bool, error) {
 	}
 	svc := corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "blockchain",
+			Name:      BlockchainServiceName,
 			Namespace: r.NamespacedName.Namespace,
 			Labels:    utils.GetPrometheusLabels(),
 		},
@@ -43,7 +43,7 @@ func (r *BlockchainReconciler) updateService(svc *corev1.Service, blockchain *te
 
 func defaultBlockchainServiceSpec() *corev1.ServiceSpec {
 	labels := map[string]string{
-		"app": "blockchain",
+		"app": BlockchainServiceName,
 	}
 	return &corev1.ServiceSpec{
 		Selector: labels,

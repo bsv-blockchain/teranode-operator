@@ -20,7 +20,10 @@ import (
 	"context"
 	"time"
 
+	"sigs.k8s.io/controller-runtime/pkg/predicate"
+
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
+	"github.com/bitcoin-sv/ubsv/services/blockchain"
 	"github.com/go-logr/logr"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -40,10 +43,11 @@ import (
 // BlockchainReconciler reconciles a Blockchain object
 type BlockchainReconciler struct {
 	client.Client
-	Scheme         *runtime.Scheme
-	Log            logr.Logger
-	NamespacedName types.NamespacedName
-	Context        context.Context
+	BlockchainClient blockchain.ClientI
+	Scheme           *runtime.Scheme
+	Log              logr.Logger
+	NamespacedName   types.NamespacedName
+	Context          context.Context
 }
 
 //+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=blockchains,verbs=get;list;watch;create;update;patch;delete
@@ -64,8 +68,8 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	r.Log = log.FromContext(ctx).WithValues("blockchain", req.NamespacedName)
 	r.Context = ctx
 	r.NamespacedName = req.NamespacedName
-	blockchain := teranodev1alpha1.Blockchain{}
-	if err := r.Get(ctx, req.NamespacedName, &blockchain); err != nil {
+	b := teranodev1alpha1.Blockchain{}
+	if err := r.Get(ctx, req.NamespacedName, &b); err != nil {
 		r.Log.Error(err, "unable to fetch blockchain CR")
 		return result, nil
 	}
@@ -75,8 +79,9 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		r.ReconcileDeployment,
 		r.ReconcileService,
 	)
+
 	if err != nil {
-		apimeta.SetStatusCondition(&blockchain.Status.Conditions,
+		apimeta.SetStatusCondition(&b.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -84,13 +89,12 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 				Message: err.Error(),
 			},
 		)
-		_ = r.Client.Status().Update(ctx, &blockchain)
+		_ = r.Client.Status().Update(ctx, &b)
 		// Since error is written on the status, let's log it and requeue
 		// Returning error here is redundant
-		r.Log.Error(err, "requeuing object for reconciliation")
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, nil
+		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
-		apimeta.SetStatusCondition(&blockchain.Status.Conditions,
+		apimeta.SetStatusCondition(&b.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,
@@ -100,8 +104,36 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		)
 	}
 
-	err = r.Client.Status().Update(ctx, &blockchain)
-	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
+	state, err := r.GetFSMState(r.Log)
+	if err != nil {
+		r.Log.Error(err, "unable to get FSM state, trying again in a minute")
+		return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, nil
+	}
+
+	if state == nil {
+		return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, nil
+	}
+
+	r.Log.Info("FSM Status", "state", state.String())
+
+	err = r.ReconcileState(*state)
+	if err != nil {
+		return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, err
+	}
+
+	// Fetch latest blockchain CR so the next status update works
+	b = teranodev1alpha1.Blockchain{}
+	if err := r.Get(ctx, req.NamespacedName, &b); err != nil {
+		r.Log.Error(err, "unable to fetch blockchain CR")
+		return result, nil
+	}
+	b.Status.FSMState = state.String()
+	err = r.Client.Status().Update(ctx, &b)
+	if err != nil {
+		r.Log.Error(err, "unable to update FSM state")
+	}
+
+	return ctrl.Result{Requeue: true, RequeueAfter: time.Minute * 5}, nil
 }
 
 // getAppLabels defines the label applied to created resources. This label is used by the predicate to determine which resources are ours
@@ -117,5 +149,6 @@ func (r *BlockchainReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		For(&teranodev1alpha1.Blockchain{}).
 		Owns(&appsv1.Deployment{}).
 		Owns(&corev1.Service{}).
+		WithEventFilter(predicate.GenerationChangedPredicate{}).
 		Complete(r)
 }
