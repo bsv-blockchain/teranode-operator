@@ -21,6 +21,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"sort"
+	"strings"
 
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 
@@ -101,9 +103,13 @@ func main() {
 		TLSOpts: tlsOpts,
 	})
 
-	watchNamespace, err := getWatchNamespace()
+	watchNamespaces, err := getWatchNamespaces()
 	if err != nil {
 		setupLog.Error(err, "unable to get WatchNamespace, the manager will watch and manage resources in all namespaces")
+	}
+	defaultNamespaces := make(map[string]cache.Config)
+	for _, ns := range watchNamespaces {
+		defaultNamespaces[ns] = cache.Config{}
 	}
 
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
@@ -114,9 +120,7 @@ func main() {
 			TLSOpts:       tlsOpts,
 		},
 		Cache: cache.Options{
-			DefaultNamespaces: map[string]cache.Config{
-				watchNamespace: {},
-			},
+			DefaultNamespaces: defaultNamespaces,
 		},
 		WebhookServer:          webhookServer,
 		HealthProbeBindAddress: probeAddr,
@@ -262,7 +266,7 @@ func main() {
 	}
 }
 
-func getWatchNamespace() (string, error) {
+func getWatchNamespaces() ([]string, error) {
 	// WatchNamespaceEnvVar is the env variable WATCH_NAMESPACE
 	// which specifies the Namespace to watch.
 	// An empty value means the operator is running with cluster scope.
@@ -270,7 +274,17 @@ func getWatchNamespace() (string, error) {
 
 	ns, found := os.LookupEnv(watchNamespaceEnvVar)
 	if !found {
-		return "", fmt.Errorf("%s must be set", watchNamespaceEnvVar)
+		return []string{}, fmt.Errorf("%s must be set", watchNamespaceEnvVar)
 	}
-	return ns, nil
+	if strings.Contains(ns, ",") {
+		var namespaces []string
+		for _, ns := range strings.Split(ns, ",") {
+			if len(ns) > 0 {
+				namespaces = append(namespaces, ns)
+			}
+		}
+		sort.Strings(namespaces)
+		return namespaces, nil
+	}
+	return []string{ns}, nil
 }
