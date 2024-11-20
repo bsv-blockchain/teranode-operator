@@ -18,6 +18,8 @@ resources:
 - bases/teranode.bsvblockchain.org_blockvalidators.yaml
 - bases/teranode.bsvblockchain.org_legacies.yaml
 - bases/teranode.bsvblockchain.org_utxopersisters.yaml
+- bases/teranode.bsvblockchain.org_rpcs.yaml
+- bases/teranode.bsvblockchain.org_alertsystems.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
 
 patches:
@@ -58,6 +60,8 @@ patches:
 #- path: patches/cainjection_in_blockvalidators.yaml
 #- path: patches/cainjection_in_legacies.yaml
 #- path: patches/cainjection_in_utxopersisters.yaml
+#- path: patches/cainjection_in_rpcs.yaml
+#- path: patches/cainjection_in_alertsystems.yaml
 #+kubebuilder:scaffold:crdkustomizecainjectionpatch
 
 # [WEBHOOK] To enable webhook, uncomment the following section

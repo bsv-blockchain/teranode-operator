@@ -1,0 +1,9 @@
+apiVersion: teranode.bsvblockchain.org/v1alpha1
+kind: RPC
+metadata:
+  labels:
+    app.kubernetes.io/name: teranode-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: rpc-sample
+spec:
+  # TODO(user): Add fields here

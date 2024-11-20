@@ -248,6 +248,20 @@ func main() {
 		setupLog.Error(err, CreateControllerError, "controller", "UtxoPersister")
 		os.Exit(1)
 	}
+	if err = (&controller.RPCReconciler{
+		Client: mgr.GetClient(),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "RPC")
+		os.Exit(1)
+	}
+	if err = (&controller.AlertSystemReconciler{
+		Client: mgr.GetClient(),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "AlertSystem")
+		os.Exit(1)
+	}
 	//+kubebuilder:scaffold:builder
 
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {

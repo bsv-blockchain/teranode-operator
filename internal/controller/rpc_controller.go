@@ -20,11 +20,10 @@ import (
 	"context"
 	"time"
 
-	corev1 "k8s.io/api/core/v1"
-
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -37,8 +36,8 @@ import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 )
 
-// MinerReconciler reconciles a Miner object
-type MinerReconciler struct {
+// RPCReconciler reconciles a RPC object
+type RPCReconciler struct {
 	client.Client
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
@@ -46,23 +45,27 @@ type MinerReconciler struct {
 	Context        context.Context
 }
 
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=miners,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=miners/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=miners/finalizers,verbs=update
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=rpcs,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=rpcs/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=rpcs/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
+// TODO(user): Modify the Reconcile function to compare the state specified by
+// the RPC object against the actual cluster state, and then
+// perform operations to make the cluster state reflect the state specified by
+// the user.
 //
 // For more details, check Reconcile and its Result here:
-// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
-func (r *MinerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.17.3/pkg/reconcile
+func (r *RPCReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	result := ctrl.Result{}
-	r.Log = log.FromContext(ctx).WithValues("miner", req.NamespacedName)
+	r.Log = log.FromContext(ctx).WithValues("rpc", req.NamespacedName)
 	r.Context = ctx
 	r.NamespacedName = req.NamespacedName
-	miner := teranodev1alpha1.Miner{}
-	if err := r.Get(ctx, req.NamespacedName, &miner); err != nil {
-		r.Log.Error(err, "unable to fetch miner CR")
+	rpc := teranodev1alpha1.RPC{}
+	if err := r.Get(ctx, req.NamespacedName, &rpc); err != nil {
+		r.Log.Error(err, "unable to fetch rpc CR")
 		return result, nil
 	}
 
@@ -72,7 +75,7 @@ func (r *MinerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 	)
 
 	if err != nil {
-		apimeta.SetStatusCondition(&miner.Status.Conditions,
+		apimeta.SetStatusCondition(&rpc.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -80,13 +83,13 @@ func (r *MinerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 				Message: err.Error(),
 			},
 		)
-		_ = r.Client.Status().Update(ctx, &miner)
+		_ = r.Client.Status().Update(ctx, &rpc)
 		// Since error is written on the status, let's log it and requeue
 		// Returning error here is redundant
 		r.Log.Error(err, "requeuing object for reconciliation")
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
-		apimeta.SetStatusCondition(&miner.Status.Conditions,
+		apimeta.SetStatusCondition(&rpc.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,
@@ -96,14 +99,14 @@ func (r *MinerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		)
 	}
 
-	err = r.Client.Status().Update(ctx, &miner)
+	err = r.Client.Status().Update(ctx, &rpc)
 	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *MinerReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *RPCReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&teranodev1alpha1.Miner{}).
+		For(&teranodev1alpha1.RPC{}).
 		Owns(&appsv1.Deployment{}).
 		Owns(&corev1.Service{}).
 		Complete(r)

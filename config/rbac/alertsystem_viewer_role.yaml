@@ -1,0 +1,23 @@
+# permissions for end users to view alertsystems.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: teranode-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: alertsystem-viewer-role
+rules:
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - alertsystems
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - alertsystems/status
+  verbs:
+  - get
