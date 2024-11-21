@@ -69,6 +69,7 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 
 	_, err := utils.ReconcileBatch(r.Log,
 		// r.Validate,
+		r.ReconcileAlertSystem,
 		r.ReconcileAsset,
 		r.ReconcileBlockAssembly,
 		r.ReconcileBlockPersister,
@@ -80,6 +81,7 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		r.ReconcileMiner,
 		r.ReconcilePeer,
 		r.ReconcilePropagation,
+		r.ReconcileRPC,
 		r.ReconcileSubtreeValidator,
 		r.ReconcileValidator,
 	)
@@ -117,6 +119,7 @@ func (r *ClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&teranodev1alpha1.Cluster{}).
 		Owns(&teranodev1alpha1.Asset{}).
+		Owns(&teranodev1alpha1.AlertSystem{}).
 		Owns(&teranodev1alpha1.BlockAssembly{}).
 		Owns(&teranodev1alpha1.Blockchain{}).
 		Owns(&teranodev1alpha1.BlockPersister{}).
@@ -126,6 +129,7 @@ func (r *ClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&teranodev1alpha1.Miner{}).
 		Owns(&teranodev1alpha1.Peer{}).
 		Owns(&teranodev1alpha1.Propagation{}).
+		Owns(&teranodev1alpha1.RPC{}).
 		Owns(&teranodev1alpha1.SubtreeValidator{}).
 		Owns(&teranodev1alpha1.Validator{}).
 		Complete(r)

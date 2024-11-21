@@ -26,6 +26,12 @@ type AssetConfig struct {
 	Spec    *AssetSpec `json:"spec"`
 }
 
+// AlertSystemConfig defines the alert system configuration
+type AlertSystemConfig struct {
+	Enabled bool             `json:"enabled"`
+	Spec    *AlertSystemSpec `json:"spec"`
+}
+
 // BlockAssemblyConfig defines the blockassembly configuration
 type BlockAssemblyConfig struct {
 	Enabled bool               `json:"enabled"`
@@ -86,6 +92,12 @@ type PropagationConfig struct {
 	Spec    *PropagationSpec `json:"spec"`
 }
 
+// RPCConfig defines the rpc configuration
+type RPCConfig struct {
+	Enabled bool     `json:"enabled"`
+	Spec    *RPCSpec `json:"spec"`
+}
+
 // SubtreeValidatorConfig defines the subtreevalidator configuration
 type SubtreeValidatorConfig struct {
 	Enabled bool                  `json:"enabled"`
@@ -109,6 +121,7 @@ type ValidatorConfig struct {
 
 // ClusterSpec defines the desired state of Cluster
 type ClusterSpec struct {
+	AlertSystem      AlertSystemConfig      `json:"alertSystem"`
 	Asset            AssetConfig            `json:"asset"`
 	BlockAssembly    BlockAssemblyConfig    `json:"blockAssembly"`
 	Blockchain       BlockchainConfig       `json:"blockchain"`
@@ -120,6 +133,7 @@ type ClusterSpec struct {
 	Miner            MinerConfig            `json:"miner"`
 	Peer             PeerConfig             `json:"peer"`
 	Propagation      PropagationConfig      `json:"propagation"`
+	RPC              RPCConfig              `json:"rpc"`
 	SubtreeValidator SubtreeValidatorConfig `json:"subtreeValidator"`
 	UtxoPersister    UtxoPersisterConfig    `json:"utxoPersister"`
 	Validator        ValidatorConfig        `json:"validator"`
