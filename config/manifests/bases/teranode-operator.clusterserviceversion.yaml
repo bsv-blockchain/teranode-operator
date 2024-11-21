@@ -10,6 +10,11 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
+    - description: AlertSystem is the Schema for the alertsystems API
+      displayName: Alert System
+      kind: AlertSystem
+      name: alertsystems.teranode.bsvblockchain.org
+      version: v1alpha1
     - description: Asset is the Schema for the assets API
       displayName: Asset
       kind: Asset
@@ -74,6 +79,11 @@ spec:
       displayName: Propagation
       kind: Propagation
       name: propagations.teranode.bsvblockchain.org
+      version: v1alpha1
+    - description: RPC is the Schema for the rpcs API
+      displayName: RPC
+      kind: RPC
+      name: rpcs.teranode.bsvblockchain.org
       version: v1alpha1
     - description: SubtreeValidator is the Schema for the subtreevalidators API
       displayName: Subtree Validator

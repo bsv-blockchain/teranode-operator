@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: teranode-operator
+  name: teranode-operator-rpc-viewer-role
+rules:
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - rpcs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - teranode.bsvblockchain.org
+  resources:
+  - rpcs/status
+  verbs:
+  - get

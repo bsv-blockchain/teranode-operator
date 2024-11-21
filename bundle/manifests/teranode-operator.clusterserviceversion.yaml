@@ -6,6 +6,18 @@ metadata:
       [
         {
           "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "AlertSystem",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "teranode-operator"
+            },
+            "name": "alertsystem-sample"
+          },
+          "spec": null
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
           "kind": "Asset",
           "metadata": {
             "labels": {
@@ -530,6 +542,18 @@ metadata:
         },
         {
           "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+          "kind": "RPC",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/managed-by": "kustomize",
+              "app.kubernetes.io/name": "teranode-operator"
+            },
+            "name": "rpc-sample"
+          },
+          "spec": null
+        },
+        {
+          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
           "kind": "SubtreeValidator",
           "metadata": {
             "labels": {
@@ -614,15 +638,20 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-11-05T00:03:19Z"
-    operators.operatorframework.io/builder: operator-sdk-v1.36.1
+    createdAt: "2024-11-21T17:16:28Z"
+    operators.operatorframework.io/builder: operator-sdk-v1.37.0
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
-  name: teranode-operator.v0.2.8
+  name: teranode-operator.v0.3.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
+    - description: AlertSystem is the Schema for the alertsystems API
+      displayName: Alert System
+      kind: AlertSystem
+      name: alertsystems.teranode.bsvblockchain.org
+      version: v1alpha1
     - description: Asset is the Schema for the assets API
       displayName: Asset
       kind: Asset
@@ -688,6 +717,11 @@ spec:
       kind: Propagation
       name: propagations.teranode.bsvblockchain.org
       version: v1alpha1
+    - description: RPC is the Schema for the rpcs API
+      displayName: RPC
+      kind: RPC
+      name: rpcs.teranode.bsvblockchain.org
+      version: v1alpha1
     - description: SubtreeValidator is the Schema for the subtreevalidators API
       displayName: Subtree Validator
       kind: SubtreeValidator
@@ -746,6 +780,32 @@ spec:
           - list
           - update
           - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - alertsystems
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - alertsystems/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - alertsystems/status
+          verbs:
+          - get
+          - patch
+          - update
         - apiGroups:
           - teranode.bsvblockchain.org
           resources:
@@ -1087,6 +1147,32 @@ spec:
         - apiGroups:
           - teranode.bsvblockchain.org
           resources:
+          - rpcs
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - rpcs/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
+          - rpcs/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - teranode.bsvblockchain.org
+          resources:
           - subtreevalidators
           verbs:
           - create
@@ -1233,7 +1319,7 @@ spec:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.annotations['olm.targetNamespaces']
-                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.2.8
+                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.3.0
                 imagePullPolicy: Always
                 livenessProbe:
                   httpGet:
@@ -1335,4 +1421,4 @@ spec:
   maturity: alpha
   provider:
     name: BSV Association
-  version: 0.2.8
+  version: 0.3.0
