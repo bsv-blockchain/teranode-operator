@@ -116,9 +116,6 @@ type ValidatorConfig struct {
 	Spec    *ValidatorSpec `json:"spec"`
 }
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // ClusterSpec defines the desired state of Cluster
 type ClusterSpec struct {
 	AlertSystem      AlertSystemConfig      `json:"alertSystem"`
@@ -130,7 +127,6 @@ type ClusterSpec struct {
 	Bootstrap        BootstrapConfig        `json:"bootstrap"`
 	Coinbase         CoinbaseConfig         `json:"coinbase"`
 	Legacy           LegacyConfig           `json:"legacy"`
-	Miner            MinerConfig            `json:"miner"`
 	Peer             PeerConfig             `json:"peer"`
 	Propagation      PropagationConfig      `json:"propagation"`
 	RPC              RPCConfig              `json:"rpc"`

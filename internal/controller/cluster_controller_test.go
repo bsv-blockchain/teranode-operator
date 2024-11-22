@@ -97,9 +97,6 @@ var _ = Describe("Cluster Controller", func() {
 						Coinbase: teranodev1alpha1.CoinbaseConfig{
 							Spec: &teranodev1alpha1.CoinbaseSpec{},
 						},
-						Miner: teranodev1alpha1.MinerConfig{
-							Spec: &teranodev1alpha1.MinerSpec{},
-						},
 						Peer: teranodev1alpha1.PeerConfig{
 							Spec: &teranodev1alpha1.PeerSpec{},
 						},

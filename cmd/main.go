@@ -192,13 +192,6 @@ func main() {
 		setupLog.Error(err, CreateControllerError, "controller", "Propagation")
 		os.Exit(1)
 	}
-	if err = (&controller.MinerReconciler{
-		Client: mgr.GetClient(),
-		Scheme: mgr.GetScheme(),
-	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, CreateControllerError, "controller", "Miner")
-		os.Exit(1)
-	}
 	if err = (&controller.ValidatorReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),

@@ -78,7 +78,6 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		r.ReconcileCoinbase,
 		r.ReconcileBootstrap,
 		r.ReconcileLegacy,
-		r.ReconcileMiner,
 		r.ReconcilePeer,
 		r.ReconcilePropagation,
 		r.ReconcileRPC,
@@ -126,7 +125,6 @@ func (r *ClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&teranodev1alpha1.Bootstrap{}).
 		Owns(&teranodev1alpha1.Coinbase{}).
 		Owns(&teranodev1alpha1.Legacy{}).
-		Owns(&teranodev1alpha1.Miner{}).
 		Owns(&teranodev1alpha1.Peer{}).
 		Owns(&teranodev1alpha1.Propagation{}).
 		Owns(&teranodev1alpha1.RPC{}).
