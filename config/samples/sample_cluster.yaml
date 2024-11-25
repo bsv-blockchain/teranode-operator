@@ -1,16 +1,19 @@
 apiVersion: teranode.bsvblockchain.org/v1alpha1
 kind: Cluster
 metadata:
+  annotations:
   labels:
     app.kubernetes.io/created-by: teranode-operator
-    app.kubernetes.io/instance: cluster-sample
+    app.kubernetes.io/instance: cluster
     app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: cluster
     app.kubernetes.io/part-of: teranode-operator
-  name: cluster-sample
-  namespace: t2
+    k8slens-edit-resource-version: v1alpha1
+  name: sample-cluster
 spec:
-  image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.102
+  alertSystem:
+    enabled: true
+    spec: {}
   asset:
     enabled: true
     spec:
@@ -18,104 +21,53 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: ast-grpc
         className: traefik-internal
-        host: t2.testing.ubsv.dev
+        host: euw1-teranode-main-net-1-prod.ubsv.dev
       httpIngress:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: web
         className: traefik-internal
-        host: t2.testing.ubsv.dev
+        host: euw1-teranode-main-net-1-prod.ubsv.dev
       httpsIngress:
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-prod
           traefik.ingress.kubernetes.io/router.entrypoints: websecure
         className: traefik-internal
-        host: t2.testing.ubsv.dev
+        host: euw1-teranode-main-net-1-prod.ubsv.dev
       deploymentOverrides:
         replicas: 1
         resources:
           requests:
-            cpu: 1
-            memory: 1Gi
-  utxoPersister:
-    enabled: false
-    spec:
-      deploymentOverrides:
-        replicas: 1
-        resources:
-          requests:
-            cpu: 2
-            memory: 1Gi
-  legacy:
-    enabled: true
-    spec:
-      deploymentOverrides:
-        replicas: 1
-        resources:
-          requests:
-            cpu: 2
-            memory: 1Gi
+            cpu: "0.5"
+            memory: 500Mi
   blockAssembly:
     enabled: true
-    spec:
-      deploymentOverrides:
-        replicas: 1
-        resources:
-          requests:
-            cpu: 2
-            memory: 1Gi
+    spec: {}
   blockPersister:
     enabled: true
-    spec:
-      deploymentOverrides:
-        replicas: 1
-        resources:
-          requests:
-            cpu: 1
-            memory: 1Gi
-      storageClass: fsx-sc
-      storageResources:
-        requests:
-          storage: 5Gi
+    spec: {}
   blockValidator:
     enabled: true
-    spec:
-      deploymentOverrides:
-        replicas: 1
-        resources:
-          requests:
-            cpu: 1
-            memory: 1Gi
+    spec: {}
   blockchain:
     enabled: true
-    spec:
-      deploymentOverrides:
-        replicas: 1
-        resources:
-          requests:
-            cpu: 1
-            memory: 1Gi
+    spec: {}
   bootstrap:
     enabled: false
     spec: {}
   coinbase:
-    enabled: true
+    enabled: false
     spec:
       deploymentOverrides:
-        replicas: 1
+        replicas: 0
         resources:
           requests:
             cpu: 1
             memory: 1Gi
   configMapName: shared-config
-  miner:
+  image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.116
+  legacy:
     enabled: true
-    spec:
-      deploymentOverrides:
-        replicas: 1
-        resources:
-          requests:
-            cpu: 1
-            memory: 1Gi
+    spec: {}
   peer:
     enabled: true
     spec:
@@ -123,23 +75,23 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: peer-grpc
         className: traefik-internal
-        host: t2.testing.ubsv.dev
+        host: euw1-teranode-main-net-1-prod.ubsv.dev
       deploymentOverrides:
         replicas: 1
         resources:
           requests:
-            cpu: 1
-            memory: 1Gi
+            cpu: "0.5"
+            memory: 500Mi
       wsIngress:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: p2p-ws
         className: traefik-internal
-        host: t2.testing.ubsv.dev
+        host: euw1-teranode-main-net-1-prod.ubsv.dev
       wssIngress:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: p2p-wss
         className: traefik-internal
-        host: t2.testing.ubsv.dev
+        host: euw1-teranode-main-net-1-prod.ubsv.dev
   propagation:
     enabled: true
     spec:
@@ -147,32 +99,34 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: prop-grpc
         className: traefik-internal
-        host: t2.testing.ubsv.dev
+        host: euw1-teranode-main-net-1-prod.ubsv.dev
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: "0.5"
+            memory: 500Mi
+      serviceAnnotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: h2c
+  rpc:
+    enabled: true
+    spec: {}
+  subtreeValidator:
+    enabled: true
+    spec:
       deploymentOverrides:
         replicas: 1
         resources:
           requests:
             cpu: 1
-            memory: 1Gi
-      serviceAnnotations:
-        traefik.ingress.kubernetes.io/service.serversscheme: h2c
-  subtreeValidator:
-    enabled: true
-    spec:
-      deploymentOverrides:
-        resources:
-          requests:
-            cpu: 1
-            memory: 2Gi
-      storageClass: fsx-sc
+            memory: 8Gi
+      storageClass: fsx-lustre
       storageResources:
         requests:
-          storage: 5Gi
+          storage: 3600Gi
+  utxoPersister:
+    enabled: false
+    spec: {}
   validator:
-    enabled: true
-    spec:
-      deploymentOverrides:
-        resources:
-          requests:
-            cpu: 1
-            memory: 1Gi
+    enabled: false
+    spec: {}
