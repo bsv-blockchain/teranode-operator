@@ -1,22 +1,32 @@
 apiVersion: teranode.bsvblockchain.org/v1alpha1
 kind: Cluster
 metadata:
-  annotations:
   labels:
     app.kubernetes.io/created-by: teranode-operator
     app.kubernetes.io/instance: cluster
     app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: cluster
     app.kubernetes.io/part-of: teranode-operator
-    k8slens-edit-resource-version: v1alpha1
   name: sample-cluster
 spec:
   alertSystem:
     enabled: true
-    spec: {}
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
   asset:
     enabled: true
     spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
       grpcIngress:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: ast-grpc
@@ -33,55 +43,67 @@ spec:
           traefik.ingress.kubernetes.io/router.entrypoints: websecure
         className: traefik-internal
         host: euw1-teranode-main-net-1-prod.ubsv.dev
+  blockAssembly:
+    enabled: true
+    spec:
       deploymentOverrides:
         replicas: 1
         resources:
           requests:
-            cpu: "0.5"
-            memory: 500Mi
-  blockAssembly:
-    enabled: true
-    spec: {}
+            cpu: 1
+            memory: 4Gi
   blockPersister:
-    enabled: true
+    enabled: false
     spec: {}
   blockValidator:
     enabled: true
-    spec: {}
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 2
+            memory: 8Gi
   blockchain:
     enabled: true
-    spec: {}
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
   bootstrap:
     enabled: false
     spec: {}
   coinbase:
     enabled: false
-    spec:
-      deploymentOverrides:
-        replicas: 0
-        resources:
-          requests:
-            cpu: 1
-            memory: 1Gi
+    spec: {}
   configMapName: shared-config
-  image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.116
+  image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-public:v0.5.21
   legacy:
     enabled: true
-    spec: {}
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 2
+            memory: 8Gi
   peer:
     enabled: true
     spec:
-      grpcIngress:
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: peer-grpc
-        className: traefik-internal
-        host: euw1-teranode-main-net-1-prod.ubsv.dev
       deploymentOverrides:
         replicas: 1
         resources:
           requests:
             cpu: "0.5"
             memory: 500Mi
+      grpcIngress:
+        annotations:
+          traefik.ingress.kubernetes.io/router.entrypoints: peer-grpc
+        className: traefik-internal
+        host: euw1-teranode-main-net-1-prod.ubsv.dev
       wsIngress:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: p2p-ws
@@ -93,24 +115,24 @@ spec:
         className: traefik-internal
         host: euw1-teranode-main-net-1-prod.ubsv.dev
   propagation:
-    enabled: true
+    enabled: false
     spec:
       grpcIngress:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: prop-grpc
         className: traefik-internal
         host: euw1-teranode-main-net-1-prod.ubsv.dev
-      deploymentOverrides:
-        replicas: 1
-        resources:
-          requests:
-            cpu: "0.5"
-            memory: 500Mi
       serviceAnnotations:
         traefik.ingress.kubernetes.io/service.serversscheme: h2c
   rpc:
     enabled: true
-    spec: {}
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
   subtreeValidator:
     enabled: true
     spec:
@@ -123,7 +145,7 @@ spec:
       storageClass: fsx-lustre
       storageResources:
         requests:
-          storage: 3600Gi
+          storage: 1200Gi
   utxoPersister:
     enabled: false
     spec: {}
