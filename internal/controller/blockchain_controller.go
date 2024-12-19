@@ -110,15 +110,17 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, nil
 	}
 
-	if state == nil {
+	if state == nil && b.Spec.FiniteStateMachine != nil && b.Spec.FiniteStateMachine.Enabled {
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, nil
 	}
 
 	r.Log.Info("FSM Status", "state", state.String())
 
-	err = r.ReconcileState(*state)
-	if err != nil {
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, err
+	if b.Spec.FiniteStateMachine != nil && b.Spec.FiniteStateMachine.Enabled {
+		err = r.ReconcileState(*state)
+		if err != nil {
+			return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, err
+		}
 	}
 
 	// Fetch latest blockchain CR so the next status update works

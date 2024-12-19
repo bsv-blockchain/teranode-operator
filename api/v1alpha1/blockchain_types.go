@@ -28,6 +28,7 @@ type BlockchainSpec struct {
 
 // FiniteStateMachineSettings defines the configuration of the FSM
 type FiniteStateMachineSettings struct {
+	Enabled      bool             `json:"enabled,omitempty"`
 	Host         string           `json:"host,omitempty"`
 	PollInterval *metav1.Duration `json:"pollInterval,omitempty"`
 }

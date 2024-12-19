@@ -1131,6 +1131,8 @@ spec:
                 description: FiniteStateMachineSettings defines the configuration
                   of the FSM
                 properties:
+                  enabled:
+                    type: boolean
                   host:
                     type: string
                   pollInterval:

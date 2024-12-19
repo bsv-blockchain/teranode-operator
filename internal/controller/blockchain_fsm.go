@@ -18,9 +18,16 @@ func (r *BlockchainReconciler) GetFSMState(log logr.Logger) (*blockchain.FSMStat
 	if err := r.Get(r.Context, r.NamespacedName, &b); err != nil {
 		return nil, err
 	}
+	if b.Spec.FiniteStateMachine != nil && !b.Spec.FiniteStateMachine.Enabled {
+		return nil, nil
+	}
 	if r.BlockchainClient == nil {
 		uLog := ulogger.New("fsm")
-		blockchainHost := fmt.Sprintf("%s:%d", BlockchainServiceName, BlockchainGRPCPort)
+		host := BlockchainServiceName
+		if b.Spec.FiniteStateMachine != nil && b.Spec.FiniteStateMachine.Host != "" {
+			host = b.Spec.FiniteStateMachine.Host
+		}
+		blockchainHost := fmt.Sprintf("%s:%d", host, BlockchainGRPCPort)
 		err := os.Setenv("blockchain_grpcAddress", blockchainHost)
 		if err != nil {
 			return nil, err
