@@ -103,26 +103,6 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 			},
 		)
 	}
-	if b.Spec.FiniteStateMachine != nil && !b.Spec.FiniteStateMachine.Enabled {
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Minute * 5}, nil
-	}
-
-	state, err := r.GetFSMState(r.Log)
-	if err != nil {
-		r.Log.Error(err, "unable to get FSM state, trying again in a minute")
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, nil
-	}
-
-	if state == nil {
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, nil
-	}
-
-	r.Log.Info("FSM Status", "state", state.String())
-
-	err = r.ReconcileState(*state)
-	if err != nil {
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, err
-	}
 
 	// Fetch latest blockchain CR so the next status update works
 	b = teranodev1alpha1.Blockchain{}
@@ -130,10 +110,30 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		r.Log.Error(err, "unable to fetch blockchain CR")
 		return result, nil
 	}
-	b.Status.FSMState = state.String()
+
+	if b.Spec.FiniteStateMachine != nil && b.Spec.FiniteStateMachine.Enabled {
+		r.Log.Info("FSM monitoring is turned on, reconciling state")
+		state, err := r.GetFSMState(r.Log)
+		if err != nil {
+			r.Log.Error(err, "unable to get FSM state, trying again in a minute")
+			return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, nil
+		}
+
+		if state == nil {
+			return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, nil
+		}
+		r.Log.Info("FSM Status", "state", state.String())
+
+		err = r.ReconcileState(*state)
+		if err != nil {
+			return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, err
+		}
+		b.Status.FSMState = state.String()
+	}
+
 	err = r.Client.Status().Update(ctx, &b)
 	if err != nil {
-		r.Log.Error(err, "unable to update FSM state")
+		r.Log.Error(err, "unable to update blockchain status")
 	}
 
 	return ctrl.Result{Requeue: true, RequeueAfter: time.Minute * 5}, nil
