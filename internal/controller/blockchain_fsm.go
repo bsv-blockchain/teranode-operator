@@ -37,6 +37,7 @@ func (r *BlockchainReconciler) GetFSMState(log logr.Logger) (*blockchain.FSMStat
 			return nil, err
 		}
 		r.BlockchainClient = bClient
+		r.Log.Info("Initiating FSM client", "host", blockchainHost)
 	}
 
 	return r.BlockchainClient.GetFSMCurrentState(r.Context)
