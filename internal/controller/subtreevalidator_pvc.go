@@ -4,8 +4,10 @@ import (
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
@@ -22,24 +24,38 @@ func (r *SubtreeValidatorReconciler) ReconcilePVC(log logr.Logger) (bool, error)
 			Labels:    getAppLabels(),
 		},
 	}
+	// Check if PVC is already created so that we can copy the existing spec values
+	// This is how we properly support resizing
+	existingPvcNamespacedName := types.NamespacedName{
+		Namespace: pvc.Namespace,
+		Name:      pvc.Name,
+	}
+	existingPVC := corev1.PersistentVolumeClaim{}
+	if err := r.Get(r.Context, existingPvcNamespacedName, &existingPVC); err != nil && !k8serrors.IsNotFound(err) {
+		return false, err
+	}
 
-	_, _ = controllerutil.CreateOrUpdate(r.Context, r.Client, &pvc, func() error {
-		return r.updatePVC(&pvc, &subtreeValidator)
+	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &pvc, func() error {
+		return r.updatePVC(&pvc, &existingPVC, &subtreeValidator)
 	})
-	/*
-		// Ignore this check for right now until we properly implement resizing
-		if err != nil && !k8serrors.IsForbidden(err) {
-			return false, err
-		}*/
+
+	// Ignore forbidden errors
+	if err != nil && !k8serrors.IsForbidden(err) {
+		return false, err
+	}
 	return true, nil
 }
 
-func (r *SubtreeValidatorReconciler) updatePVC(pvc *corev1.PersistentVolumeClaim, subtreeValidator *teranodev1alpha1.SubtreeValidator) error {
+func (r *SubtreeValidatorReconciler) updatePVC(pvc *corev1.PersistentVolumeClaim, inClusterPVC *corev1.PersistentVolumeClaim, subtreeValidator *teranodev1alpha1.SubtreeValidator) error {
 	err := controllerutil.SetControllerReference(subtreeValidator, pvc, r.Scheme)
 	if err != nil {
 		return err
 	}
-	pvc.Spec = *defaultPVCSpec()
+	if inClusterPVC == nil {
+		pvc.Spec = *defaultPVCSpec()
+	} else {
+		pvc.Spec = *inClusterPVC.Spec.DeepCopy()
+	}
 
 	// If storage class is configured, use it
 	if subtreeValidator.Spec.StorageClass != "" {

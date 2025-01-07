@@ -104,15 +104,18 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		)
 	}
 
-	// Fetch latest blockchain CR so the next status update works
-	b = teranodev1alpha1.Blockchain{}
-	if err := r.Get(ctx, req.NamespacedName, &b); err != nil {
-		r.Log.Error(err, "unable to fetch blockchain CR")
-		return result, nil
-	}
+	// Update status and ignore if we error out
+	_ = r.Client.Status().Update(ctx, &b)
 
+	// If we want to monitor the FSM, trigger state check
 	if b.Spec.FiniteStateMachine != nil && b.Spec.FiniteStateMachine.Enabled {
 		r.Log.Info("FSM monitoring is turned on, reconciling state")
+		// Fetch latest blockchain CR so the next status update works
+		b = teranodev1alpha1.Blockchain{}
+		if err := r.Get(ctx, req.NamespacedName, &b); err != nil {
+			r.Log.Error(err, "unable to fetch blockchain CR")
+			return result, nil
+		}
 		state, err := r.GetFSMState(r.Log)
 		if err != nil {
 			r.Log.Error(err, "unable to get FSM state, trying again in a minute")
@@ -129,13 +132,11 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 			return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, err
 		}
 		b.Status.FSMState = state.String()
+		err = r.Client.Status().Update(ctx, &b)
+		if err != nil {
+			r.Log.Error(err, "unable to update blockchain status")
+		}
 	}
-
-	err = r.Client.Status().Update(ctx, &b)
-	if err != nil {
-		r.Log.Error(err, "unable to update blockchain status")
-	}
-
 	return ctrl.Result{Requeue: true, RequeueAfter: time.Minute * 5}, nil
 }
 
