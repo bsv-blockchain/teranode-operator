@@ -53,4 +53,4 @@ linters-settings:
     excludes:
       - G204
 exclude:
-  - "^github.com/bitcoin-sv/ubsv"
+  - "^github.com/bitcoin-sv/teranode"

@@ -23,7 +23,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
-	"github.com/bitcoin-sv/ubsv/services/blockchain"
+	"github.com/bitcoin-sv/teranode/services/blockchain"
 	"github.com/go-logr/logr"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"

@@ -2,11 +2,10 @@ package controller
 
 import (
 	"fmt"
-	"os"
-
 	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
-	"github.com/bitcoin-sv/ubsv/services/blockchain"
-	"github.com/bitcoin-sv/ubsv/ulogger"
+	"github.com/bitcoin-sv/teranode/services/blockchain"
+	"github.com/bitcoin-sv/teranode/settings"
+	"github.com/bitcoin-sv/teranode/ulogger"
 	"github.com/go-logr/logr"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/types"
@@ -28,11 +27,12 @@ func (r *BlockchainReconciler) GetFSMState(log logr.Logger) (*blockchain.FSMStat
 			host = b.Spec.FiniteStateMachine.Host
 		}
 		blockchainHost := fmt.Sprintf("%s:%d", host, BlockchainGRPCPort)
-		err := os.Setenv("blockchain_grpcAddress", blockchainHost)
-		if err != nil {
-			return nil, err
+		tSettings := settings.Settings{
+			BlockChain: settings.BlockChainSettings{
+				GRPCAddress: blockchainHost,
+			},
 		}
-		bClient, err := blockchain.NewClient(r.Context, uLog, blockchainHost)
+		bClient, err := blockchain.NewClient(r.Context, uLog, &tSettings, blockchainHost)
 		if err != nil {
 			return nil, err
 		}
@@ -72,14 +72,14 @@ func (r *BlockchainReconciler) ReconcileState(state blockchain.FSMStateType) err
 	switch state {
 	case blockchain.FSMStateRUNNING:
 		break
-	case blockchain.FSMStateSTOPPED:
+	case blockchain.FSMStateIDLE:
 		legacyEnabled, err := r.IsLegacyEnabled()
 		if err != nil {
 			// lets just break for now because we don't know if we are supposed to be doing anything
 			return err
 		}
 		if !legacyEnabled {
-			return r.BlockchainClient.Run(r.Context)
+			return r.BlockchainClient.Run(r.Context, "")
 		}
 	}
 	return nil

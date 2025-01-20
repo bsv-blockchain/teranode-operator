@@ -2,12 +2,12 @@
 FROM golang:1.23 AS builder
 ARG TARGETOS
 ARG TARGETARCH
-ARG GOPRIVATE="github.com/bitcoin-sv/ubsv"
+ARG GOPRIVATE="github.com/bitcoin-sv/teranode"
 ARG UBSV_READER_TOKEN
 
 WORKDIR /workspace
 
-# Add github token for reading ubsv repo
+# Add github token for reading teranode repo
 RUN echo "machine github.com login bitcoin-sv password ${UBSV_READER_TOKEN}" >> ~/.netrc
 
 # Copy the Go Modules manifests
