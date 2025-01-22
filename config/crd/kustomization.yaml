@@ -10,7 +10,6 @@ resources:
 - bases/teranode.bsvblockchain.org_faucets.yaml
 - bases/teranode.bsvblockchain.org_propagations.yaml
 - bases/teranode.bsvblockchain.org_blockpersisters.yaml
-- bases/teranode.bsvblockchain.org_miners.yaml
 - bases/teranode.bsvblockchain.org_validators.yaml
 - bases/teranode.bsvblockchain.org_coinbases.yaml
 - bases/teranode.bsvblockchain.org_bootstraps.yaml

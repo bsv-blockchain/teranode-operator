@@ -74,12 +74,6 @@ type LegacyConfig struct {
 	Spec    *LegacySpec `json:"spec"`
 }
 
-// MinerConfig defines the miner configuration
-type MinerConfig struct {
-	Enabled bool       `json:"enabled"`
-	Spec    *MinerSpec `json:"spec"`
-}
-
 // PeerConfig defines the miner configuration
 type PeerConfig struct {
 	Enabled bool      `json:"enabled"`

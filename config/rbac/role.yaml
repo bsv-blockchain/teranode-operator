@@ -52,7 +52,6 @@ rules:
   - coinbases
   - faucets
   - legacies
-  - miners
   - peers
   - propagations
   - rpcs
@@ -81,7 +80,6 @@ rules:
   - coinbases/finalizers
   - faucets/finalizers
   - legacies/finalizers
-  - miners/finalizers
   - peers/finalizers
   - propagations/finalizers
   - rpcs/finalizers
@@ -104,7 +102,6 @@ rules:
   - coinbases/status
   - faucets/status
   - legacies/status
-  - miners/status
   - peers/status
   - propagations/status
   - rpcs/status
