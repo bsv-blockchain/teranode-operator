@@ -67,7 +67,7 @@ func SetDeploymentOverrides(client client.Client, dep *appsv1.Deployment, cr v1a
 		dep.Spec.Template.Spec.ServiceAccountName = cr.DeploymentOverrides().ServiceAccount
 	}
 
-	// if parent cluster CR has a configmap set, append it first
+	// if parent cluster CR has a configmap or env vars set, append it first
 	clusterOwner := GetClusterOwner(client, context.Background(), cr.Metadata())
 	if clusterOwner != nil {
 		if clusterOwner.Spec.ConfigMapName != "" {
@@ -77,6 +77,22 @@ func SetDeploymentOverrides(client client.Client, dep *appsv1.Deployment, cr v1a
 				},
 			})
 		}
+		if len(clusterOwner.Spec.Env) > 0 {
+			dep.Spec.Template.Spec.Containers[0].Env = append(dep.Spec.Template.Spec.Containers[0].Env, clusterOwner.Spec.Env...)
+		}
+		if len(clusterOwner.Spec.EnvFrom) > 0 {
+			dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, clusterOwner.Spec.EnvFrom...)
+		}
+	}
+
+	// if user configures env vars
+	if len(cr.DeploymentOverrides().Env) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Env = append(dep.Spec.Template.Spec.Containers[0].Env, cr.DeploymentOverrides().Env...)
+	}
+
+	// if user configures envFrom vars
+	if len(cr.DeploymentOverrides().EnvFrom) > 0 {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, cr.DeploymentOverrides().EnvFrom...)
 	}
 
 	// if user configures a config map for the service, append it next

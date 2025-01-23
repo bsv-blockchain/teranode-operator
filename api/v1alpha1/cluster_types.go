@@ -17,6 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -128,8 +129,10 @@ type ClusterSpec struct {
 	UtxoPersister    UtxoPersisterConfig    `json:"utxoPersister"`
 	Validator        ValidatorConfig        `json:"validator"`
 
-	ConfigMapName string `json:"configMapName"`
-	Image         string `json:"image,omitempty"`
+	ConfigMapName string                 `json:"configMapName"`
+	Env           []corev1.EnvVar        `json:"env,omitempty"`
+	EnvFrom       []corev1.EnvFromSource `json:"envFrom,omitempty"`
+	Image         string                 `json:"image,omitempty"`
 }
 
 // ClusterStatus defines the observed state of Cluster

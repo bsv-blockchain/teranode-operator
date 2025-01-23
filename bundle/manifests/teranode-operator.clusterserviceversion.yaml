@@ -30,7 +30,6 @@ metadata:
             "name": "asset-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -57,7 +56,6 @@ metadata:
             "name": "blockassembly-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -84,7 +82,6 @@ metadata:
             "name": "blockpersister-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -132,7 +129,6 @@ metadata:
             "name": "blockchain-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -269,7 +265,6 @@ metadata:
               }
             },
             "configMapName": "teranode-operator-config",
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.102",
             "legacy": {
               "enabled": true,
               "spec": {
@@ -404,7 +399,6 @@ metadata:
             "name": "coinbase-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -431,7 +425,6 @@ metadata:
             "name": "faucet-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -461,33 +454,6 @@ metadata:
         },
         {
           "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
-          "kind": "Miner",
-          "metadata": {
-            "labels": {
-              "app.kubernetes.io/created-by": "teranode-operator",
-              "app.kubernetes.io/instance": "miner-sample",
-              "app.kubernetes.io/managed-by": "kustomize",
-              "app.kubernetes.io/name": "miner",
-              "app.kubernetes.io/part-of": "teranode-operator"
-            },
-            "name": "miner-sample"
-          },
-          "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
-            "imagePullPolicy": "Always",
-            "resources": {
-              "limits": {
-                "memory": "2Gi"
-              },
-              "requests": {
-                "cpu": 1,
-                "memory": "1Gi"
-              }
-            }
-          }
-        },
-        {
-          "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
           "kind": "Peer",
           "metadata": {
             "labels": {
@@ -500,7 +466,6 @@ metadata:
             "name": "peer-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -527,7 +492,6 @@ metadata:
             "name": "propagation-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -566,7 +530,6 @@ metadata:
             "name": "subtreevalidator-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -596,7 +559,6 @@ metadata:
             "name": "utxopersister-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -623,7 +585,6 @@ metadata:
             "name": "validator-sample"
           },
           "spec": {
-            "image": "434394763103.dkr.ecr.eu-north-1.amazonaws.com/ubsv:v2.2.68",
             "imagePullPolicy": "Always",
             "resources": {
               "limits": {
@@ -638,10 +599,10 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2025-01-07T13:28:34Z"
+    createdAt: "2025-01-22T20:56:32Z"
     operators.operatorframework.io/builder: operator-sdk-v1.37.0
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
-  name: teranode-operator.v0.3.2
+  name: teranode-operator.v0.4.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -701,11 +662,6 @@ spec:
       displayName: Legacy
       kind: Legacy
       name: legacies.teranode.bsvblockchain.org
-      version: v1alpha1
-    - description: Miner is the Schema for the miners API
-      displayName: Miner
-      kind: Miner
-      name: miners.teranode.bsvblockchain.org
       version: v1alpha1
     - description: Peer is the Schema for the peers API
       displayName: Peer
@@ -784,447 +740,21 @@ spec:
           - teranode.bsvblockchain.org
           resources:
           - alertsystems
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - alertsystems/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - alertsystems/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - assets
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - assets/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - assets/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - blockassemblies
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - blockassemblies/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - blockassemblies/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - blockchains
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - blockchains/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - blockchains/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - blockpersisters
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - blockpersisters/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - blockpersisters/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - blockvalidators
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - blockvalidators/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - blockvalidators/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - bootstraps
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - bootstraps/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - bootstraps/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - clusters
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - clusters/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - clusters/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - coinbases
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - coinbases/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - coinbases/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - faucets
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - faucets/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - faucets/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - legacies
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - legacies/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - legacies/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - miners
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - miners/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - miners/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - peers
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - peers/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - peers/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - propagations
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - propagations/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - propagations/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - rpcs
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - rpcs/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - rpcs/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - subtreevalidators
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - subtreevalidators/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - subtreevalidators/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - utxopersisters
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - utxopersisters/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
-          - utxopersisters/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - teranode.bsvblockchain.org
-          resources:
           - validators
           verbs:
           - create
@@ -1237,12 +767,44 @@ spec:
         - apiGroups:
           - teranode.bsvblockchain.org
           resources:
+          - alertsystems/finalizers
+          - assets/finalizers
+          - blockassemblies/finalizers
+          - blockchains/finalizers
+          - blockpersisters/finalizers
+          - blockvalidators/finalizers
+          - bootstraps/finalizers
+          - clusters/finalizers
+          - coinbases/finalizers
+          - faucets/finalizers
+          - legacies/finalizers
+          - peers/finalizers
+          - propagations/finalizers
+          - rpcs/finalizers
+          - subtreevalidators/finalizers
+          - utxopersisters/finalizers
           - validators/finalizers
           verbs:
           - update
         - apiGroups:
           - teranode.bsvblockchain.org
           resources:
+          - alertsystems/status
+          - assets/status
+          - blockassemblies/status
+          - blockchains/status
+          - blockpersisters/status
+          - blockvalidators/status
+          - bootstraps/status
+          - clusters/status
+          - coinbases/status
+          - faucets/status
+          - legacies/status
+          - peers/status
+          - propagations/status
+          - rpcs/status
+          - subtreevalidators/status
+          - utxopersisters/status
           - validators/status
           verbs:
           - get
@@ -1319,7 +881,7 @@ spec:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.annotations['olm.targetNamespaces']
-                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.3.2
+                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.4.0
                 imagePullPolicy: Always
                 livenessProbe:
                   httpGet:
@@ -1421,4 +983,4 @@ spec:
   maturity: alpha
   provider:
     name: BSV Association
-  version: 0.3.2
+  version: 0.4.0

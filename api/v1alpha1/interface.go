@@ -30,4 +30,6 @@ type DeploymentOverrides struct {
 	Command            []string                     `json:"command,omitempty"`
 	Args               []string                     `json:"args,omitempty"`
 	Strategy           *v1.DeploymentStrategy       `json:"strategy,omitempty"`
+	Env                []corev1.EnvVar              `json:"env,omitempty"`
+	EnvFrom            []corev1.EnvFromSource       `json:"envFrom,omitempty"`
 }
