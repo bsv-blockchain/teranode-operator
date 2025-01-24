@@ -80,7 +80,7 @@ spec:
     enabled: false
     spec: {}
   configMapName: shared-config
-  image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-public:v0.5.21
+  image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-public:v0.6.2
   legacy:
     enabled: true
     spec:

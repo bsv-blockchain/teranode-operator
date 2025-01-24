@@ -8,7 +8,7 @@ const DefaultServiceAccountName = "teranode-operator-service-runner"
 const SharedPVCName = "cluster-storage"
 
 // DefaultImage is the default teranode service image
-const DefaultImage = "434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-public:v0.5.50"
+const DefaultImage = "434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-public:v0.6.2"
 
 // Service Names
 
