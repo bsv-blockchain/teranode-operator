@@ -30,13 +30,19 @@ func (r *SubtreeValidatorReconciler) ReconcilePVC(log logr.Logger) (bool, error)
 		Namespace: pvc.Namespace,
 		Name:      pvc.Name,
 	}
-	existingPVC := corev1.PersistentVolumeClaim{}
-	if err := r.Get(r.Context, existingPvcNamespacedName, &existingPVC); err != nil && !k8serrors.IsNotFound(err) {
+	existingPVC := &corev1.PersistentVolumeClaim{}
+	err := r.Get(r.Context, existingPvcNamespacedName, existingPVC)
+	if err != nil && !k8serrors.IsNotFound(err) {
 		return false, err
 	}
 
-	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &pvc, func() error {
-		return r.updatePVC(&pvc, &existingPVC, &subtreeValidator)
+	// If in cluster PVC is not found; nil it out to not confuse the create or update section
+	if k8serrors.IsNotFound(err) {
+		existingPVC = nil
+	}
+
+	_, err = controllerutil.CreateOrUpdate(r.Context, r.Client, &pvc, func() error {
+		return r.updatePVC(&pvc, existingPVC, &subtreeValidator)
 	})
 
 	// Ignore forbidden errors
