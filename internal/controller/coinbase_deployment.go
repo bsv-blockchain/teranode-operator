@@ -142,6 +142,10 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
+								ContainerPort: CoinbaseP2PPort,
+								Protocol:      corev1.ProtocolTCP,
+							},
+							{
 								ContainerPort: ProfilerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
