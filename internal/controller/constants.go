@@ -17,6 +17,7 @@ const BlockchainServiceName = "blockchain"
 // Ports for services
 
 const AlertSystemPort = 9908
+const AlertWebserverPort = 3000
 const AssetGRPCPort = 8091
 const AssetHTTPPort = 8090
 const BlockAssemblyPort = 8085

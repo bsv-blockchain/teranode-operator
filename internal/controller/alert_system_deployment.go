@@ -138,6 +138,10 @@ func defaultAlertSystemDeploymentSpec() *appsv1.DeploymentSpec {
 								ContainerPort: HealthPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
+							{
+								ContainerPort: AlertWebserverPort,
+								Protocol:      corev1.ProtocolTCP,
+							},
 						},
 					},
 				},

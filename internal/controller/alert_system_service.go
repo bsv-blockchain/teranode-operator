@@ -72,6 +72,12 @@ func defaultAlertSystemServiceSpec() *corev1.ServiceSpec {
 				TargetPort: intstr.FromInt32(HealthPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
+			{
+				Name:       "webserver",
+				Port:       int32(AlertWebserverPort),
+				TargetPort: intstr.FromInt32(AlertWebserverPort),
+				Protocol:   corev1.ProtocolTCP,
+			},
 		},
 	}
 }
