@@ -85,17 +85,17 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 						EnvFrom:         envFrom,
 						Env:             env,
 						Args:            []string{"-coinbase=1"},
-						Image:           DefaultImage,
+						Image:           DefaultCoinbaseImage,
 						ImagePullPolicy: corev1.PullAlways,
 						Name:            "coinbase",
 						// Make sane defaults, and this should be configurable
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
-								corev1.ResourceMemory: resource.MustParse("28Gi"), // TODO: verify these numbers
+								corev1.ResourceMemory: resource.MustParse("4Gi"), // TODO: verify these numbers
 							},
 							Requests: corev1.ResourceList{
-								corev1.ResourceCPU:    resource.MustParse("8"),
-								corev1.ResourceMemory: resource.MustParse("20Gi"),
+								corev1.ResourceCPU:    resource.MustParse("1"),
+								corev1.ResourceMemory: resource.MustParse("2Gi"),
 							},
 						},
 						ReadinessProbe: &corev1.Probe{
