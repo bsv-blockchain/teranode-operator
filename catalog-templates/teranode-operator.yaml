@@ -18,6 +18,7 @@ stable:
   - Image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.4.1
   - Image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.4.2
   - Image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.4.3
+  - Image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.4.4
 fast:
   Bundles:
   - Image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.2.0
@@ -36,3 +37,4 @@ fast:
   - Image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.4.1
   - Image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.4.2
   - Image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.4.3
+  - Image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.4.4
