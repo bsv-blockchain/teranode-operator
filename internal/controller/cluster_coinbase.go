@@ -64,9 +64,6 @@ func (r *ClusterReconciler) updateCoinbase(coinbase *teranodev1alpha1.Coinbase, 
 	if coinbase.Spec.DeploymentOverrides == nil {
 		coinbase.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
-	if cluster.Spec.Image != "" {
-		coinbase.Spec.DeploymentOverrides.Image = cluster.Spec.Image
-	}
 
 	return nil
 }

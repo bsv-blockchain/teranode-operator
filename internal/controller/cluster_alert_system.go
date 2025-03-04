@@ -63,7 +63,7 @@ func (r *ClusterReconciler) updateAlertSystem(alertSystem *teranodev1alpha1.Aler
 	if alertSystem.Spec.DeploymentOverrides == nil {
 		alertSystem.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
-	if cluster.Spec.Image != "" {
+	if cluster.Spec.Image != "" && alertSystem.Spec.DeploymentOverrides.Image == "" {
 		alertSystem.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 

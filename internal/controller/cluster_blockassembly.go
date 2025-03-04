@@ -64,7 +64,7 @@ func (r *ClusterReconciler) updateBlockAssembly(blockAssembly *teranodev1alpha1.
 	if blockAssembly.Spec.DeploymentOverrides == nil {
 		blockAssembly.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
-	if cluster.Spec.Image != "" {
+	if cluster.Spec.Image != "" && blockAssembly.Spec.DeploymentOverrides.Image == "" {
 		blockAssembly.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 

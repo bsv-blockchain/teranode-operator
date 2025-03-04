@@ -64,7 +64,7 @@ func (r *ClusterReconciler) updatePropagation(propagation *teranodev1alpha1.Prop
 	if propagation.Spec.DeploymentOverrides == nil {
 		propagation.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
-	if cluster.Spec.Image != "" {
+	if cluster.Spec.Image != "" && propagation.Spec.DeploymentOverrides.Image == "" {
 		propagation.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 

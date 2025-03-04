@@ -64,7 +64,7 @@ func (r *ClusterReconciler) updateBlockchain(blockchain *teranodev1alpha1.Blockc
 	if blockchain.Spec.DeploymentOverrides == nil {
 		blockchain.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
-	if cluster.Spec.Image != "" {
+	if cluster.Spec.Image != "" && blockchain.Spec.DeploymentOverrides.Image == "" {
 		blockchain.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 

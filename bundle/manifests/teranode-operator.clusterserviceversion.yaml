@@ -251,7 +251,7 @@ metadata:
               "spec": {}
             },
             "coinbase": {
-              "enabled": true,
+              "enabled": false,
               "spec": {
                 "deploymentOverrides": {
                   "replicas": 1,
@@ -599,10 +599,10 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2025-03-03T16:04:33Z"
+    createdAt: "2025-03-04T13:59:52Z"
     operators.operatorframework.io/builder: operator-sdk-v1.37.0
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
-  name: teranode-operator.v0.4.4
+  name: teranode-operator.v0.4.5
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -881,7 +881,7 @@ spec:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.annotations['olm.targetNamespaces']
-                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.4.4
+                image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.4.5
                 imagePullPolicy: Always
                 livenessProbe:
                   httpGet:
@@ -983,4 +983,4 @@ spec:
   maturity: alpha
   provider:
     name: BSV Association
-  version: 0.4.4
+  version: 0.4.5

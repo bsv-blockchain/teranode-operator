@@ -64,7 +64,7 @@ func (r *ClusterReconciler) updateUtxoPersister(up *teranodev1alpha1.UtxoPersist
 	if up.Spec.DeploymentOverrides == nil {
 		up.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
-	if cluster.Spec.Image != "" {
+	if cluster.Spec.Image != "" && up.Spec.DeploymentOverrides.Image == "" {
 		up.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 
