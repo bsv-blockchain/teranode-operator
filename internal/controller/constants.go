@@ -34,6 +34,7 @@ const CoinbaseGRPCPort = 8093
 const CoinbaseP2PPort = 9907
 const MinerHTTPPort = 8092
 const PeerPort = 9095
+const PeerLegacyPort = 8333
 const PeerHTTPPort = 9096
 const PropagationGRPCPort = 8084
 const PropagationHTTPPort = 8833

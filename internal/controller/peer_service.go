@@ -67,6 +67,12 @@ func defaultPeerServiceSpec() *corev1.ServiceSpec {
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
+				Name:       "legacy",
+				Port:       int32(PeerLegacyPort),
+				TargetPort: intstr.FromInt32(PeerLegacyPort),
+				Protocol:   corev1.ProtocolTCP,
+			},
+			{
 				Name:       "delve",
 				Port:       int32(DebuggerPort),
 				TargetPort: intstr.FromInt32(DebuggerPort),

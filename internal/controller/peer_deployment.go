@@ -161,6 +161,10 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
+								ContainerPort: PeerLegacyPort,
+								Protocol:      corev1.ProtocolTCP,
+							},
+							{
 								ContainerPort: PeerHTTPPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
