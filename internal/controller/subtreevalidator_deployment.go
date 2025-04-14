@@ -83,11 +83,11 @@ func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 						// Make sane defaults, and this should be configurable
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
-								corev1.ResourceMemory: resource.MustParse("370Gi"),
+								corev1.ResourceMemory: resource.MustParse("16Gi"),
 							},
 							Requests: corev1.ResourceList{
-								corev1.ResourceCPU:    resource.MustParse("40"),
-								corev1.ResourceMemory: resource.MustParse("250Gi"),
+								corev1.ResourceCPU:    resource.MustParse("1"),
+								corev1.ResourceMemory: resource.MustParse("8Gi"),
 							},
 						},
 						ReadinessProbe: &corev1.Probe{

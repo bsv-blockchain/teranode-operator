@@ -87,11 +87,11 @@ func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 						// Make sane defaults, and this should be configurable
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
-								corev1.ResourceMemory: resource.MustParse("80Gi"), // TODO: these values should be reviewed
+								corev1.ResourceMemory: resource.MustParse("2Gi"),
 							},
 							Requests: corev1.ResourceList{
-								corev1.ResourceCPU:    resource.MustParse("25"),
-								corev1.ResourceMemory: resource.MustParse("80Gi"),
+								corev1.ResourceCPU:    resource.MustParse("1"),
+								corev1.ResourceMemory: resource.MustParse("1Gi"),
 							},
 						},
 						ReadinessProbe: &corev1.Probe{

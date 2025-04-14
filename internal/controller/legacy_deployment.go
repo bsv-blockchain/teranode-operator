@@ -80,11 +80,11 @@ func defaultLegacyDeploymentSpec() *appsv1.DeploymentSpec {
 						// Make sane defaults, and this should be configurable
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
-								corev1.ResourceMemory: resource.MustParse("2Gi"),
+								corev1.ResourceMemory: resource.MustParse("8Gi"),
 							},
 							Requests: corev1.ResourceList{
 								corev1.ResourceCPU:    resource.MustParse("2"),
-								corev1.ResourceMemory: resource.MustParse("2Gi"),
+								corev1.ResourceMemory: resource.MustParse("8Gi"),
 							},
 						},
 						ReadinessProbe: &corev1.Probe{

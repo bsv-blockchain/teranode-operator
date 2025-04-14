@@ -111,11 +111,11 @@ func defaultBlockValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 						Name:            "block-validator",
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
-								corev1.ResourceMemory: resource.MustParse("2Gi"),
+								corev1.ResourceMemory: resource.MustParse("10Gi"),
 							},
 							Requests: corev1.ResourceList{
 								corev1.ResourceCPU:    resource.MustParse("2"),
-								corev1.ResourceMemory: resource.MustParse("2Gi"),
+								corev1.ResourceMemory: resource.MustParse("8Gi"),
 							},
 						},
 						ReadinessProbe: &corev1.Probe{

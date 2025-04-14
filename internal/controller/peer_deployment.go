@@ -109,11 +109,11 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 						Name:            "peer",
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
-								corev1.ResourceMemory: resource.MustParse("4Gi"),
+								corev1.ResourceMemory: resource.MustParse("2Gi"),
 							},
 							Requests: corev1.ResourceList{
-								corev1.ResourceCPU:    resource.MustParse("2"),
-								corev1.ResourceMemory: resource.MustParse("4Gi"),
+								corev1.ResourceCPU:    resource.MustParse("1"),
+								corev1.ResourceMemory: resource.MustParse("1Gi"),
 							},
 						},
 						ReadinessProbe: &corev1.Probe{

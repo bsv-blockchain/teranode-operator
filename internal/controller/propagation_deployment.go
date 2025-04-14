@@ -83,11 +83,11 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 						// Make sane defaults, and this should be configurable
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
-								corev1.ResourceMemory: resource.MustParse("58Gi"),
+								corev1.ResourceMemory: resource.MustParse("2Gi"),
 							},
 							Requests: corev1.ResourceList{
-								corev1.ResourceCPU:    resource.MustParse("28"),
-								corev1.ResourceMemory: resource.MustParse("40Gi"),
+								corev1.ResourceCPU:    resource.MustParse("1"),
+								corev1.ResourceMemory: resource.MustParse("1Gi"),
 							},
 						},
 						ReadinessProbe: &corev1.Probe{

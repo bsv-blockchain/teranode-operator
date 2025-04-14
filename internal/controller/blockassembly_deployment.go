@@ -84,11 +84,11 @@ func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
 						// Make sane defaults, and this should be configurable
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
-								corev1.ResourceMemory: resource.MustParse("1500Gi"), // TODO: these values should be reviewed
+								corev1.ResourceMemory: resource.MustParse("8Gi"),
 							},
 							Requests: corev1.ResourceList{
-								corev1.ResourceCPU:    resource.MustParse("100"),
-								corev1.ResourceMemory: resource.MustParse("1000Gi"),
+								corev1.ResourceCPU:    resource.MustParse("1"),
+								corev1.ResourceMemory: resource.MustParse("4Gi"),
 							},
 						},
 						ReadinessProbe: &corev1.Probe{
