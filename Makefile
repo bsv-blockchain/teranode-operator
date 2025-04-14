@@ -193,10 +193,23 @@ deploy: manifests kustomize ## Deploy controller to the K8s cluster specified in
 	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
 	$(KUSTOMIZE) build config/default | $(KUBECTL) apply -f -
 
-.PHONY: generate-deployment
-generate-deployment: manifests kustomize
+.PHONY: generate-helm
+generate-helm: generate-helm-deployment generate-helm-crds generate-helm-rbac
+
+.PHONY: generate-helm-deployment
+generate-helm-deployment: manifests kustomize
 	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
 	$(KUSTOMIZE) build config/default > deploy/manifest.yaml
+
+.PHONY: generate-helm-crds
+generate-helm-crds: manifests kustomize
+	echo "---" > deploy/crds.yaml
+	$(KUSTOMIZE) build config/crd >> deploy/crds.yaml
+
+.PHONY: generate-helm-rbac
+generate-helm-rbac: manifests kustomize
+	echo "---" > deploy/rbac.yaml
+	$(KUSTOMIZE) build config/rbac >> deploy/rbac.yaml
 
 .PHONY: undeploy
 undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config. Call with ignore-not-found=true to ignore resource not found errors during deletion.
