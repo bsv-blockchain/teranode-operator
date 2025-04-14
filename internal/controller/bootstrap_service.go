@@ -61,12 +61,6 @@ func defaultBootstrapServiceSpec() *corev1.ServiceSpec {
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "profiler",
-				Port:       int32(ProfilerPort),
-				TargetPort: intstr.FromInt32(9091),
-				Protocol:   corev1.ProtocolTCP,
-			},
-			{
 				Name:       "delve",
 				Port:       int32(DebuggerPort),
 				TargetPort: intstr.FromInt32(4041),

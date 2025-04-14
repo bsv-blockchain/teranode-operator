@@ -55,18 +55,6 @@ func defaultBlockAssemblyServiceSpec() *corev1.ServiceSpec {
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "profiler",
-				Port:       int32(ProfilerPort),
-				TargetPort: intstr.FromInt32(ProfilerPort),
-				Protocol:   corev1.ProtocolTCP,
-			},
-			{
-				Name:       "debugger",
-				Port:       int32(DebuggerPort),
-				TargetPort: intstr.FromInt32(DebuggerPort),
-				Protocol:   corev1.ProtocolTCP,
-			},
-			{
 				Name:       "health",
 				Port:       int32(HealthPort),
 				TargetPort: intstr.FromInt32(HealthPort),

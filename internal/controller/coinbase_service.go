@@ -61,12 +61,6 @@ func defaultCoinbaseServiceSpec() *corev1.ServiceSpec {
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "profiler",
-				Port:       int32(ProfilerPort),
-				TargetPort: intstr.FromInt32(ProfilerPort),
-				Protocol:   corev1.ProtocolTCP,
-			},
-			{
 				Name:       "coinbase",
 				Port:       int32(CoinbaseP2PPort),
 				TargetPort: intstr.FromInt32(CoinbaseP2PPort),

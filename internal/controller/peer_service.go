@@ -55,12 +55,6 @@ func defaultPeerServiceSpec() *corev1.ServiceSpec {
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "profiler",
-				Port:       int32(ProfilerPort),
-				TargetPort: intstr.FromInt32(ProfilerPort),
-				Protocol:   corev1.ProtocolTCP,
-			},
-			{
 				Name:       "p2p",
 				Port:       int32(PeerPort),
 				TargetPort: intstr.FromInt32(PeerPort),

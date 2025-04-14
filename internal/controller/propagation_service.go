@@ -61,12 +61,6 @@ func defaultPropagationServiceSpec() *corev1.ServiceSpec {
 		},
 		Ports: []corev1.ServicePort{
 			{
-				Name:       "propagation-delve",
-				Port:       int32(DebuggerPort),
-				TargetPort: intstr.FromInt32(DebuggerPort),
-				Protocol:   corev1.ProtocolTCP,
-			},
-			{
 				Name:       "propagation-grpc",
 				Port:       int32(PropagationGRPCPort),
 				TargetPort: intstr.FromInt32(PropagationGRPCPort),
@@ -82,12 +76,6 @@ func defaultPropagationServiceSpec() *corev1.ServiceSpec {
 				Name:       "propagation-http",
 				Port:       int32(PropagationHTTPPort),
 				TargetPort: intstr.FromInt32(PropagationHTTPPort),
-				Protocol:   corev1.ProtocolTCP,
-			},
-			{
-				Name:       "profiler", // TODO: shouldn't we call these x-profiler, where x is respective service name?
-				Port:       int32(ProfilerPort),
-				TargetPort: intstr.FromInt32(ProfilerPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{

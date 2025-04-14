@@ -49,21 +49,9 @@ func defaultAlertSystemServiceSpec() *corev1.ServiceSpec {
 		Selector: labels,
 		Ports: []corev1.ServicePort{
 			{
-				Name:       "profiler",
-				Port:       int32(ProfilerPort),
-				TargetPort: intstr.FromInt32(ProfilerPort),
-				Protocol:   corev1.ProtocolTCP,
-			},
-			{
 				Name:       "alert-p2p",
 				Port:       int32(AlertSystemPort),
 				TargetPort: intstr.FromInt32(AlertSystemPort),
-				Protocol:   corev1.ProtocolTCP,
-			},
-			{
-				Name:       "debugger",
-				Port:       int32(DebuggerPort),
-				TargetPort: intstr.FromInt32(DebuggerPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
