@@ -133,6 +133,14 @@ type ClusterSpec struct {
 	Env           []corev1.EnvVar        `json:"env,omitempty"`
 	EnvFrom       []corev1.EnvFromSource `json:"envFrom,omitempty"`
 	Image         string                 `json:"image,omitempty"`
+
+	SharedStorage StorageConfig `json:"sharedStorage"`
+}
+
+type StorageConfig struct {
+	StorageResources *corev1.VolumeResourceRequirements `json:"storageResources,omitempty"`
+	StorageClass     string                             `json:"storageClass,omitempty"`
+	StorageVolume    string                             `json:"storageVolume,omitempty"`
 }
 
 // ClusterStatus defines the observed state of Cluster

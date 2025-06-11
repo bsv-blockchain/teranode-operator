@@ -72,7 +72,6 @@ func (r *SubtreeValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	_, err := utils.ReconcileBatch(r.Log,
 		r.ReconcileDeployment,
 		r.ReconcileService,
-		r.ReconcilePVC,
 	)
 
 	if err != nil {

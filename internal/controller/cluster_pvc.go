@@ -12,9 +12,9 @@ import (
 )
 
 // ReconcilePVC is the postgres PVC
-func (r *SubtreeValidatorReconciler) ReconcilePVC(log logr.Logger) (bool, error) {
-	subtreeValidator := teranodev1alpha1.SubtreeValidator{}
-	if err := r.Get(r.Context, r.NamespacedName, &subtreeValidator); err != nil {
+func (r *ClusterReconciler) ReconcilePVC(log logr.Logger) (bool, error) {
+	cluster := teranodev1alpha1.Cluster{}
+	if err := r.Get(r.Context, r.NamespacedName, &cluster); err != nil {
 		return false, err
 	}
 	pvc := corev1.PersistentVolumeClaim{
@@ -42,7 +42,7 @@ func (r *SubtreeValidatorReconciler) ReconcilePVC(log logr.Logger) (bool, error)
 	}
 
 	_, err = controllerutil.CreateOrUpdate(r.Context, r.Client, &pvc, func() error {
-		return r.updatePVC(&pvc, existingPVC, &subtreeValidator)
+		return r.updatePVC(&pvc, existingPVC, &cluster)
 	})
 
 	// Ignore forbidden errors
@@ -52,8 +52,8 @@ func (r *SubtreeValidatorReconciler) ReconcilePVC(log logr.Logger) (bool, error)
 	return true, nil
 }
 
-func (r *SubtreeValidatorReconciler) updatePVC(pvc *corev1.PersistentVolumeClaim, inClusterPVC *corev1.PersistentVolumeClaim, subtreeValidator *teranodev1alpha1.SubtreeValidator) error {
-	err := controllerutil.SetControllerReference(subtreeValidator, pvc, r.Scheme)
+func (r *ClusterReconciler) updatePVC(pvc *corev1.PersistentVolumeClaim, inClusterPVC *corev1.PersistentVolumeClaim, cluster *teranodev1alpha1.Cluster) error {
+	err := controllerutil.SetControllerReference(cluster, pvc, r.Scheme)
 	if err != nil {
 		return err
 	}
@@ -64,15 +64,15 @@ func (r *SubtreeValidatorReconciler) updatePVC(pvc *corev1.PersistentVolumeClaim
 	}
 
 	// If storage class is configured, use it
-	if subtreeValidator.Spec.StorageClass != "" {
-		pvc.Spec.StorageClassName = &subtreeValidator.Spec.StorageClass
+	if cluster.Spec.SharedStorage.StorageClass != "" {
+		pvc.Spec.StorageClassName = &cluster.Spec.SharedStorage.StorageClass
 	}
 	// If storage resources are configured, use them
-	if subtreeValidator.Spec.StorageResources != nil {
-		pvc.Spec.Resources = *subtreeValidator.Spec.StorageResources
+	if cluster.Spec.SharedStorage.StorageResources != nil {
+		pvc.Spec.Resources = *cluster.Spec.SharedStorage.StorageResources
 	}
-	if subtreeValidator.Spec.StorageVolume != "" {
-		pvc.Spec.VolumeName = subtreeValidator.Spec.StorageVolume
+	if cluster.Spec.SharedStorage.StorageVolume != "" {
+		pvc.Spec.VolumeName = cluster.Spec.SharedStorage.StorageVolume
 	}
 	return nil
 }

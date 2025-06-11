@@ -9,6 +9,11 @@ metadata:
     app.kubernetes.io/part-of: teranode-operator
   name: sample-cluster
 spec:
+  sharedStorage:
+    storageClass: fsx-lustre
+    storageResources:
+      requests:
+        storage: 1200Gi
   alertSystem:
     enabled: true
     spec:
@@ -142,10 +147,6 @@ spec:
           requests:
             cpu: 1
             memory: 8Gi
-      storageClass: fsx-lustre
-      storageResources:
-        requests:
-          storage: 1200Gi
   utxoPersister:
     enabled: false
     spec: {}

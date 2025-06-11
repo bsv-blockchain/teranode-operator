@@ -17,17 +17,13 @@ limitations under the License.
 package v1alpha1
 
 import (
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // SubtreeValidatorSpec defines the desired state of SubtreeValidator
 type SubtreeValidatorSpec struct {
-	DeploymentOverrides    *DeploymentOverrides               `json:"deploymentOverrides,omitempty"`
-	StorageResources       *corev1.VolumeResourceRequirements `json:"storageResources,omitempty"`
-	PodTemplateAnnotations map[string]string                  `json:"podTemplateAnnotations,omitempty"`
-	StorageClass           string                             `json:"storageClass,omitempty"`
-	StorageVolume          string                             `json:"storageVolume,omitempty"`
+	DeploymentOverrides    *DeploymentOverrides `json:"deploymentOverrides,omitempty"`
+	PodTemplateAnnotations map[string]string    `json:"podTemplateAnnotations,omitempty"`
 }
 
 // SubtreeValidatorStatus defines the observed state of SubtreeValidator

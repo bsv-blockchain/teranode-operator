@@ -69,6 +69,7 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 
 	_, err := utils.ReconcileBatch(r.Log,
 		// r.Validate,
+		r.ReconcilePVC,
 		r.ReconcileAlertSystem,
 		r.ReconcileAsset,
 		r.ReconcileBlockAssembly,
