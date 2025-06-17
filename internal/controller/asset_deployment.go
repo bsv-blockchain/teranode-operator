@@ -23,7 +23,7 @@ func (r *AssetReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "asset",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("asset"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -48,11 +48,7 @@ func (r *AssetReconciler) updateDeployment(dep *appsv1.Deployment, asset *terano
 }
 
 func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
-	labels := map[string]string{
-		"app":        "asset",
-		"deployment": "asset",
-		"project":    "service",
-	}
+	labels := getAppLabels("asset")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

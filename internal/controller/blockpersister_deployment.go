@@ -23,7 +23,7 @@ func (r *BlockPersisterReconciler) ReconcileDeployment(log logr.Logger) (bool, e
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "block-persister",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("block-persister"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -47,11 +47,7 @@ func (r *BlockPersisterReconciler) updateDeployment(dep *appsv1.Deployment, bloc
 }
 
 func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
-	labels := map[string]string{
-		"app":        "block-persister",
-		"deployment": "block-persister",
-		"project":    "service",
-	}
+	labels := getAppLabels("block-persister")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

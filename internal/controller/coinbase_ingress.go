@@ -18,7 +18,7 @@ func (r *CoinbaseReconciler) ReconcileGrpcIngress(log logr.Logger) (bool, error)
 	if coinbase.Spec.GrpcIngress == nil {
 		return false, nil
 	}
-	labels := getAppLabels()
+	labels := getAppLabels("coinbase")
 	prefix := v1.PathTypePrefix
 	ingress := &v1.Ingress{
 		ObjectMeta: metav1.ObjectMeta{

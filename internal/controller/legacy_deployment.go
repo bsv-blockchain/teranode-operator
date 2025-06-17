@@ -23,7 +23,7 @@ func (r *LegacyReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "legacy",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("legacy"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -47,11 +47,7 @@ func (r *LegacyReconciler) updateDeployment(dep *appsv1.Deployment, legacy *tera
 }
 
 func defaultLegacyDeploymentSpec() *appsv1.DeploymentSpec {
-	labels := map[string]string{
-		"app":        "legacy",
-		"deployment": "legacy",
-		"project":    "service",
-	}
+	labels := getAppLabels("legacy")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

@@ -23,7 +23,7 @@ func (r *AlertSystemReconciler) ReconcileDeployment(log logr.Logger) (bool, erro
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "alert",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("alert"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {

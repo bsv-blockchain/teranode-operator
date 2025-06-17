@@ -23,7 +23,7 @@ func (r *BlockAssemblyReconciler) ReconcileDeployment(log logr.Logger) (bool, er
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "block-assembly",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("block-assembly"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -47,11 +47,7 @@ func (r *BlockAssemblyReconciler) updateDeployment(dep *appsv1.Deployment, block
 }
 
 func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
-	labels := map[string]string{
-		"app":        "block-assembly",
-		"deployment": "block-assembly",
-		"project":    "service",
-	}
+	labels := getAppLabels("block-assembly")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

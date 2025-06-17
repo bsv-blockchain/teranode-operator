@@ -22,7 +22,7 @@ func (r *ClusterReconciler) ReconcilePeer(log logr.Logger) (bool, error) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-peer", cluster.Name),
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("peer"),
 		},
 	}
 

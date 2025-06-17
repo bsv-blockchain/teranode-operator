@@ -19,8 +19,7 @@ func (r *BlockValidatorReconciler) ReconcileDeployment(log logr.Logger) (bool, e
 	if err := r.Get(r.Context, r.NamespacedName, &blockValidator); err != nil {
 		return false, err
 	}
-	labels := getAppLabels()
-	labels["app"] = "block-validator"
+	labels := getAppLabels("block-validator")
 	dep := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "block-validator",
@@ -48,11 +47,7 @@ func (r *BlockValidatorReconciler) updateDeployment(dep *appsv1.Deployment, bloc
 }
 
 func defaultBlockValidatorDeploymentSpec() *appsv1.DeploymentSpec {
-	podLabels := map[string]string{
-		"app":        "block-validator",
-		"deployment": "block-validator",
-		"project":    "service",
-	}
+	podLabels := getAppLabels("block-validator")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

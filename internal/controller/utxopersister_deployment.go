@@ -27,7 +27,7 @@ func (r *UtxoPersisterReconciler) ReconcileDeployment(log logr.Logger) (bool, er
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      UtxoPersisterName,
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("utxo-persister"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -51,11 +51,7 @@ func (r *UtxoPersisterReconciler) updateDeployment(dep *appsv1.Deployment, utxoP
 }
 
 func defaultUtxoPersisterDeploymentSpec() *appsv1.DeploymentSpec {
-	labels := map[string]string{
-		"app":        UtxoPersisterName,
-		"deployment": UtxoPersisterName,
-		"project":    "service",
-	}
+	labels := getAppLabels("utxo-persister")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

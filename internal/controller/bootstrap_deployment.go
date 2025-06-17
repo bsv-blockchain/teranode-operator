@@ -22,7 +22,7 @@ func (r *BootstrapReconciler) ReconcileDeployment(log logr.Logger) (bool, error)
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "bootstrap",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("bootstrap"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -72,11 +72,7 @@ func (r *BootstrapReconciler) updateDeployment(dep *appsv1.Deployment, bs *teran
 }
 
 func defaultBootstrapDeploymentSpec() *appsv1.DeploymentSpec {
-	podLabels := map[string]string{
-		"app":        "bootstrap",
-		"deployment": "bootstrap",
-		"project":    "service",
-	}
+	podLabels := getAppLabels("bootstrap")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

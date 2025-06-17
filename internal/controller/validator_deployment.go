@@ -23,7 +23,7 @@ func (r *ValidatorReconciler) ReconcileDeployment(log logr.Logger) (bool, error)
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "validator",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("validator"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -48,11 +48,7 @@ func (r *ValidatorReconciler) updateDeployment(dep *appsv1.Deployment, validator
 }
 
 func defaultValidatorDeploymentSpec() *appsv1.DeploymentSpec {
-	labels := map[string]string{
-		"app":        "validator",
-		"deployment": "validator",
-		"project":    "service",
-	}
+	labels := getAppLabels("validator")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

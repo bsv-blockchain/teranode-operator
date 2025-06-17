@@ -19,8 +19,7 @@ func (r *BlockchainReconciler) ReconcileDeployment(log logr.Logger) (bool, error
 	if err := r.Get(r.Context, r.NamespacedName, &blockchain); err != nil {
 		return false, err
 	}
-	labels := getAppLabels()
-	labels["app"] = "blockchain"
+	labels := getAppLabels("blockchain")
 	dep := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "blockchain",
@@ -49,11 +48,7 @@ func (r *BlockchainReconciler) updateDeployment(dep *appsv1.Deployment, blockcha
 }
 
 func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
-	podLabels := map[string]string{
-		"app":        "blockchain",
-		"deployment": "blockchain",
-		"project":    "service",
-	}
+	podLabels := getAppLabels("blockchain")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

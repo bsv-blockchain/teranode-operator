@@ -23,7 +23,7 @@ func (r *PeerReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "peer",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("peer"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -47,11 +47,7 @@ func (r *PeerReconciler) updateDeployment(dep *appsv1.Deployment, peer *teranode
 }
 
 func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
-	podLabels := map[string]string{
-		"app":        "peer",
-		"deployment": "peer",
-		"project":    "service",
-	}
+	podLabels := getAppLabels("peer")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

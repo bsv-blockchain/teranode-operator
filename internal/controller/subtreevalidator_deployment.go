@@ -23,7 +23,7 @@ func (r *SubtreeValidatorReconciler) ReconcileDeployment(log logr.Logger) (bool,
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "subtree-validator",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("subtree-validator"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -47,11 +47,7 @@ func (r *SubtreeValidatorReconciler) updateDeployment(dep *appsv1.Deployment, su
 }
 
 func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
-	labels := map[string]string{
-		"app":        "subtree-validator",
-		"deployment": "subtree-validator",
-		"project":    "service",
-	}
+	labels := getAppLabels("subtree-validator")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

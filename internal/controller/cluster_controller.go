@@ -20,6 +20,8 @@ import (
 	"context"
 	"time"
 
+	networkingv1 "k8s.io/api/networking/v1"
+
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
@@ -84,6 +86,7 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		r.ReconcileRPC,
 		r.ReconcileSubtreeValidator,
 		r.ReconcileValidator,
+		r.ReconcileNetworkPolicy,
 	)
 	if err != nil {
 		apimeta.SetStatusCondition(&cluster.Status.Conditions,
@@ -131,5 +134,6 @@ func (r *ClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&teranodev1alpha1.RPC{}).
 		Owns(&teranodev1alpha1.SubtreeValidator{}).
 		Owns(&teranodev1alpha1.Validator{}).
+		Owns(&networkingv1.NetworkPolicy{}).
 		Complete(r)
 }

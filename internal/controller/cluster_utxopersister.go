@@ -22,7 +22,7 @@ func (r *ClusterReconciler) ReconcileUtxoPersister(log logr.Logger) (bool, error
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-utxo-persister", cluster.Name),
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("utxo-persister"),
 		},
 	}
 

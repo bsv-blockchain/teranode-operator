@@ -19,7 +19,7 @@ func (r *PropagationReconciler) ReconcileGrpcIngress(log logr.Logger) (bool, err
 		return false, nil
 	}
 
-	labels := getAppLabels()
+	labels := getAppLabels("propagation")
 	prefix := v1.PathTypePrefix
 	ingress := &v1.Ingress{
 		ObjectMeta: metav1.ObjectMeta{

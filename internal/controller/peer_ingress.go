@@ -18,7 +18,7 @@ func (r *PeerReconciler) ReconcileGrpcIngress(log logr.Logger) (bool, error) {
 	if peer.Spec.GrpcIngress == nil {
 		return false, nil
 	}
-	labels := getAppLabels()
+	labels := getAppLabels("peer")
 	prefix := v1.PathTypePrefix
 	ingress := &v1.Ingress{
 		ObjectMeta: metav1.ObjectMeta{
@@ -90,7 +90,7 @@ func (r *PeerReconciler) ReconcileWsIngress(log logr.Logger) (bool, error) {
 	if peer.Spec.WsIngress == nil {
 		return false, nil
 	}
-	labels := getAppLabels()
+	labels := getAppLabels("peer")
 	prefix := v1.PathTypePrefix
 	ingress := &v1.Ingress{
 		ObjectMeta: metav1.ObjectMeta{
@@ -164,7 +164,7 @@ func (r *PeerReconciler) ReconcileWssIngress(log logr.Logger) (bool, error) {
 		return false, nil
 	}
 
-	labels := getAppLabels()
+	labels := getAppLabels("peer")
 	prefix := v1.PathTypePrefix
 	ingress := &v1.Ingress{
 		ObjectMeta: metav1.ObjectMeta{

@@ -21,7 +21,7 @@ func (r *ClusterReconciler) ReconcilePVC(log logr.Logger) (bool, error) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      SharedPVCName,
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("subtree-validator"),
 		},
 	}
 	// Check if PVC is already created so that we can copy the existing spec values

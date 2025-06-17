@@ -23,7 +23,7 @@ func (r *PropagationReconciler) ReconcileDeployment(log logr.Logger) (bool, erro
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "propagation",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("propagation"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -47,11 +47,7 @@ func (r *PropagationReconciler) updateDeployment(dep *appsv1.Deployment, propaga
 }
 
 func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
-	labels := map[string]string{
-		"app":        "propagation",
-		"deployment": "propagation",
-		"project":    "service",
-	}
+	labels := getAppLabels("propagation")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

@@ -22,7 +22,7 @@ func (r *ClusterReconciler) ReconcileBootstrap(log logr.Logger) (bool, error) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-bootstrap", cluster.Name),
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("bootstrap"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &bootstrap, func() error {

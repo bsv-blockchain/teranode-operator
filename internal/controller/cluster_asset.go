@@ -21,7 +21,7 @@ func (r *ClusterReconciler) ReconcileAsset(log logr.Logger) (bool, error) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-asset", cluster.Name),
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("asset"),
 		},
 	}
 

@@ -18,7 +18,7 @@ func (r *AssetReconciler) ReconcileHTTPIngress(log logr.Logger) (bool, error) {
 	if asset.Spec.HTTPIngress == nil {
 		return false, nil
 	}
-	labels := getAppLabels()
+	labels := getAppLabels("asset")
 	prefix := v1.PathTypePrefix
 	ingress := &v1.Ingress{
 		ObjectMeta: metav1.ObjectMeta{
@@ -92,7 +92,7 @@ func (r *AssetReconciler) ReconcileHTTPSIngress(log logr.Logger) (bool, error) {
 		return false, nil
 	}
 
-	labels := getAppLabels()
+	labels := getAppLabels("asset")
 	prefix := v1.PathTypePrefix
 	ingress := &v1.Ingress{
 		ObjectMeta: metav1.ObjectMeta{

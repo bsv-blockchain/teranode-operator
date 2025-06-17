@@ -22,7 +22,7 @@ func (r *ClusterReconciler) ReconcileBlockValidator(log logr.Logger) (bool, erro
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-blockvalidator", cluster.Name),
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("block-validator"),
 		},
 	}
 

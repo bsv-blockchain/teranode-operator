@@ -22,7 +22,7 @@ func (r *ClusterReconciler) ReconcileRPC(log logr.Logger) (bool, error) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-rpc", cluster.Name),
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("rpc"),
 		},
 	}
 

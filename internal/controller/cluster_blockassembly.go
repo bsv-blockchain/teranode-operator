@@ -22,7 +22,7 @@ func (r *ClusterReconciler) ReconcileBlockAssembly(log logr.Logger) (bool, error
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-blockassembly", cluster.Name),
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("block-assembly"),
 		},
 	}
 

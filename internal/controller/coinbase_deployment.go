@@ -23,7 +23,7 @@ func (r *CoinbaseReconciler) ReconcileDeployment(log logr.Logger) (bool, error) 
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "coinbase",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("coinbase"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -47,11 +47,7 @@ func (r *CoinbaseReconciler) updateDeployment(dep *appsv1.Deployment, coinbase *
 }
 
 func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
-	labels := map[string]string{
-		"app":        "coinbase",
-		"deployment": "coinbase",
-		"project":    "service",
-	}
+	labels := getAppLabels("coinbase")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

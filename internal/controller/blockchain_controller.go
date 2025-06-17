@@ -141,9 +141,10 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 }
 
 // getAppLabels defines the label applied to created resources. This label is used by the predicate to determine which resources are ours
-func getAppLabels() map[string]string {
+func getAppLabels(service string) map[string]string {
 	return map[string]string{
 		teranodev1alpha1.TeranodeLabel: "true",
+		"app":                          service,
 	}
 }
 

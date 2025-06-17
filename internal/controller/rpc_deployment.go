@@ -23,7 +23,7 @@ func (r *RPCReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "rpc",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("rpc"),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -47,11 +47,7 @@ func (r *RPCReconciler) updateDeployment(dep *appsv1.Deployment, rpc *teranodev1
 }
 
 func defaultRPCDeploymentSpec() *appsv1.DeploymentSpec {
-	labels := map[string]string{
-		"app":        "rpc",
-		"deployment": "rpc",
-		"project":    "service",
-	}
+	labels := getAppLabels("rpc")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{

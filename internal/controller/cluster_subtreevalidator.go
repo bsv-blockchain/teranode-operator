@@ -22,7 +22,7 @@ func (r *ClusterReconciler) ReconcileSubtreeValidator(log logr.Logger) (bool, er
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("%s-subtreevalidator", cluster.Name),
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels(),
+			Labels:    getAppLabels("subtree-validator"),
 		},
 	}
 

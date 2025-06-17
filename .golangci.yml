@@ -1,27 +1,8 @@
+version: "2"
 run:
-  deadline: 5m
   allow-parallel-runners: true
-
-issues:
-  # don't skip warning about doc comments
-  # don't exclude the default set of lint
-  exclude-use-default: false
-  # restore some of the defaults
-  # (fill in the rest as needed)
-  exclude-rules:
-    - path: test/
-      text: "ST1001: should not use dot imports"
-      linters: ["stylecheck"]
-    - path: "api/*"
-      linters:
-        - lll
-        - dupl
-    - path: "internal/*"
-      linters:
-        - dupl
-        - lll
 linters:
-  disable-all: true
+  default: none
   enable:
     - asciicheck
     - dupl
@@ -30,10 +11,7 @@ linters:
     - goconst
     - gocritic
     - gocyclo
-    - gofmt
-    - goimports
     - gosec
-    - gosimple
     - govet
     - ineffassign
     - lll
@@ -41,15 +19,40 @@ linters:
     - nakedret
     - prealloc
     - staticcheck
-    - stylecheck
-    - typecheck
     - unconvert
     - unparam
     - unused
     - whitespace
-linters-settings:
-  gosec:
-    excludes:
-      - G204
-exclude:
-  - "^github.com/bitcoin-sv/teranode"
+  settings:
+    gosec:
+      excludes:
+        - G204
+  exclusions:
+    generated: lax
+    rules:
+      - linters:
+          - staticcheck
+        path: test/
+        text: 'ST1001: should not use dot imports'
+      - linters:
+          - dupl
+          - lll
+        path: api/*
+      - linters:
+          - dupl
+          - lll
+        path: internal/*
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
