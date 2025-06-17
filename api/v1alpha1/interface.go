@@ -19,7 +19,9 @@ type TeranodeService interface {
 type DeploymentOverrides struct {
 	NodeSelector       map[string]string            `json:"nodeSelector,omitempty"`
 	Tolerations        *[]corev1.Toleration         `json:"tolerations,omitempty"`
+	Taints             *[]corev1.Taint              `json:"taints,omitempty"`
 	Affinity           *corev1.Affinity             `json:"affinity,omitempty"`
+	PodAntiAffinity    *corev1.PodAntiAffinity      `json:"podAntiAffinity,omitempty"`
 	Resources          *corev1.ResourceRequirements `json:"resources,omitempty"`
 	Image              string                       `json:"image,omitempty"`
 	ImagePullPolicy    corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
