@@ -23,7 +23,7 @@ package v1alpha1
 import (
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -1000,6 +1000,11 @@ func (in *ClusterSpec) DeepCopyInto(out *ClusterSpec) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.Enabled != nil {
+		in, out := &in.Enabled, &out.Enabled
+		*out = new(bool)
+		**out = **in
+	}
 	in.SharedStorage.DeepCopyInto(&out.SharedStorage)
 }
 
@@ -1182,9 +1187,25 @@ func (in *DeploymentOverrides) DeepCopyInto(out *DeploymentOverrides) {
 			}
 		}
 	}
+	if in.Taints != nil {
+		in, out := &in.Taints, &out.Taints
+		*out = new([]corev1.Taint)
+		if **in != nil {
+			in, out := *in, *out
+			*out = make([]corev1.Taint, len(*in))
+			for i := range *in {
+				(*in)[i].DeepCopyInto(&(*out)[i])
+			}
+		}
+	}
 	if in.Affinity != nil {
 		in, out := &in.Affinity, &out.Affinity
 		*out = new(corev1.Affinity)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.PodAntiAffinity != nil {
+		in, out := &in.PodAntiAffinity, &out.PodAntiAffinity
+		*out = new(corev1.PodAntiAffinity)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Resources != nil {

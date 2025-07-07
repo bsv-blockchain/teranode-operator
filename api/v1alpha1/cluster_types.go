@@ -133,6 +133,7 @@ type ClusterSpec struct {
 	Env           []corev1.EnvVar        `json:"env,omitempty"`
 	EnvFrom       []corev1.EnvFromSource `json:"envFrom,omitempty"`
 	Image         string                 `json:"image,omitempty"`
+	Enabled       *bool                  `json:"enabled,omitempty"`
 
 	SharedStorage StorageConfig `json:"sharedStorage"`
 }

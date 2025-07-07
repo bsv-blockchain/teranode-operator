@@ -12164,6 +12164,8 @@ spec:
                 type: object
               configMapName:
                 type: string
+              enabled:
+                type: boolean
               env:
                 items:
                   description: EnvVar represents an environment variable present in

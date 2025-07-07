@@ -19,6 +19,8 @@ package utils
 import (
 	"context"
 
+	"k8s.io/utils/ptr"
+
 	"github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -82,6 +84,11 @@ func SetDeploymentOverrides(client client.Client, dep *appsv1.Deployment, cr v1a
 		}
 		if len(clusterOwner.Spec.EnvFrom) > 0 {
 			dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, clusterOwner.Spec.EnvFrom...)
+		}
+		if clusterOwner.Spec.Enabled != nil && !*clusterOwner.Spec.Enabled {
+			// If the cluster is disabled, we should not deploy this service so set replicas to 0
+			dep.Spec.Replicas = ptr.To(int32(0))
+			return
 		}
 	}
 
