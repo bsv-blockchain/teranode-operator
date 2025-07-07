@@ -47,9 +47,11 @@ entries:
   - teranode-operator.v0.4.4
   - teranode-operator.v0.4.5
 - name: teranode-operator.v0.5.0
+- name: teranode-operator.v0.5.1
   replaces: teranode-operator.v0.4.6
   skips:
   - teranode-operator.v0.4.6
+  - teranode-operator.v0.5.0
 name: fast-v0
 package: teranode-operator
 schema: olm.channel
@@ -96,9 +98,11 @@ entries:
   - teranode-operator.v0.4.4
   - teranode-operator.v0.4.5
 - name: teranode-operator.v0.5.0
+- name: teranode-operator.v0.5.1
   replaces: teranode-operator.v0.4.6
   skips:
   - teranode-operator.v0.4.6
+  - teranode-operator.v0.5.0
 name: stable-v0
 package: teranode-operator
 schema: olm.channel
@@ -16473,8 +16477,8 @@ properties:
           }
         ]
       capabilities: Basic Install
-      createdAt: "2025-06-18T13:32:51Z"
-      operators.operatorframework.io/builder: operator-sdk-v1.37.0
+      createdAt: "2025-06-18T14:02:45Z"
+      operators.operatorframework.io/builder: operator-sdk-v1.34.2
       operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
     apiServiceDefinitions: {}
     crdDescriptions:
@@ -16592,6 +16596,823 @@ relatedImages:
 - image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.5.0
   name: ""
 - image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.5.0
+  name: ""
+- image: gcr.io/kubebuilder/kube-rbac-proxy:v0.15.0
+  name: ""
+schema: olm.bundle
+---
+image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.5.1
+name: teranode-operator.v0.5.1
+package: teranode-operator
+properties:
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: AlertSystem
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: Asset
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: BlockAssembly
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: BlockPersister
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: BlockValidator
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: Blockchain
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: Bootstrap
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: Cluster
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: Coinbase
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: Faucet
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: Legacy
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: Peer
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: Propagation
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: RPC
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: SubtreeValidator
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: UtxoPersister
+    version: v1alpha1
+- type: olm.gvk
+  value:
+    group: teranode.bsvblockchain.org
+    kind: Validator
+    version: v1alpha1
+- type: olm.package
+  value:
+    packageName: teranode-operator
+    version: 0.5.1
+- type: olm.csv.metadata
+  value:
+    annotations:
+      alm-examples: |-
+        [
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "AlertSystem",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "teranode-operator"
+              },
+              "name": "alertsystem-sample"
+            },
+            "spec": null
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "Asset",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "asset-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "asset",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "asset-sample"
+            },
+            "spec": {
+              "imagePullPolicy": "Always",
+              "resources": {
+                "limits": {
+                  "memory": "2Gi"
+                },
+                "requests": {
+                  "cpu": 1,
+                  "memory": "1Gi"
+                }
+              }
+            }
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "BlockAssembly",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "blockassembly-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "blockassembly",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "blockassembly-sample"
+            },
+            "spec": {
+              "imagePullPolicy": "Always",
+              "resources": {
+                "limits": {
+                  "memory": "2Gi"
+                },
+                "requests": {
+                  "cpu": 1,
+                  "memory": "1Gi"
+                }
+              }
+            }
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "BlockPersister",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "blockpersister-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "blockpersister",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "blockpersister-sample"
+            },
+            "spec": {
+              "imagePullPolicy": "Always",
+              "resources": {
+                "limits": {
+                  "memory": "2Gi"
+                },
+                "requests": {
+                  "cpu": 1,
+                  "memory": "1Gi"
+                }
+              },
+              "storageClass": "fsx-sc",
+              "storageResources": {
+                "requests": {
+                  "storage": "5Gi"
+                }
+              }
+            }
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "BlockValidator",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "blockvalidator-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "blockvalidator",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "blockvalidator-sample"
+            },
+            "spec": null
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "Blockchain",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "blockchain-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "blockchain",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "blockchain-sample"
+            },
+            "spec": {
+              "imagePullPolicy": "Always",
+              "resources": {
+                "limits": {
+                  "memory": "2Gi"
+                },
+                "requests": {
+                  "cpu": 1,
+                  "memory": "1Gi"
+                }
+              }
+            }
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "Cluster",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "cluster-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "cluster",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "cluster-sample"
+            },
+            "spec": {
+              "asset": {
+                "enabled": true,
+                "spec": {
+                  "deploymentOverrides": {
+                    "replicas": 1,
+                    "resources": {
+                      "requests": {
+                        "cpu": 1,
+                        "memory": "1Gi"
+                      }
+                    }
+                  },
+                  "grpcIngress": {
+                    "className": "nginx",
+                    "host": "cluster.example.com"
+                  },
+                  "httpIngress": {
+                    "className": "nginx",
+                    "host": "cluster.example.com"
+                  },
+                  "httpsIngress": {
+                    "annotations": {
+                      "cert-manager.io/cluster-issuer": "letsencrypt-prod"
+                    },
+                    "className": "nginx",
+                    "host": "cluster.example.com"
+                  }
+                }
+              },
+              "blockAssembly": {
+                "enabled": true,
+                "spec": {
+                  "deploymentOverrides": {
+                    "replicas": 1,
+                    "resources": {
+                      "requests": {
+                        "cpu": 2,
+                        "memory": "1Gi"
+                      }
+                    }
+                  }
+                }
+              },
+              "blockPersister": {
+                "enabled": true,
+                "spec": {
+                  "deploymentOverrides": {
+                    "replicas": 1,
+                    "resources": {
+                      "requests": {
+                        "cpu": 1,
+                        "memory": "1Gi"
+                      }
+                    }
+                  },
+                  "storageClass": "standard",
+                  "storageResources": {
+                    "requests": {
+                      "storage": "5Gi"
+                    }
+                  }
+                }
+              },
+              "blockValidator": {
+                "enabled": true,
+                "spec": {
+                  "deploymentOverrides": {
+                    "replicas": 1,
+                    "resources": {
+                      "requests": {
+                        "cpu": 1,
+                        "memory": "1Gi"
+                      }
+                    }
+                  }
+                }
+              },
+              "blockchain": {
+                "enabled": true,
+                "spec": {
+                  "deploymentOverrides": {
+                    "replicas": 1,
+                    "resources": {
+                      "requests": {
+                        "cpu": 1,
+                        "memory": "1Gi"
+                      }
+                    }
+                  }
+                }
+              },
+              "bootstrap": {
+                "enabled": false,
+                "spec": {}
+              },
+              "coinbase": {
+                "enabled": false,
+                "spec": {
+                  "deploymentOverrides": {
+                    "replicas": 1,
+                    "resources": {
+                      "requests": {
+                        "cpu": 1,
+                        "memory": "1Gi"
+                      }
+                    }
+                  }
+                }
+              },
+              "configMapName": "teranode-operator-config",
+              "legacy": {
+                "enabled": true,
+                "spec": {
+                  "deploymentOverrides": {
+                    "replicas": 1,
+                    "resources": {
+                      "requests": {
+                        "cpu": 2,
+                        "memory": "1Gi"
+                      }
+                    }
+                  }
+                }
+              },
+              "miner": {
+                "enabled": true,
+                "spec": {
+                  "deploymentOverrides": {
+                    "replicas": 1,
+                    "resources": {
+                      "requests": {
+                        "cpu": 1,
+                        "memory": "1Gi"
+                      }
+                    }
+                  }
+                }
+              },
+              "peer": {
+                "enabled": true,
+                "spec": {
+                  "deploymentOverrides": {
+                    "replicas": 1,
+                    "resources": {
+                      "requests": {
+                        "cpu": 1,
+                        "memory": "1Gi"
+                      }
+                    }
+                  },
+                  "grpcIngress": {
+                    "className": "nginx",
+                    "host": "cluster.example.com"
+                  },
+                  "wsIngress": {
+                    "className": "nginx",
+                    "host": "cluster.example.com"
+                  },
+                  "wssIngress": {
+                    "className": "nginx",
+                    "host": "cluster.example.com"
+                  }
+                }
+              },
+              "propagation": {
+                "enabled": true,
+                "spec": {
+                  "deploymentOverrides": {
+                    "replicas": 1,
+                    "resources": {
+                      "requests": {
+                        "cpu": 1,
+                        "memory": "1Gi"
+                      }
+                    }
+                  },
+                  "grpcIngress": {
+                    "className": "nginx",
+                    "host": "cluster.example.com"
+                  }
+                }
+              },
+              "subtreeValidator": {
+                "enabled": true,
+                "spec": {
+                  "deploymentOverrides": {
+                    "resources": {
+                      "requests": {
+                        "cpu": 1,
+                        "memory": "2Gi"
+                      }
+                    }
+                  },
+                  "storageClass": "standard",
+                  "storageResources": {
+                    "requests": {
+                      "storage": "5Gi"
+                    }
+                  }
+                }
+              },
+              "utxoPersister": {
+                "enabled": false,
+                "spec": {
+                  "deploymentOverrides": {
+                    "replicas": 1,
+                    "resources": {
+                      "requests": {
+                        "cpu": 2,
+                        "memory": "1Gi"
+                      }
+                    }
+                  }
+                }
+              },
+              "validator": {
+                "enabled": true,
+                "spec": {
+                  "deploymentOverrides": {
+                    "resources": {
+                      "requests": {
+                        "cpu": 1,
+                        "memory": "1Gi"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "Coinbase",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "coinbase-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "coinbase",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "coinbase-sample"
+            },
+            "spec": {
+              "imagePullPolicy": "Always",
+              "resources": {
+                "limits": {
+                  "memory": "2Gi"
+                },
+                "requests": {
+                  "cpu": 1,
+                  "memory": "1Gi"
+                }
+              }
+            }
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "Faucet",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "faucet-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "faucet",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "faucet-sample"
+            },
+            "spec": {
+              "imagePullPolicy": "Always",
+              "resources": {
+                "limits": {
+                  "memory": "2Gi"
+                },
+                "requests": {
+                  "cpu": 1,
+                  "memory": "1Gi"
+                }
+              }
+            }
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "Legacy",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "legacy-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "legacy",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "legacy-sample"
+            },
+            "spec": null
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "Peer",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "peer-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "peer",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "peer-sample"
+            },
+            "spec": {
+              "imagePullPolicy": "Always",
+              "resources": {
+                "limits": {
+                  "memory": "2Gi"
+                },
+                "requests": {
+                  "cpu": 1,
+                  "memory": "1Gi"
+                }
+              }
+            }
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "Propagation",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "propagation-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "propagation",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "propagation-sample"
+            },
+            "spec": {
+              "imagePullPolicy": "Always",
+              "resources": {
+                "limits": {
+                  "memory": "2Gi"
+                },
+                "requests": {
+                  "cpu": 1,
+                  "memory": "1Gi"
+                }
+              }
+            }
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "RPC",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "teranode-operator"
+              },
+              "name": "rpc-sample"
+            },
+            "spec": null
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "SubtreeValidator",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "subtreevalidator-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "subtreevalidator",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "subtreevalidator-sample"
+            },
+            "spec": {
+              "imagePullPolicy": "Always",
+              "resources": {
+                "limits": {
+                  "memory": "6Gi"
+                },
+                "requests": {
+                  "cpu": 1,
+                  "memory": "2Gi"
+                }
+              },
+              "storageClass": "fsx-sc",
+              "storageResources": {
+                "requests": {
+                  "storage": "5Gi"
+                }
+              }
+            }
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "UtxoPersister",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "teranode-operator"
+              },
+              "name": "utxopersister-sample"
+            },
+            "spec": {
+              "imagePullPolicy": "Always",
+              "resources": {
+                "limits": {
+                  "memory": "2Gi"
+                },
+                "requests": {
+                  "cpu": 1,
+                  "memory": "1Gi"
+                }
+              }
+            }
+          },
+          {
+            "apiVersion": "teranode.bsvblockchain.org/v1alpha1",
+            "kind": "Validator",
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/created-by": "teranode-operator",
+                "app.kubernetes.io/instance": "validator-sample",
+                "app.kubernetes.io/managed-by": "kustomize",
+                "app.kubernetes.io/name": "validator",
+                "app.kubernetes.io/part-of": "teranode-operator"
+              },
+              "name": "validator-sample"
+            },
+            "spec": {
+              "imagePullPolicy": "Always",
+              "resources": {
+                "limits": {
+                  "memory": "2Gi"
+                },
+                "requests": {
+                  "cpu": 1,
+                  "memory": "1Gi"
+                }
+              }
+            }
+          }
+        ]
+      capabilities: Basic Install
+      createdAt: "2025-07-07T18:47:43Z"
+      operators.operatorframework.io/builder: operator-sdk-v1.37.0
+      operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
+    apiServiceDefinitions: {}
+    crdDescriptions:
+      owned:
+      - description: AlertSystem is the Schema for the alertsystems API
+        displayName: Alert System
+        kind: AlertSystem
+        name: alertsystems.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: Asset is the Schema for the assets API
+        displayName: Asset
+        kind: Asset
+        name: assets.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: BlockAssembly is the Schema for the blockassemblies API
+        displayName: Block Assembly
+        kind: BlockAssembly
+        name: blockassemblies.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: Blockchain is the Schema for the blockchains API
+        displayName: Blockchain
+        kind: Blockchain
+        name: blockchains.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: BlockPersister is the Schema for the blockpersisters API
+        displayName: Block Persister
+        kind: BlockPersister
+        name: blockpersisters.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: BlockValidator is the Schema for the blockvalidators API
+        displayName: Block Validator
+        kind: BlockValidator
+        name: blockvalidators.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: Bootstrap is the Schema for the bootstraps API
+        displayName: Bootstrap
+        kind: Bootstrap
+        name: bootstraps.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: Cluster is the Schema for the nodes API
+        displayName: Cluster
+        kind: Cluster
+        name: clusters.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: Coinbase is the Schema for the coinbases API
+        displayName: Coinbase
+        kind: Coinbase
+        name: coinbases.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: Faucet is the Schema for the faucets API
+        displayName: Faucet
+        kind: Faucet
+        name: faucets.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: Legacy is the Schema for the legacies API
+        displayName: Legacy
+        kind: Legacy
+        name: legacies.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: Peer is the Schema for the peers API
+        displayName: Peer
+        kind: Peer
+        name: peers.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: Propagation is the Schema for the propagations API
+        displayName: Propagation
+        kind: Propagation
+        name: propagations.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: RPC is the Schema for the rpcs API
+        displayName: RPC
+        kind: RPC
+        name: rpcs.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: SubtreeValidator is the Schema for the subtreevalidators API
+        displayName: Subtree Validator
+        kind: SubtreeValidator
+        name: subtreevalidators.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: UtxoPersister is the Schema for the utxopersisters API
+        displayName: Utxo Persister
+        kind: UtxoPersister
+        name: utxopersisters.teranode.bsvblockchain.org
+        version: v1alpha1
+      - description: Validator is the Schema for the validators API
+        displayName: Validator
+        kind: Validator
+        name: validators.teranode.bsvblockchain.org
+        version: v1alpha1
+    description: An operator that deploys the teranode services
+    displayName: Teranode Operator
+    installModes:
+    - supported: true
+      type: OwnNamespace
+    - supported: false
+      type: SingleNamespace
+    - supported: false
+      type: MultiNamespace
+    - supported: false
+      type: AllNamespaces
+    keywords:
+    - teranode
+    - blockchain
+    - bsv
+    links:
+    - name: Teranode Operator
+      url: https://teranode-operator.domain
+    maintainers:
+    - email: dylan.murray@bsvblockchain.org
+      name: Dylan Murray
+    maturity: alpha
+    provider:
+      name: BSV Association
+relatedImages:
+- image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.5.1
+  name: ""
+- image: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator:v0.5.1
   name: ""
 - image: gcr.io/kubebuilder/kube-rbac-proxy:v0.15.0
   name: ""
