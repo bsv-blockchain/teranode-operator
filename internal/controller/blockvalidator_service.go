@@ -66,6 +66,12 @@ func defaultBlockValidatorServiceSpec() *corev1.ServiceSpec {
 				TargetPort: intstr.FromInt32(HealthPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
+			{
+				Name:       "profiler",
+				Port:       int32(ProfilerPort),
+				TargetPort: intstr.FromInt32(ProfilerPort),
+				Protocol:   corev1.ProtocolTCP,
+			},
 		},
 	}
 }

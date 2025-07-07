@@ -66,6 +66,12 @@ func defaultAlertSystemServiceSpec() *corev1.ServiceSpec {
 				TargetPort: intstr.FromInt32(AlertWebserverPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
+			{
+				Name:       "profiler",
+				Port:       int32(ProfilerPort),
+				TargetPort: intstr.FromInt32(ProfilerPort),
+				Protocol:   corev1.ProtocolTCP,
+			},
 		},
 	}
 }
