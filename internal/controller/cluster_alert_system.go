@@ -26,7 +26,7 @@ func (r *ClusterReconciler) ReconcileAlertSystem(log logr.Logger) (bool, error) 
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.AlertSystem.Enabled {
+	if !cluster.Spec.AlertSystem.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      alertSystem.Name,
 			Namespace: alertSystem.Namespace,

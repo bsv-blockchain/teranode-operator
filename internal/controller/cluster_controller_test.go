@@ -337,7 +337,7 @@ var _ = Describe("Cluster Controller", func() {
 			})
 			Expect(err).NotTo(HaveOccurred())
 
-			// Verify components were created (checking a subset)
+			// Verify components were created
 			components := []struct {
 				name   string
 				object client.Object
@@ -369,10 +369,8 @@ var _ = Describe("Cluster Controller", func() {
 			err := k8sClient.Get(ctx, typeNamespacedName, cluster)
 			Expect(err).NotTo(HaveOccurred())
 
-			// Enable some components
-			cluster.Spec.Asset.Enabled = true
-			cluster.Spec.BlockAssembly.Enabled = true
-			cluster.Spec.Blockchain.Enabled = true
+			// Enable all components
+			enableAllServices(cluster)
 
 			// Update the cluster
 			Expect(k8sClient.Update(ctx, cluster)).To(Succeed())
@@ -387,24 +385,32 @@ var _ = Describe("Cluster Controller", func() {
 			})
 			Expect(err).NotTo(HaveOccurred())
 
-			// Verify components were created
-			asset := &teranodev1alpha1.Asset{}
-			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      fmt.Sprintf("%s-asset", cluster.Name),
-				Namespace: "default",
-			}, asset)).To(Succeed())
+			// Verify components were created (checking a subset)
+			components := []struct {
+				name   string
+				object client.Object
+			}{
+				{fmt.Sprintf("%s-alert-system", cluster.Name), &teranodev1alpha1.AlertSystem{}},
+				{fmt.Sprintf("%s-asset", cluster.Name), &teranodev1alpha1.Asset{}},
+				{fmt.Sprintf("%s-blockchain", cluster.Name), &teranodev1alpha1.Blockchain{}},
+				{fmt.Sprintf("%s-blockpersister", cluster.Name), &teranodev1alpha1.BlockPersister{}},
+				{fmt.Sprintf("%s-blockvalidator", cluster.Name), &teranodev1alpha1.BlockValidator{}},
+				{fmt.Sprintf("%s-coinbase", cluster.Name), &teranodev1alpha1.Coinbase{}},
+				{fmt.Sprintf("%s-legacy", cluster.Name), &teranodev1alpha1.Legacy{}},
+				{fmt.Sprintf("%s-propagation", cluster.Name), &teranodev1alpha1.Propagation{}},
+				{fmt.Sprintf("%s-subtreevalidator", cluster.Name), &teranodev1alpha1.SubtreeValidator{}},
+				{fmt.Sprintf("%s-utxo-persister", cluster.Name), &teranodev1alpha1.UtxoPersister{}},
+				{fmt.Sprintf("%s-validator", cluster.Name), &teranodev1alpha1.Validator{}},
+				{fmt.Sprintf("%s-peer", cluster.Name), &teranodev1alpha1.Peer{}},
+				{fmt.Sprintf("%s-rpc", cluster.Name), &teranodev1alpha1.RPC{}},
+			}
 
-			blockAssembly := &teranodev1alpha1.BlockAssembly{}
-			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      fmt.Sprintf("%s-blockassembly", cluster.Name),
-				Namespace: "default",
-			}, blockAssembly)).To(Succeed())
-
-			blockchain := &teranodev1alpha1.Blockchain{}
-			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      fmt.Sprintf("%s-blockchain", cluster.Name),
-				Namespace: "default",
-			}, blockchain)).To(Succeed())
+			for _, component := range components {
+				Expect(k8sClient.Get(ctx, types.NamespacedName{
+					Name:      component.name,
+					Namespace: "default",
+				}, component.object)).To(Succeed())
+			}
 
 			// Now disable the cluster
 			fetchedCluster := &teranodev1alpha1.Cluster{}
@@ -419,23 +425,31 @@ var _ = Describe("Cluster Controller", func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			// Verify all components were deleted
-			err = k8sClient.Get(ctx, types.NamespacedName{
-				Name:      fmt.Sprintf("%s-asset", cluster.Name),
-				Namespace: "default",
-			}, asset)
-			Expect(errors.IsNotFound(err)).To(BeTrue(), "Asset should be deleted when cluster is disabled")
-
-			err = k8sClient.Get(ctx, types.NamespacedName{
-				Name:      fmt.Sprintf("%s-blockassembly", cluster.Name),
-				Namespace: "default",
-			}, blockAssembly)
-			Expect(errors.IsNotFound(err)).To(BeTrue(), "BlockAssembly should be deleted when cluster is disabled")
-
-			err = k8sClient.Get(ctx, types.NamespacedName{
-				Name:      fmt.Sprintf("%s-blockchain", cluster.Name),
-				Namespace: "default",
-			}, blockchain)
-			Expect(errors.IsNotFound(err)).To(BeTrue(), "Blockchain should be deleted when cluster is disabled")
+			for _, component := range components {
+				err = k8sClient.Get(ctx, types.NamespacedName{
+					Name:      component.name,
+					Namespace: "default",
+				}, component.object)
+				Expect(errors.IsNotFound(err)).To(BeTrue(), fmt.Sprintf("%s should be deleted when cluster is disabled", component.name))
+			}
 		})
 	})
 })
+
+func enableAllServices(cluster *teranodev1alpha1.Cluster) {
+	cluster.Spec.Asset.Enabled = true
+	cluster.Spec.AlertSystem.Enabled = true
+	cluster.Spec.BlockAssembly.Enabled = true
+	cluster.Spec.Blockchain.Enabled = true
+	cluster.Spec.BlockPersister.Enabled = true
+	cluster.Spec.BlockValidator.Enabled = true
+	cluster.Spec.Bootstrap.Enabled = true
+	cluster.Spec.Coinbase.Enabled = true
+	cluster.Spec.Legacy.Enabled = true
+	cluster.Spec.Peer.Enabled = true
+	cluster.Spec.Propagation.Enabled = true
+	cluster.Spec.RPC.Enabled = true
+	cluster.Spec.SubtreeValidator.Enabled = true
+	cluster.Spec.UtxoPersister.Enabled = true
+	cluster.Spec.Validator.Enabled = true
+}
