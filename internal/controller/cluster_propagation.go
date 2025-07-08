@@ -27,7 +27,7 @@ func (r *ClusterReconciler) ReconcilePropagation(log logr.Logger) (bool, error) 
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.Propagation.Enabled {
+	if !cluster.Spec.Propagation.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      propagation.Name,
 			Namespace: propagation.Namespace,

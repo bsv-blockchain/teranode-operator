@@ -43,6 +43,8 @@ func (r *BlockValidatorReconciler) updateDeployment(dep *appsv1.Deployment, bloc
 	}
 	dep.Spec = *defaultBlockValidatorDeploymentSpec()
 	utils.SetDeploymentOverrides(r.Client, dep, blockValidator)
+	utils.SetClusterOverrides(r.Client, dep, blockValidator)
+
 	return nil
 }
 

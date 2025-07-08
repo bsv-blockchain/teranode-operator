@@ -27,7 +27,7 @@ func (r *ClusterReconciler) ReconcileBlockchain(log logr.Logger) (bool, error) {
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.Blockchain.Enabled {
+	if !cluster.Spec.Blockchain.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      blockchain.Name,
 			Namespace: blockchain.Namespace,

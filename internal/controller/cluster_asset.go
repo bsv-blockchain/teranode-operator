@@ -26,7 +26,7 @@ func (r *ClusterReconciler) ReconcileAsset(log logr.Logger) (bool, error) {
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.Asset.Enabled {
+	if !cluster.Spec.Asset.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      asset.Name,
 			Namespace: asset.Namespace,

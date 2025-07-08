@@ -27,7 +27,7 @@ func (r *ClusterReconciler) ReconcileCoinbase(log logr.Logger) (bool, error) {
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.Coinbase.Enabled {
+	if !cluster.Spec.Coinbase.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      coinbase.Name,
 			Namespace: coinbase.Namespace,

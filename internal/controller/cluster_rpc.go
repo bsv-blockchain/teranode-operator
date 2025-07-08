@@ -27,7 +27,7 @@ func (r *ClusterReconciler) ReconcileRPC(log logr.Logger) (bool, error) {
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.RPC.Enabled {
+	if !cluster.Spec.RPC.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      rpc.Name,
 			Namespace: rpc.Namespace,

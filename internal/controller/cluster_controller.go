@@ -85,6 +85,7 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		r.ReconcilePropagation,
 		r.ReconcileRPC,
 		r.ReconcileSubtreeValidator,
+		r.ReconcileUtxoPersister,
 		r.ReconcileValidator,
 		r.ReconcileNetworkPolicy,
 	)
@@ -132,6 +133,7 @@ func (r *ClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&teranodev1alpha1.Peer{}).
 		Owns(&teranodev1alpha1.Propagation{}).
 		Owns(&teranodev1alpha1.RPC{}).
+		Owns(&teranodev1alpha1.UtxoPersister{}).
 		Owns(&teranodev1alpha1.SubtreeValidator{}).
 		Owns(&teranodev1alpha1.Validator{}).
 		Owns(&networkingv1.NetworkPolicy{}).

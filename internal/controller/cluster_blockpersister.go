@@ -27,7 +27,7 @@ func (r *ClusterReconciler) ReconcileBlockPersister(log logr.Logger) (bool, erro
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.BlockPersister.Enabled {
+	if !cluster.Spec.BlockPersister.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      blockPersister.Name,
 			Namespace: blockPersister.Namespace,

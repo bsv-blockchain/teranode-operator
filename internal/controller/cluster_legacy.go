@@ -27,7 +27,7 @@ func (r *ClusterReconciler) ReconcileLegacy(log logr.Logger) (bool, error) {
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.Legacy.Enabled {
+	if !cluster.Spec.Legacy.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      legacy.Name,
 			Namespace: legacy.Namespace,

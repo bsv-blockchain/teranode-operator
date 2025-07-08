@@ -27,7 +27,7 @@ func (r *ClusterReconciler) ReconcileUtxoPersister(log logr.Logger) (bool, error
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.UtxoPersister.Enabled {
+	if !cluster.Spec.UtxoPersister.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      up.Name,
 			Namespace: up.Namespace,

@@ -43,6 +43,7 @@ func (r *AssetReconciler) updateDeployment(dep *appsv1.Deployment, asset *terano
 	dep.Spec = *defaultAssetDeploymentSpec()
 
 	utils.SetDeploymentOverrides(r.Client, dep, asset)
+	utils.SetClusterOverrides(r.Client, dep, asset)
 
 	return nil
 }

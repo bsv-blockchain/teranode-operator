@@ -19,8 +19,6 @@ package utils
 import (
 	"context"
 
-	"k8s.io/utils/ptr"
-
 	"github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -69,29 +67,6 @@ func SetDeploymentOverrides(client client.Client, dep *appsv1.Deployment, cr v1a
 		dep.Spec.Template.Spec.ServiceAccountName = cr.DeploymentOverrides().ServiceAccount
 	}
 
-	// if parent cluster CR has a configmap or env vars set, append it first
-	clusterOwner := GetClusterOwner(client, context.Background(), cr.Metadata())
-	if clusterOwner != nil {
-		if clusterOwner.Spec.ConfigMapName != "" {
-			dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
-				ConfigMapRef: &corev1.ConfigMapEnvSource{
-					LocalObjectReference: corev1.LocalObjectReference{Name: clusterOwner.Spec.ConfigMapName},
-				},
-			})
-		}
-		if len(clusterOwner.Spec.Env) > 0 {
-			dep.Spec.Template.Spec.Containers[0].Env = append(dep.Spec.Template.Spec.Containers[0].Env, clusterOwner.Spec.Env...)
-		}
-		if len(clusterOwner.Spec.EnvFrom) > 0 {
-			dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, clusterOwner.Spec.EnvFrom...)
-		}
-		if clusterOwner.Spec.Enabled != nil && !*clusterOwner.Spec.Enabled {
-			// If the cluster is disabled, we should not deploy this service so set replicas to 0
-			dep.Spec.Replicas = ptr.To(int32(0))
-			return
-		}
-	}
-
 	// if user configures env vars
 	if len(cr.DeploymentOverrides().Env) > 0 {
 		dep.Spec.Template.Spec.Containers[0].Env = append(dep.Spec.Template.Spec.Containers[0].Env, cr.DeploymentOverrides().Env...)
@@ -123,5 +98,26 @@ func SetDeploymentOverrides(client client.Client, dep *appsv1.Deployment, cr v1a
 
 	if cr.DeploymentOverrides().Strategy != nil {
 		dep.Spec.Strategy = *cr.DeploymentOverrides().Strategy
+	}
+}
+
+func SetClusterOverrides(client client.Client, dep *appsv1.Deployment, cr v1alpha1.TeranodeService) {
+	// if parent cluster CR has a configmap or env vars set, append it first
+	clusterOwner := GetClusterOwner(client, context.Background(), cr.Metadata())
+	if clusterOwner == nil {
+		return
+	}
+	if clusterOwner.Spec.ConfigMapName != "" {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, corev1.EnvFromSource{
+			ConfigMapRef: &corev1.ConfigMapEnvSource{
+				LocalObjectReference: corev1.LocalObjectReference{Name: clusterOwner.Spec.ConfigMapName},
+			},
+		})
+	}
+	if len(clusterOwner.Spec.Env) > 0 {
+		dep.Spec.Template.Spec.Containers[0].Env = append(dep.Spec.Template.Spec.Containers[0].Env, clusterOwner.Spec.Env...)
+	}
+	if len(clusterOwner.Spec.EnvFrom) > 0 {
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, clusterOwner.Spec.EnvFrom...)
 	}
 }

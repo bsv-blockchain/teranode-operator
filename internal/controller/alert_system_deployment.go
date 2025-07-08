@@ -42,6 +42,7 @@ func (r *AlertSystemReconciler) updateDeployment(dep *appsv1.Deployment, alert *
 	}
 	dep.Spec = *defaultAlertSystemDeploymentSpec()
 	utils.SetDeploymentOverrides(r.Client, dep, alert)
+	utils.SetClusterOverrides(r.Client, dep, alert)
 
 	return nil
 }

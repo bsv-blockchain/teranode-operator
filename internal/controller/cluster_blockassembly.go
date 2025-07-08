@@ -27,7 +27,7 @@ func (r *ClusterReconciler) ReconcileBlockAssembly(log logr.Logger) (bool, error
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.BlockAssembly.Enabled {
+	if !cluster.Spec.BlockAssembly.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      blockAssembly.Name,
 			Namespace: blockAssembly.Namespace,

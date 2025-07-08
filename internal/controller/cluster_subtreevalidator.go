@@ -27,7 +27,7 @@ func (r *ClusterReconciler) ReconcileSubtreeValidator(log logr.Logger) (bool, er
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.SubtreeValidator.Enabled {
+	if !cluster.Spec.SubtreeValidator.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      subtreeValidator.Name,
 			Namespace: subtreeValidator.Namespace,

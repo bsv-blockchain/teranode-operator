@@ -27,7 +27,7 @@ func (r *ClusterReconciler) ReconcilePeer(log logr.Logger) (bool, error) {
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.Peer.Enabled {
+	if !cluster.Spec.Peer.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      peer.Name,
 			Namespace: peer.Namespace,

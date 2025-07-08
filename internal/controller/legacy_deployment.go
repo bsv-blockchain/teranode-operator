@@ -42,6 +42,7 @@ func (r *LegacyReconciler) updateDeployment(dep *appsv1.Deployment, legacy *tera
 	}
 	dep.Spec = *defaultLegacyDeploymentSpec()
 	utils.SetDeploymentOverrides(r.Client, dep, legacy)
+	utils.SetClusterOverrides(r.Client, dep, legacy)
 
 	return nil
 }

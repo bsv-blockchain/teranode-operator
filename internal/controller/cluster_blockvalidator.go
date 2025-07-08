@@ -27,7 +27,7 @@ func (r *ClusterReconciler) ReconcileBlockValidator(log logr.Logger) (bool, erro
 	}
 
 	// Delete resource if we are disabling it
-	if !cluster.Spec.BlockValidator.Enabled {
+	if !cluster.Spec.BlockValidator.Enabled || (cluster.Spec.Enabled != nil && !*cluster.Spec.Enabled) {
 		namespacedName := types.NamespacedName{
 			Name:      blockValidator.Name,
 			Namespace: blockValidator.Namespace,
