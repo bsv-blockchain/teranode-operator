@@ -29,9 +29,20 @@ rules:
   - update
   - watch
 - apiGroups:
+  - discovery.k8s.io
+  resources:
+  - endpointslices
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
   - networking.k8s.io
   resources:
   - ingresses
+  - networkpolicies
   verbs:
   - create
   - get
