@@ -20,6 +20,8 @@ import (
 	"context"
 	"time"
 
+	corev1 "k8s.io/api/core/v1"
+
 	networkingv1 "k8s.io/api/networking/v1"
 
 	"github.com/bitcoin-sv/teranode-operator/internal/utils"
@@ -68,6 +70,7 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		r.Log.Error(err, "unable to fetch cluster CR")
 		return result, nil
 	}
+	r.Log.Info("reconciling cluster", "cluster", cluster.Name)
 
 	_, err := utils.ReconcileBatch(r.Log,
 		// r.Validate,
@@ -115,7 +118,7 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	}
 
 	err = r.Client.Status().Update(ctx, &cluster)
-	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
+	return ctrl.Result{RequeueAfter: 1 * time.Minute}, err
 }
 
 // SetupWithManager sets up the controller with the Manager.
@@ -136,6 +139,7 @@ func (r *ClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&teranodev1alpha1.UtxoPersister{}).
 		Owns(&teranodev1alpha1.SubtreeValidator{}).
 		Owns(&teranodev1alpha1.Validator{}).
+		Owns(&corev1.PersistentVolumeClaim{}).
 		Owns(&networkingv1.NetworkPolicy{}).
 		Complete(r)
 }

@@ -112,6 +112,8 @@ func main() {
 		defaultNamespaces[ns] = cache.Config{}
 	}
 
+	setupLog.Info("watching namespaces", "namespaces", watchNamespaces)
+
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme: scheme,
 		Metrics: metricsserver.Options{
