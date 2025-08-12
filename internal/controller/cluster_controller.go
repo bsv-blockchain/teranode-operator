@@ -91,6 +91,7 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		r.ReconcileUtxoPersister,
 		r.ReconcileValidator,
 		r.ReconcileNetworkPolicy,
+		r.ReconcileAdditionalIngresses,
 	)
 	if err != nil {
 		apimeta.SetStatusCondition(&cluster.Status.Conditions,
@@ -141,5 +142,6 @@ func (r *ClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&teranodev1alpha1.Validator{}).
 		Owns(&corev1.PersistentVolumeClaim{}).
 		Owns(&networkingv1.NetworkPolicy{}).
+		Owns(&networkingv1.Ingress{}).
 		Complete(r)
 }

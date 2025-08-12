@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	corev1 "k8s.io/api/core/v1"
+	v1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -135,7 +136,8 @@ type ClusterSpec struct {
 	Image         string                 `json:"image,omitempty"`
 	Enabled       *bool                  `json:"enabled,omitempty"`
 
-	SharedStorage StorageConfig `json:"sharedStorage"`
+	SharedStorage       StorageConfig    `json:"sharedStorage"`
+	AdditionalIngresses []v1.IngressSpec `json:"additionalIngresses,omitempty"`
 }
 
 type StorageConfig struct {
