@@ -21,6 +21,7 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
@@ -51,14 +52,13 @@ var _ = Describe("Peer Controller", func() {
 						Name:      resourceName,
 						Namespace: "default",
 					},
-					// TODO(user): Specify other spec details if needed.
+					Spec: teranodev1alpha1.PeerSpec{},
 				}
 				Expect(k8sClient.Create(ctx, resource)).To(Succeed())
 			}
 		})
 
 		AfterEach(func() {
-			// TODO(user): Cleanup logic after each test, like removing the resource instance.
 			resource := &teranodev1alpha1.Peer{}
 			err := k8sClient.Get(ctx, typeNamespacedName, resource)
 			Expect(err).NotTo(HaveOccurred())
@@ -77,8 +77,16 @@ var _ = Describe("Peer Controller", func() {
 				NamespacedName: typeNamespacedName,
 			})
 			Expect(err).NotTo(HaveOccurred())
-			// TODO(user): Add more specific assertions depending on your controller's reconciliation logic.
-			// Example: If you expect a certain status condition after reconciliation, verify it here.
+
+			fetchedDeployment := &appsv1.Deployment{}
+			Expect(k8sClient.Get(ctx, types.NamespacedName{
+				Name:      "peer",
+				Namespace: "default",
+			}, fetchedDeployment)).To(Succeed())
+			Expect(len(fetchedDeployment.Spec.Template.Spec.Containers)).To(Equal(1))
+			Expect(len(fetchedDeployment.Spec.Template.Spec.Containers[0].VolumeMounts)).To(Equal(1))
+			Expect(fetchedDeployment.Spec.Template.Spec.Containers[0].VolumeMounts[0].MountPath).To(Equal("/data"))
+			Expect(fetchedDeployment.Spec.Template.Spec.Containers[0].VolumeMounts[0].Name).To(Equal(SharedPVCName))
 		})
 	})
 })
