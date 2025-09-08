@@ -66,6 +66,9 @@ func (r *ClusterReconciler) updateAsset(asset *teranodev1alpha1.Asset, cluster *
 	if cluster.Spec.Image != "" && asset.Spec.DeploymentOverrides.Image == "" {
 		asset.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
+	if cluster.Spec.ImagePullSecrets != nil {
+		asset.Spec.DeploymentOverrides.ImagePullSecrets = cluster.Spec.ImagePullSecrets
+	}
 
 	return nil
 }

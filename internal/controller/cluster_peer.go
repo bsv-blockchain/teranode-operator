@@ -67,6 +67,9 @@ func (r *ClusterReconciler) updatePeer(peer *teranodev1alpha1.Peer, cluster *ter
 	if cluster.Spec.Image != "" && peer.Spec.DeploymentOverrides.Image == "" {
 		peer.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
+	if cluster.Spec.ImagePullSecrets != nil {
+		peer.Spec.DeploymentOverrides.ImagePullSecrets = cluster.Spec.ImagePullSecrets
+	}
 
 	return nil
 }

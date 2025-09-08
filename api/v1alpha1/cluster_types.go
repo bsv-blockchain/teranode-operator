@@ -130,11 +130,12 @@ type ClusterSpec struct {
 	UtxoPersister    UtxoPersisterConfig    `json:"utxoPersister"`
 	Validator        ValidatorConfig        `json:"validator"`
 
-	ConfigMapName string                 `json:"configMapName"`
-	Env           []corev1.EnvVar        `json:"env,omitempty"`
-	EnvFrom       []corev1.EnvFromSource `json:"envFrom,omitempty"`
-	Image         string                 `json:"image,omitempty"`
-	Enabled       *bool                  `json:"enabled,omitempty"`
+	ConfigMapName    string                         `json:"configMapName"`
+	Env              []corev1.EnvVar                `json:"env,omitempty"`
+	EnvFrom          []corev1.EnvFromSource         `json:"envFrom,omitempty"`
+	Image            string                         `json:"image,omitempty"`
+	Enabled          *bool                          `json:"enabled,omitempty"`
+	ImagePullSecrets *[]corev1.LocalObjectReference `json:"imagePullSecrets,omitempty"`
 
 	SharedStorage       StorageConfig    `json:"sharedStorage"`
 	AdditionalIngresses []v1.IngressSpec `json:"additionalIngresses,omitempty"`

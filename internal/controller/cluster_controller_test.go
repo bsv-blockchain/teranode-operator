@@ -22,6 +22,7 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -366,6 +367,69 @@ var _ = Describe("Cluster Controller", func() {
 				}, component.object)).To(Succeed(), "Component %s should exist", component.name)
 			}
 		})
+
+		It("should append custom pull secrets when specified", func() {
+			cluster := &teranodev1alpha1.Cluster{}
+			err := k8sClient.Get(ctx, typeNamespacedName, cluster)
+			Expect(err).NotTo(HaveOccurred())
+
+			// Define custom pull secrets
+			customSecrets := []v1.LocalObjectReference{
+				{Name: "custom-secret-1"},
+				{Name: "custom-secret-2"},
+			}
+			cluster.Spec.ImagePullSecrets = &customSecrets
+
+			// Enable all components
+			enableAllServices(cluster)
+
+			// Update the cluster
+			Expect(k8sClient.Update(ctx, cluster)).To(Succeed())
+
+			// Reconcile
+			controllerReconciler := &ClusterReconciler{
+				Client: k8sClient,
+				Scheme: k8sClient.Scheme(),
+			}
+
+			_, err = controllerReconciler.Reconcile(ctx, reconcile.Request{
+				NamespacedName: typeNamespacedName,
+			})
+			Expect(err).NotTo(HaveOccurred())
+
+			// Verify pull secrets were applied to a component (e.g., Asset)
+			asset := &teranodev1alpha1.Asset{}
+			Expect(k8sClient.Get(ctx, types.NamespacedName{
+				Name:      fmt.Sprintf("%s-asset", cluster.Name),
+				Namespace: "default",
+			}, asset)).To(Succeed())
+			Expect(asset.Spec.DeploymentOverrides.ImagePullSecrets).NotTo(BeNil())
+			Expect(*asset.Spec.DeploymentOverrides.ImagePullSecrets).To(ContainElements(customSecrets))
+
+			// Reconcile asset
+			assetReconciler := &AssetReconciler{
+				Client: k8sClient,
+				Scheme: k8sClient.Scheme(),
+			}
+
+			_, err = assetReconciler.Reconcile(ctx, reconcile.Request{
+				NamespacedName: types.NamespacedName{
+					Name:      fmt.Sprintf("%s-asset", cluster.Name),
+					Namespace: "default",
+				},
+			})
+			Expect(err).NotTo(HaveOccurred())
+
+			// fetch asset deployment to verify pull secrets are set there too
+			dep := &appsv1.Deployment{}
+			Expect(k8sClient.Get(ctx, types.NamespacedName{
+				Name:      "asset",
+				Namespace: "default",
+			}, dep)).To(Succeed())
+			Expect(dep.Spec.Template.Spec.ImagePullSecrets).To(ContainElements(customSecrets))
+
+		})
+
 		It("should disable all services when cluster is disabled", func() {
 			cluster := &teranodev1alpha1.Cluster{}
 			err := k8sClient.Get(ctx, typeNamespacedName, cluster)
@@ -983,7 +1047,7 @@ var _ = Describe("Cluster Controller", func() {
 										{
 											Path:     "/invalid",
 											PathType: ptr.To(networkingv1.PathTypePrefix),
-											Backend:  networkingv1.IngressBackend{
+											Backend: networkingv1.IngressBackend{
 												// Invalid: both Service and Resource are nil
 											},
 										},

@@ -67,6 +67,9 @@ func (r *ClusterReconciler) updateRPC(rpc *teranodev1alpha1.RPC, cluster *terano
 	if cluster.Spec.Image != "" && rpc.Spec.DeploymentOverrides.Image == "" {
 		rpc.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
+	if cluster.Spec.ImagePullSecrets != nil {
+		rpc.Spec.DeploymentOverrides.ImagePullSecrets = cluster.Spec.ImagePullSecrets
+	}
 
 	return nil
 }

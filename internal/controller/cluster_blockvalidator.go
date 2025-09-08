@@ -67,6 +67,9 @@ func (r *ClusterReconciler) updateBlockValidator(blockValidator *teranodev1alpha
 	if cluster.Spec.Image != "" && blockValidator.Spec.DeploymentOverrides.Image == "" {
 		blockValidator.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
+	if cluster.Spec.ImagePullSecrets != nil {
+		blockValidator.Spec.DeploymentOverrides.ImagePullSecrets = cluster.Spec.ImagePullSecrets
+	}
 
 	return nil
 }

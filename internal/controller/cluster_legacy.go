@@ -67,6 +67,9 @@ func (r *ClusterReconciler) updateLegacy(legacy *teranodev1alpha1.Legacy, cluste
 	if cluster.Spec.Image != "" && legacy.Spec.DeploymentOverrides.Image == "" {
 		legacy.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
+	if cluster.Spec.ImagePullSecrets != nil {
+		legacy.Spec.DeploymentOverrides.ImagePullSecrets = cluster.Spec.ImagePullSecrets
+	}
 
 	return nil
 }

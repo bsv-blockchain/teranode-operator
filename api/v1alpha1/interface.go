@@ -17,21 +17,22 @@ type TeranodeService interface {
 
 // DeploymentOverrides defines all the overrides for the deployment of each service
 type DeploymentOverrides struct {
-	NodeSelector       map[string]string            `json:"nodeSelector,omitempty"`
-	Tolerations        *[]corev1.Toleration         `json:"tolerations,omitempty"`
-	Taints             *[]corev1.Taint              `json:"taints,omitempty"`
-	Affinity           *corev1.Affinity             `json:"affinity,omitempty"`
-	PodAntiAffinity    *corev1.PodAntiAffinity      `json:"podAntiAffinity,omitempty"`
-	Resources          *corev1.ResourceRequirements `json:"resources,omitempty"`
-	Image              string                       `json:"image,omitempty"`
-	ImagePullPolicy    corev1.PullPolicy            `json:"imagePullPolicy,omitempty"`
-	ServiceAccount     string                       `json:"serviceAccount,omitempty"`
-	ConfigMapName      string                       `json:"configMapName,omitempty"`
-	ServiceAnnotations map[string]string            `json:"serviceAnnotations,omitempty"`
-	Replicas           *int32                       `json:"replicas,omitempty"`
-	Command            []string                     `json:"command,omitempty"`
-	Args               []string                     `json:"args,omitempty"`
-	Strategy           *v1.DeploymentStrategy       `json:"strategy,omitempty"`
-	Env                []corev1.EnvVar              `json:"env,omitempty"`
-	EnvFrom            []corev1.EnvFromSource       `json:"envFrom,omitempty"`
+	NodeSelector       map[string]string              `json:"nodeSelector,omitempty"`
+	Tolerations        *[]corev1.Toleration           `json:"tolerations,omitempty"`
+	Taints             *[]corev1.Taint                `json:"taints,omitempty"`
+	Affinity           *corev1.Affinity               `json:"affinity,omitempty"`
+	PodAntiAffinity    *corev1.PodAntiAffinity        `json:"podAntiAffinity,omitempty"`
+	Resources          *corev1.ResourceRequirements   `json:"resources,omitempty"`
+	Image              string                         `json:"image,omitempty"`
+	ImagePullPolicy    corev1.PullPolicy              `json:"imagePullPolicy,omitempty"`
+	ImagePullSecrets   *[]corev1.LocalObjectReference `json:"imagePullSecrets,omitempty"`
+	ServiceAccount     string                         `json:"serviceAccount,omitempty"`
+	ConfigMapName      string                         `json:"configMapName,omitempty"`
+	ServiceAnnotations map[string]string              `json:"serviceAnnotations,omitempty"`
+	Replicas           *int32                         `json:"replicas,omitempty"`
+	Command            []string                       `json:"command,omitempty"`
+	Args               []string                       `json:"args,omitempty"`
+	Strategy           *v1.DeploymentStrategy         `json:"strategy,omitempty"`
+	Env                []corev1.EnvVar                `json:"env,omitempty"`
+	EnvFrom            []corev1.EnvFromSource         `json:"envFrom,omitempty"`
 }

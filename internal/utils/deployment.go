@@ -99,6 +99,13 @@ func SetDeploymentOverrides(client client.Client, dep *appsv1.Deployment, cr v1a
 	if cr.DeploymentOverrides().Strategy != nil {
 		dep.Spec.Strategy = *cr.DeploymentOverrides().Strategy
 	}
+
+	if cr.DeploymentOverrides().ImagePullSecrets != nil {
+		if dep.Spec.Template.Spec.ImagePullSecrets == nil {
+			dep.Spec.Template.Spec.ImagePullSecrets = []corev1.LocalObjectReference{}
+		}
+		dep.Spec.Template.Spec.ImagePullSecrets = append(dep.Spec.Template.Spec.ImagePullSecrets, *cr.DeploymentOverrides().ImagePullSecrets...)
+	}
 }
 
 func SetClusterOverrides(client client.Client, dep *appsv1.Deployment, cr v1alpha1.TeranodeService) {
@@ -119,5 +126,11 @@ func SetClusterOverrides(client client.Client, dep *appsv1.Deployment, cr v1alph
 	}
 	if len(clusterOwner.Spec.EnvFrom) > 0 {
 		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, clusterOwner.Spec.EnvFrom...)
+	}
+	if clusterOwner.Spec.ImagePullSecrets != nil {
+		if dep.Spec.Template.Spec.ImagePullSecrets == nil {
+			dep.Spec.Template.Spec.ImagePullSecrets = []corev1.LocalObjectReference{}
+		}
+		dep.Spec.Template.Spec.ImagePullSecrets = append(dep.Spec.Template.Spec.ImagePullSecrets, *clusterOwner.Spec.ImagePullSecrets...)
 	}
 }
