@@ -62,17 +62,7 @@ func defaultBlockchainDeploymentSpec() *appsv1.DeploymentSpec {
 		Replicas: ptr.To(int32(1)),
 		Selector: metav1.SetAsLabelSelector(podLabels),
 		Strategy: appsv1.DeploymentStrategy{
-			Type: appsv1.RollingUpdateDeploymentStrategyType,
-			RollingUpdate: &appsv1.RollingUpdateDeployment{
-				MaxUnavailable: &intstr.IntOrString{
-					Type:   intstr.Int,
-					IntVal: 0,
-				},
-				MaxSurge: &intstr.IntOrString{
-					Type:   intstr.Int,
-					IntVal: 1,
-				},
-			},
+			Type: appsv1.RecreateDeploymentStrategyType,
 		},
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
