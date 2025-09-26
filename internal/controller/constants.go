@@ -31,6 +31,7 @@ const BlockValidationHTTPPort = 8188
 const BootstrapGRPCPort = 8089
 const BootstrapHTTPPort = 8099
 const CoinbaseGRPCPort = 8093
+const CoinbaseHTTPPort = 8094
 const CoinbaseP2PPort = 9907
 const MinerHTTPPort = 8092
 const PeerPort = 9905

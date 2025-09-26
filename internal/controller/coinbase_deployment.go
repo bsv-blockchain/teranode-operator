@@ -99,7 +99,7 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health/readiness",
-									Port: intstr.FromInt32(HealthPort),
+									Port: intstr.FromInt32(CoinbaseHTTPPort),
 								},
 							},
 							InitialDelaySeconds: 1,
@@ -111,7 +111,7 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health/liveness",
-									Port: intstr.FromInt32(HealthPort),
+									Port: intstr.FromInt32(CoinbaseHTTPPort),
 								},
 							},
 							InitialDelaySeconds: 1,
@@ -123,7 +123,7 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
 									Path: "/health/readiness",
-									Port: intstr.FromInt32(HealthPort),
+									Port: intstr.FromInt32(CoinbaseHTTPPort),
 								},
 							},
 							FailureThreshold: 30,
@@ -136,6 +136,10 @@ func defaultCoinbaseDeploymentSpec() *appsv1.DeploymentSpec {
 							},
 							{
 								ContainerPort: CoinbaseGRPCPort,
+								Protocol:      corev1.ProtocolTCP,
+							},
+							{
+								ContainerPort: CoinbaseHTTPPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
