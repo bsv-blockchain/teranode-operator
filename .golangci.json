@@ -38,13 +38,15 @@
         }
     },
     "issues": {
-        "uniq-by-line": true,
         "exclude-rules": [
             {
-                "text": "replacement are not allowed.*github.com/libsv/go-bt",
-                "linters": ["gomoddirectives"]
+                "linters": [
+                    "gomoddirectives"
+                ],
+                "text": "replacement are not allowed.*github.com/libsv/go-bt"
             }
-        ]
+        ],
+        "uniq-by-line": true
     },
     "linters": {
         "disable": [
