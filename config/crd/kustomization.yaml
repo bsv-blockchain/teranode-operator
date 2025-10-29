@@ -2,23 +2,23 @@
 # since it depends on service name and namespace that are out of this kustomize package.
 # It should be run by config/default
 resources:
-- bases/teranode.bsvblockchain.org_assets.yaml
-- bases/teranode.bsvblockchain.org_clusters.yaml
-- bases/teranode.bsvblockchain.org_blockchains.yaml
-- bases/teranode.bsvblockchain.org_peers.yaml
-- bases/teranode.bsvblockchain.org_subtreevalidators.yaml
-- bases/teranode.bsvblockchain.org_faucets.yaml
-- bases/teranode.bsvblockchain.org_propagations.yaml
-- bases/teranode.bsvblockchain.org_blockpersisters.yaml
-- bases/teranode.bsvblockchain.org_validators.yaml
-- bases/teranode.bsvblockchain.org_coinbases.yaml
-- bases/teranode.bsvblockchain.org_bootstraps.yaml
-- bases/teranode.bsvblockchain.org_blockassemblies.yaml
-- bases/teranode.bsvblockchain.org_blockvalidators.yaml
-- bases/teranode.bsvblockchain.org_legacies.yaml
-- bases/teranode.bsvblockchain.org_utxopersisters.yaml
-- bases/teranode.bsvblockchain.org_rpcs.yaml
-- bases/teranode.bsvblockchain.org_alertsystems.yaml
+  - bases/teranode.bsvblockchain.org_assets.yaml
+  - bases/teranode.bsvblockchain.org_clusters.yaml
+  - bases/teranode.bsvblockchain.org_blockchains.yaml
+  - bases/teranode.bsvblockchain.org_peers.yaml
+  - bases/teranode.bsvblockchain.org_subtreevalidators.yaml
+  - bases/teranode.bsvblockchain.org_faucets.yaml
+  - bases/teranode.bsvblockchain.org_propagations.yaml
+  - bases/teranode.bsvblockchain.org_blockpersisters.yaml
+  - bases/teranode.bsvblockchain.org_validators.yaml
+  - bases/teranode.bsvblockchain.org_coinbases.yaml
+  - bases/teranode.bsvblockchain.org_bootstraps.yaml
+  - bases/teranode.bsvblockchain.org_blockassemblies.yaml
+  - bases/teranode.bsvblockchain.org_blockvalidators.yaml
+  - bases/teranode.bsvblockchain.org_legacies.yaml
+  - bases/teranode.bsvblockchain.org_utxopersisters.yaml
+  - bases/teranode.bsvblockchain.org_rpcs.yaml
+  - bases/teranode.bsvblockchain.org_alertsystems.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
 
 patches:

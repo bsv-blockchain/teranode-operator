@@ -11,17 +11,17 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: subtreevalidator-viewer-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - subtreevalidators
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - subtreevalidators/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - subtreevalidators
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - subtreevalidators/status
+    verbs:
+      - get

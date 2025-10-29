@@ -7,17 +7,17 @@ metadata:
     app.kubernetes.io/name: teranode-operator
   name: teranode-operator-alertsystem-viewer-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems/status
+    verbs:
+      - get

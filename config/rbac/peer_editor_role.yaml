@@ -11,21 +11,21 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: peer-editor-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - peers
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - peers/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - peers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - peers/status
+    verbs:
+      - get

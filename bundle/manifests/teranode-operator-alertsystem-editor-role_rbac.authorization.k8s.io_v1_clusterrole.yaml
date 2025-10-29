@@ -7,21 +7,21 @@ metadata:
     app.kubernetes.io/name: teranode-operator
   name: teranode-operator-alertsystem-editor-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems/status
+    verbs:
+      - get

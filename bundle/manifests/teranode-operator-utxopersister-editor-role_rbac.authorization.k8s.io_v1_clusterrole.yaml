@@ -7,21 +7,21 @@ metadata:
     app.kubernetes.io/name: teranode-operator
   name: teranode-operator-utxopersister-editor-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - utxopersisters
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - utxopersisters/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - utxopersisters
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - utxopersisters/status
+    verbs:
+      - get

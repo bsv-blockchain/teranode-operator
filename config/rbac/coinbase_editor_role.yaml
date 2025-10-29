@@ -11,21 +11,21 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: coinbase-editor-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - coinbases
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - coinbases/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - coinbases
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - coinbases/status
+    verbs:
+      - get

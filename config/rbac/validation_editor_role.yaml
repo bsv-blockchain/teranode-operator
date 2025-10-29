@@ -11,21 +11,21 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: validator-editor-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - validators
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - validators/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - validators
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - validators/status
+    verbs:
+      - get

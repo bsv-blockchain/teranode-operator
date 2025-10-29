@@ -4,4 +4,4 @@ metadata:
   name: bsva-group
 spec:
   targetNamespaces:
-  - teranode-operator
+    - teranode-operator

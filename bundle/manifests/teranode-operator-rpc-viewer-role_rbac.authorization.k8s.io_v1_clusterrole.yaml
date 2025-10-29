@@ -7,17 +7,17 @@ metadata:
     app.kubernetes.io/name: teranode-operator
   name: teranode-operator-rpc-viewer-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - rpcs
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - rpcs/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - rpcs
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - rpcs/status
+    verbs:
+      - get

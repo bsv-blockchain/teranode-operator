@@ -1,4 +1,3 @@
----
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -30,37 +29,37 @@ metadata:
     app.kubernetes.io/part-of: teranode-operator
   name: leader-election-role
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - update
-  - patch
-  - delete
-- apiGroups:
-  - coordination.k8s.io
-  resources:
-  - leases
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - update
-  - patch
-  - delete
-- apiGroups:
-  - ""
-  resources:
-  - events
-  verbs:
-  - create
-  - patch
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -68,26 +67,26 @@ metadata:
   creationTimestamp: null
   name: sr-role
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - persistentvolumeclaims
-  - deployments
-  - configmaps
-  - secrets
-  - endpoints
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - discovery.k8s.io
-  resources:
-  - endpointslices
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - ""
+    resources:
+      - persistentvolumeclaims
+      - deployments
+      - configmaps
+      - secrets
+      - endpoints
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - get
+      - list
+      - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -97,24 +96,24 @@ metadata:
     app.kubernetes.io/name: teranode-operator
   name: alertsystem-editor-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems/status
+    verbs:
+      - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -124,145 +123,145 @@ metadata:
     app.kubernetes.io/name: teranode-operator
   name: alertsystem-viewer-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems/status
+    verbs:
+      - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: manager-role
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  - endpoints
-  - persistentvolumeclaims
-  - secrets
-  - services
-  verbs:
-  - create
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - apps
-  resources:
-  - deployments
-  verbs:
-  - create
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - discovery.k8s.io
-  resources:
-  - endpointslices
-  verbs:
-  - create
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - networking.k8s.io
-  resources:
-  - ingresses
-  - networkpolicies
-  verbs:
-  - create
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems
-  - assets
-  - blockassemblies
-  - blockchains
-  - blockpersisters
-  - blockvalidators
-  - bootstraps
-  - clusters
-  - coinbases
-  - faucets
-  - legacies
-  - peers
-  - propagations
-  - rpcs
-  - subtreevalidators
-  - utxopersisters
-  - validators
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems/finalizers
-  - assets/finalizers
-  - blockassemblies/finalizers
-  - blockchains/finalizers
-  - blockpersisters/finalizers
-  - blockvalidators/finalizers
-  - bootstraps/finalizers
-  - clusters/finalizers
-  - coinbases/finalizers
-  - faucets/finalizers
-  - legacies/finalizers
-  - peers/finalizers
-  - propagations/finalizers
-  - rpcs/finalizers
-  - subtreevalidators/finalizers
-  - utxopersisters/finalizers
-  - validators/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems/status
-  - assets/status
-  - blockassemblies/status
-  - blockchains/status
-  - blockpersisters/status
-  - blockvalidators/status
-  - bootstraps/status
-  - clusters/status
-  - coinbases/status
-  - faucets/status
-  - legacies/status
-  - peers/status
-  - propagations/status
-  - rpcs/status
-  - subtreevalidators/status
-  - utxopersisters/status
-  - validators/status
-  verbs:
-  - get
-  - patch
-  - update
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - endpoints
+      - persistentvolumeclaims
+      - secrets
+      - services
+    verbs:
+      - create
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - create
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - create
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+      - networkpolicies
+    verbs:
+      - create
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems
+      - assets
+      - blockassemblies
+      - blockchains
+      - blockpersisters
+      - blockvalidators
+      - bootstraps
+      - clusters
+      - coinbases
+      - faucets
+      - legacies
+      - peers
+      - propagations
+      - rpcs
+      - subtreevalidators
+      - utxopersisters
+      - validators
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems/finalizers
+      - assets/finalizers
+      - blockassemblies/finalizers
+      - blockchains/finalizers
+      - blockpersisters/finalizers
+      - blockvalidators/finalizers
+      - bootstraps/finalizers
+      - clusters/finalizers
+      - coinbases/finalizers
+      - faucets/finalizers
+      - legacies/finalizers
+      - peers/finalizers
+      - propagations/finalizers
+      - rpcs/finalizers
+      - subtreevalidators/finalizers
+      - utxopersisters/finalizers
+      - validators/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems/status
+      - assets/status
+      - blockassemblies/status
+      - blockchains/status
+      - blockpersisters/status
+      - blockvalidators/status
+      - bootstraps/status
+      - clusters/status
+      - coinbases/status
+      - faucets/status
+      - legacies/status
+      - peers/status
+      - propagations/status
+      - rpcs/status
+      - subtreevalidators/status
+      - utxopersisters/status
+      - validators/status
+    verbs:
+      - get
+      - patch
+      - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -276,10 +275,10 @@ metadata:
     app.kubernetes.io/part-of: teranode-operator
   name: metrics-reader
 rules:
-- nonResourceURLs:
-  - /metrics
-  verbs:
-  - get
+  - nonResourceURLs:
+      - /metrics
+    verbs:
+      - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -293,18 +292,18 @@ metadata:
     app.kubernetes.io/part-of: teranode-operator
   name: proxy-role
 rules:
-- apiGroups:
-  - authentication.k8s.io
-  resources:
-  - tokenreviews
-  verbs:
-  - create
-- apiGroups:
-  - authorization.k8s.io
-  resources:
-  - subjectaccessreviews
-  verbs:
-  - create
+  - apiGroups:
+      - authentication.k8s.io
+    resources:
+      - tokenreviews
+    verbs:
+      - create
+  - apiGroups:
+      - authorization.k8s.io
+    resources:
+      - subjectaccessreviews
+    verbs:
+      - create
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -314,24 +313,24 @@ metadata:
     app.kubernetes.io/name: teranode-operator
   name: rpc-editor-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - rpcs
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - rpcs/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - rpcs
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - rpcs/status
+    verbs:
+      - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -341,20 +340,20 @@ metadata:
     app.kubernetes.io/name: teranode-operator
   name: rpc-viewer-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - rpcs
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - rpcs/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - rpcs
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - rpcs/status
+    verbs:
+      - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -372,9 +371,9 @@ roleRef:
   kind: Role
   name: leader-election-role
 subjects:
-- kind: ServiceAccount
-  name: controller-manager
-  namespace: system
+  - kind: ServiceAccount
+    name: controller-manager
+    namespace: system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -385,9 +384,9 @@ roleRef:
   kind: Role
   name: sr-role
 subjects:
-- kind: ServiceAccount
-  name: service-runner
-  namespace: system
+  - kind: ServiceAccount
+    name: service-runner
+    namespace: system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -405,9 +404,9 @@ roleRef:
   kind: ClusterRole
   name: manager-role
 subjects:
-- kind: ServiceAccount
-  name: controller-manager
-  namespace: system
+  - kind: ServiceAccount
+    name: controller-manager
+    namespace: system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -425,9 +424,9 @@ roleRef:
   kind: ClusterRole
   name: proxy-role
 subjects:
-- kind: ServiceAccount
-  name: controller-manager
-  namespace: system
+  - kind: ServiceAccount
+    name: controller-manager
+    namespace: system
 ---
 apiVersion: v1
 kind: Service
@@ -444,9 +443,9 @@ metadata:
   namespace: system
 spec:
   ports:
-  - name: https
-    port: 8443
-    protocol: TCP
-    targetPort: https
+    - name: https
+      port: 8443
+      protocol: TCP
+      targetPort: https
   selector:
     control-plane: controller-manager

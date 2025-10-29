@@ -11,17 +11,17 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: blockassembly-viewer-role
 rules:
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - blockassemblies
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - blockassemblies/status
-  verbs:
-  - get
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - blockassemblies
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - blockassemblies/status
+    verbs:
+      - get

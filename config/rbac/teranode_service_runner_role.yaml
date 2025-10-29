@@ -4,23 +4,23 @@ metadata:
   creationTimestamp: null
   name: sr-role
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - persistentvolumeclaims
-  - deployments
-  - configmaps
-  - secrets
-  - endpoints
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - "discovery.k8s.io"
-  resources:
-  - endpointslices
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - ""
+    resources:
+      - persistentvolumeclaims
+      - deployments
+      - configmaps
+      - secrets
+      - endpoints
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - "discovery.k8s.io"
+    resources:
+      - endpointslices
+    verbs:
+      - get
+      - list
+      - watch
