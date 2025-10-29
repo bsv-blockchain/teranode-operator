@@ -17,6 +17,8 @@ limitations under the License.
 package e2e
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"os/exec"
 	"time"
@@ -28,6 +30,13 @@ import (
 )
 
 const namespace = "teranode-operator-system"
+
+var (
+	// ErrUnexpectedPodCount is returned when the number of controller pods is not as expected
+	ErrUnexpectedPodCount = errors.New("unexpected number of controller pods")
+	// ErrPodNotRunning is returned when the controller pod is not in Running status
+	ErrPodNotRunning = errors.New("controller pod not in Running status")
+)
 
 var _ = Describe("controller", Ordered, func() {
 	BeforeAll(func() {
@@ -63,7 +72,7 @@ var _ = Describe("controller", Ordered, func() {
 			projectimage := "example.com/teranode-operator:v0.0.1"
 
 			By("building the manager(Operator) image")
-			cmd := exec.Command("make", "docker-build", fmt.Sprintf("IMG=%s", projectimage))
+			cmd := exec.Command("make", "docker-build", fmt.Sprintf("IMG=%s", projectimage)) //nolint:gosec // G204: Controlled command in test environment
 			_, err = utils.Run(cmd)
 			ExpectWithOffset(1, err).NotTo(HaveOccurred())
 
@@ -77,7 +86,7 @@ var _ = Describe("controller", Ordered, func() {
 			ExpectWithOffset(1, err).NotTo(HaveOccurred())
 
 			By("deploying the controller-manager")
-			cmd = exec.Command("make", "deploy", fmt.Sprintf("IMG=%s", projectimage))
+			cmd = exec.Command("make", "deploy", fmt.Sprintf("IMG=%s", projectimage)) //nolint:gosec // G204: Controlled command in test environment
 			_, err = utils.Run(cmd)
 			ExpectWithOffset(1, err).NotTo(HaveOccurred())
 
@@ -85,7 +94,7 @@ var _ = Describe("controller", Ordered, func() {
 			verifyControllerUp := func() error {
 				// Get pod name
 
-				cmd = exec.Command("kubectl", "get",
+				cmd = exec.CommandContext(context.Background(), "kubectl", "get",
 					"pods", "-l", "control-plane=controller-manager",
 					"-o", "go-template={{ range .items }}"+
 						"{{ if not .metadata.deletionTimestamp }}"+
@@ -98,20 +107,21 @@ var _ = Describe("controller", Ordered, func() {
 				ExpectWithOffset(2, err).NotTo(HaveOccurred())
 				podNames := utils.GetNonEmptyLines(string(podOutput))
 				if len(podNames) != 1 {
-					return fmt.Errorf("expect 1 controller pods running, but got %d", len(podNames))
+					return fmt.Errorf("expect 1 controller pods running, but got %d: %w", len(podNames), ErrUnexpectedPodCount)
 				}
 				controllerPodName = podNames[0]
 				ExpectWithOffset(2, controllerPodName).Should(ContainSubstring("controller-manager"))
 
 				// Validate pod status
-				cmd = exec.Command("kubectl", "get",
+				//nolint:gosec // G204: Controlled variables in test environment
+				cmd = exec.CommandContext(context.Background(), "kubectl", "get",
 					"pods", controllerPodName, "-o", "jsonpath={.status.phase}",
 					"-n", namespace,
 				)
 				status, err := utils.Run(cmd)
 				ExpectWithOffset(2, err).NotTo(HaveOccurred())
 				if string(status) != "Running" {
-					return fmt.Errorf("controller pod in %s status", status)
+					return fmt.Errorf("controller pod in %s status: %w", status, ErrPodNotRunning)
 				}
 				return nil
 			}
