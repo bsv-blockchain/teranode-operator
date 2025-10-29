@@ -60,6 +60,7 @@ type Blockchain struct {
 func (bl *Blockchain) DeploymentOverrides() *DeploymentOverrides {
 	return bl.Spec.DeploymentOverrides
 }
+
 func (bl *Blockchain) Metadata() metav1.ObjectMeta {
 	return bl.ObjectMeta
 }

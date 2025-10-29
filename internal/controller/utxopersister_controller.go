@@ -18,7 +18,6 @@ package controller
 
 import (
 	"context"
-
 	"time"
 
 	"github.com/bsv-blockchain/teranode-operator/internal/utils"

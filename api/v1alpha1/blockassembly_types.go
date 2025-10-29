@@ -48,6 +48,7 @@ type BlockAssembly struct {
 func (ba *BlockAssembly) DeploymentOverrides() *DeploymentOverrides {
 	return ba.Spec.DeploymentOverrides
 }
+
 func (ba *BlockAssembly) Metadata() metav1.ObjectMeta {
 	return ba.ObjectMeta
 }

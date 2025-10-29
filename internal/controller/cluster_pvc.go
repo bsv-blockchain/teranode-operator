@@ -52,7 +52,7 @@ func (r *ClusterReconciler) ReconcilePVC(log logr.Logger) (bool, error) {
 	return true, nil
 }
 
-func (r *ClusterReconciler) updatePVC(pvc *corev1.PersistentVolumeClaim, inClusterPVC *corev1.PersistentVolumeClaim, cluster *teranodev1alpha1.Cluster) error {
+func (r *ClusterReconciler) updatePVC(pvc, inClusterPVC *corev1.PersistentVolumeClaim, cluster *teranodev1alpha1.Cluster) error {
 	err := controllerutil.SetControllerReference(cluster, pvc, r.Scheme)
 	if err != nil {
 		return err

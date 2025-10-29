@@ -50,6 +50,7 @@ type Asset struct {
 func (a *Asset) DeploymentOverrides() *DeploymentOverrides {
 	return a.Spec.DeploymentOverrides
 }
+
 func (a *Asset) Metadata() metav1.ObjectMeta {
 	return a.ObjectMeta
 }

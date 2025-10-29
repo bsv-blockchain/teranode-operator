@@ -427,7 +427,6 @@ var _ = Describe("Cluster Controller", func() {
 				Namespace: "default",
 			}, dep)).To(Succeed())
 			Expect(dep.Spec.Template.Spec.ImagePullSecrets).To(ContainElements(customSecrets))
-
 		})
 
 		It("should disable all services when cluster is disabled", func() {
