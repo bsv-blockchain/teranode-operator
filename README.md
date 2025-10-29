@@ -6,45 +6,7 @@ This operator controls the management of each microservice associated with a Ter
 
 # Installation
 
-## Installation via BSVA Catalog (Recommended)
-Ensure OLM is installed:
-```bash
-$ operator-sdk olm install
-```
-
-Create BSVA CatalogSource in the OLM namespace
-```bash
-$ kubectl create -f olm/catalog-source.yaml
-```
-
-Create the target installation namespace for the operator (Example uses namespace `teranode-operator`)
-```bash
-$ kubectl create namespace teranode-operator
-```
-
-Create OperatorGroup and Subscription in installation namespace 
-
-(Optional) If you are deploying to a namespace other than `teranode-operator`, modify the OperatorGroup to specify your installation namespace:
-```bash
-$ echo "  - <namespace>" >> olm/og.yaml
-```
-
-Create the resources:
-```bash
-$ kubectl create -f olm/og.yaml -n teranode-operator
-$ kubectl create -f olm/subscription.yaml -n teranode-operator
-```
-
-This installs the Teranode Operator from the `stable` published channel in the BSVA Catalog. This will include automatic upgrades for minor releases published to this channel. If you want to change channels or the upgrade policy, modify `olm/subscription.yaml`.
-## Installation via operator-sdk
-Ensure OLM is installed:
-```bash
-$ operator-sdk olm install
-```
-Run the bundle to install teranode operator on the cluster:
-```bash
-$ operator-sdk run bundle 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator-bundle:v0.2.0 --install-mode OwnNamespace -n <namespace>
-```
+## TODO: Dylan to update with helm documentation
 
 ## Running a node
 Once you have the operator installed, modify `config/samples/teranode_v1alpha1_node.yaml` with your needed configuration values, then create the instance in the cluster:
