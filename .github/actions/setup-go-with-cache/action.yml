@@ -29,7 +29,7 @@ description: "Complete Go environment setup with intelligent caching and version
 
 inputs:
   go-version:
-    description: "Go version to install (e.g., 1.23.x, 1.24.0)"
+    description: "Go version to install (e.g., 1.24.x, 1.25.0)"
     required: true
   matrix-os:
     description: "Operating system for cache keys (e.g., ubuntu-latest, windows-latest)"
