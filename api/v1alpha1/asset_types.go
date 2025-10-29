@@ -61,7 +61,8 @@ func (a *Asset) Metadata() metav1.ObjectMeta {
 type AssetList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Asset `json:"items"`
+
+	Items []Asset `json:"items"`
 }
 
 func init() {

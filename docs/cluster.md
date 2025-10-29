@@ -156,6 +156,6 @@ spec:
           memory: 2Gi
 ```
 
-At the root level, `configMapName` allows the user to set a configmap that will be mounted as environment variables for each service. 
+At the root level, `configMapName` allows the user to set a configmap that will be mounted as environment variables for each service.
 
 

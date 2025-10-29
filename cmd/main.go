@@ -18,6 +18,7 @@ package main
 
 import (
 	"crypto/tls"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -47,6 +48,9 @@ import (
 var (
 	scheme   = runtime.NewScheme()
 	setupLog = ctrl.Log.WithName("setup")
+
+	// ErrEnvVarNotSet is returned when a required environment variable is not set
+	ErrEnvVarNotSet = errors.New("environment variable must be set")
 )
 
 const (
@@ -60,6 +64,7 @@ func init() {
 	//+kubebuilder:scaffold:scheme
 }
 
+//nolint:gocognit,gocyclo // Main function complexity is acceptable for initialization
 func main() {
 	var metricsAddr string
 	var enableLeaderElection bool
@@ -283,7 +288,7 @@ func getWatchNamespaces() ([]string, error) {
 
 	ns, found := os.LookupEnv(watchNamespaceEnvVar)
 	if !found {
-		return []string{}, fmt.Errorf("%s must be set", watchNamespaceEnvVar)
+		return []string{}, fmt.Errorf("%s: %w", watchNamespaceEnvVar, ErrEnvVarNotSet)
 	}
 	if strings.Contains(ns, ",") {
 		var namespaces []string

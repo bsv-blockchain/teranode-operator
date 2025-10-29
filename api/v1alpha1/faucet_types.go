@@ -22,6 +22,7 @@ import (
 )
 
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
+//nolint:godox // Kubebuilder-generated scaffolding comment
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
 // FaucetSpec defines the desired state of Faucet
@@ -63,7 +64,8 @@ type Faucet struct {
 type FaucetList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Faucet `json:"items"`
+
+	Items []Faucet `json:"items"`
 }
 
 func init() {

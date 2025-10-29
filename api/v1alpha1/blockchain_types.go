@@ -71,7 +71,8 @@ func (bl *Blockchain) Metadata() metav1.ObjectMeta {
 type BlockchainList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Blockchain `json:"items"`
+
+	Items []Blockchain `json:"items"`
 }
 
 func init() {

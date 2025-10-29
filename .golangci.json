@@ -38,7 +38,13 @@
         }
     },
     "issues": {
-        "uniq-by-line": true
+        "uniq-by-line": true,
+        "exclude-rules": [
+            {
+                "text": "replacement are not allowed.*github.com/libsv/go-bt",
+                "linters": ["gomoddirectives"]
+            }
+        ]
     },
     "linters": {
         "disable": [
@@ -47,7 +53,8 @@
             "revive",
             "gochecknoinits",
             "gochecknoglobals",
-            "wsl_v5"
+            "wsl_v5",
+            "gomoddirectives"
         ],
         "enable": [
             "asasalint",
@@ -76,7 +83,6 @@
             "gocyclo",
             "godox",
             "goheader",
-            "gomoddirectives",
             "gosec",
             "gosmopolitan",
             "govet",

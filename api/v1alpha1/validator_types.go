@@ -53,7 +53,8 @@ func (v *Validator) Metadata() metav1.ObjectMeta { return v.ObjectMeta }
 type ValidatorList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Validator `json:"items"`
+
+	Items []Validator `json:"items"`
 }
 
 func init() {

@@ -21,6 +21,7 @@ import (
 )
 
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
+//nolint:godox // Kubebuilder-generated scaffolding comment
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
 // AlertSystemSpec defines the desired state of AlertSystem
@@ -60,7 +61,8 @@ type AlertSystem struct {
 type AlertSystemList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []AlertSystem `json:"items"`
+
+	Items []AlertSystem `json:"items"`
 }
 
 func init() {

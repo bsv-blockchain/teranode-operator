@@ -56,7 +56,8 @@ func (p *Peer) Metadata() metav1.ObjectMeta { return p.ObjectMeta }
 type PeerList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Peer `json:"items"`
+
+	Items []Peer `json:"items"`
 }
 
 func init() {
