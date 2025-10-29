@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
@@ -43,11 +44,12 @@ import (
 // BlockchainReconciler reconciles a Blockchain object
 type BlockchainReconciler struct {
 	client.Client
+
 	BlockchainClient blockchain.ClientI
 	Scheme           *runtime.Scheme
 	Log              logr.Logger
 	NamespacedName   types.NamespacedName
-	Context          context.Context
+	Context          context.Context //nolint:containedctx // Required for reconciler pattern
 }
 
 //+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=blockchains,verbs=get;list;watch;create;update;patch;delete
@@ -63,6 +65,8 @@ type BlockchainReconciler struct {
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
+//
+//nolint:gocognit,gocyclo // Reconcile function complexity is inherent to the reconciliation logic
 func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	result := ctrl.Result{}
 	r.Log = log.FromContext(ctx).WithValues("blockchain", req.NamespacedName)
@@ -108,7 +112,7 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	_ = r.Client.Status().Update(ctx, &b)
 
 	// If we want to monitor the FSM, trigger state check
-	if b.Spec.FiniteStateMachine != nil && b.Spec.FiniteStateMachine.Enabled {
+	if b.Spec.FiniteStateMachine != nil && b.Spec.FiniteStateMachine.Enabled { //nolint:nestif // FSM reconciliation logic
 		r.Log.Info("FSM monitoring is turned on, reconciling state")
 		// Fetch latest blockchain CR so the next status update works
 		b = teranodev1alpha1.Blockchain{}
@@ -118,6 +122,10 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		}
 		state, err := r.GetFSMState(r.Log)
 		if err != nil {
+			if errors.Is(err, ErrFSMDisabled) {
+				// FSM is disabled, skip FSM reconciliation
+				return ctrl.Result{}, nil
+			}
 			r.Log.Error(err, "unable to get FSM state, trying again in a minute")
 			return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, nil
 		}

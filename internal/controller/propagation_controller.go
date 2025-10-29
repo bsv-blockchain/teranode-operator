@@ -40,10 +40,12 @@ import (
 // PropagationReconciler reconciles a Propagation object
 type PropagationReconciler struct {
 	client.Client
+
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
 	NamespacedName types.NamespacedName
-	Context        context.Context
+	//nolint:containedctx // Required for reconciler pattern
+	Context context.Context
 }
 
 //+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=propagations,verbs=get;list;watch;create;update;patch;delete

@@ -38,10 +38,11 @@ import (
 // BlockPersisterReconciler reconciles a BlockPersister object
 type BlockPersisterReconciler struct {
 	client.Client
+
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
 	NamespacedName types.NamespacedName
-	Context        context.Context
+	Context        context.Context //nolint:containedctx // Required for reconciler pattern
 }
 
 //+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=blockpersisters,verbs=get;list;watch;create;update;patch;delete

@@ -40,10 +40,11 @@ import (
 // AssetReconciler reconciles a Asset object
 type AssetReconciler struct {
 	client.Client
+
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
 	NamespacedName types.NamespacedName
-	Context        context.Context
+	Context        context.Context //nolint:containedctx // Required for reconciler pattern
 }
 
 //+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=assets,verbs=get;list;watch;create;update;patch;delete

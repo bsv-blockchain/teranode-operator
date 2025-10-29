@@ -39,10 +39,12 @@ import (
 // SubtreeValidatorReconciler reconciles a SubtreeValidator object
 type SubtreeValidatorReconciler struct {
 	client.Client
+
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
 	NamespacedName types.NamespacedName
-	Context        context.Context
+	//nolint:containedctx // Required for reconciler pattern
+	Context context.Context
 }
 
 //+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=subtreevalidators,verbs=get;list;watch;create;update;patch;delete
