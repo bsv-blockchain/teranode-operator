@@ -186,6 +186,7 @@ require (
 	sigs.k8s.io/yaml v1.6.0 // indirect
 )
 
+//nolint:gomoddirectives // Required for dependency override
 replace github.com/libsv/go-bt/v2 => github.com/bsv-blockchain/go-bt/v2 v2.5.0
 
 // replace github.com/bitcoin-sv/go-sdk => github.com/bsv-blockchain/go-sdk v1.2.11
