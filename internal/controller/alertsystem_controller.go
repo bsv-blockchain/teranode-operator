@@ -20,7 +20,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/bitcoin-sv/teranode-operator/internal/utils"
+	"github.com/bsv-blockchain/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -33,7 +33,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 )
 
 // AlertSystemReconciler reconciles a AlertSystem object

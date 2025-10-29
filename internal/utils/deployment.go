@@ -19,7 +19,7 @@ package utils
 import (
 	"context"
 
-	"github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	"github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"

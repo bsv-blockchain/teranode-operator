@@ -34,7 +34,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 )
 
 var _ = Describe("Cluster Controller", func() {
@@ -1047,7 +1047,7 @@ var _ = Describe("Cluster Controller", func() {
 										{
 											Path:     "/invalid",
 											PathType: ptr.To(networkingv1.PathTypePrefix),
-											Backend: networkingv1.IngressBackend{
+											Backend:  networkingv1.IngressBackend{
 												// Invalid: both Service and Resource are nil
 											},
 										},

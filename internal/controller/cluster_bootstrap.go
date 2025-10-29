@@ -3,7 +3,7 @@ package controller
 import (
 	"fmt"
 
-	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"

@@ -24,7 +24,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/bitcoin-sv/teranode-operator/test/utils"
+	"github.com/bsv-blockchain/teranode-operator/test/utils"
 )
 
 const namespace = "teranode-operator-system"

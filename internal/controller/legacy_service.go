@@ -1,8 +1,8 @@
 package controller
 
 import (
-	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
-	"github.com/bitcoin-sv/teranode-operator/internal/utils"
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
+	"github.com/bsv-blockchain/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

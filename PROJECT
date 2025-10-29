@@ -9,7 +9,7 @@ plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
 projectName: teranode-operator
-repo: github.com/bitcoin-sv/teranode-operator
+repo: github.com/bsv-blockchain/teranode-operator
 resources:
 - api:
     crdVersion: v1
@@ -18,7 +18,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: Cluster
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -27,7 +27,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: Asset
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -36,7 +36,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: Blockchain
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -45,7 +45,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: Peer
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -54,7 +54,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: SubtreeValidator
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -62,7 +62,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: Faucet
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -71,7 +71,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: Propagation
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -80,7 +80,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: BlockPersister
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -89,7 +89,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: Miner
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -98,7 +98,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: Coinbase
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -107,7 +107,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: Validator
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -116,7 +116,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: Bootstrap
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -125,7 +125,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: BlockAssembly
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -134,7 +134,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: BlockValidator
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -143,7 +143,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: Legacy
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -152,7 +152,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: UtxoPersister
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -161,7 +161,7 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: RPC
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -170,6 +170,6 @@ resources:
   domain: bsvblockchain.org
   group: teranode
   kind: AlertSystem
-  path: github.com/bitcoin-sv/teranode-operator/api/v1alpha1
+  path: github.com/bsv-blockchain/teranode-operator/api/v1alpha1
   version: v1alpha1
 version: "3"

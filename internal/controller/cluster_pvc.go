@@ -1,7 +1,7 @@
 package controller
 
 import (
-	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"

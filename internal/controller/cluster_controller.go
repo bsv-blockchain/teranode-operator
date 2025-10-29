@@ -24,7 +24,7 @@ import (
 
 	networkingv1 "k8s.io/api/networking/v1"
 
-	"github.com/bitcoin-sv/teranode-operator/internal/utils"
+	"github.com/bsv-blockchain/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -35,7 +35,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 )
 
 // ClusterReconciler reconciles a Cluster object

@@ -39,8 +39,8 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
-	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
-	"github.com/bitcoin-sv/teranode-operator/internal/controller"
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
+	"github.com/bsv-blockchain/teranode-operator/internal/controller"
 	//+kubebuilder:scaffold:imports
 )
 

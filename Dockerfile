@@ -2,13 +2,8 @@
 FROM golang:1.24 AS builder
 ARG TARGETOS
 ARG TARGETARCH
-ARG GOPRIVATE="github.com/bitcoin-sv/teranode"
-ARG TERANODE_READER_TOKEN
 
 WORKDIR /workspace
-
-# Add github token for reading teranode repo
-RUN echo "machine github.com login bitcoin-sv password ${TERANODE_READER_TOKEN}" >> ~/.netrc
 
 # Copy the Go Modules manifests
 COPY go.mod go.mod

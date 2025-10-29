@@ -22,8 +22,8 @@ import (
 
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 
-	"github.com/bitcoin-sv/teranode-operator/internal/utils"
-	"github.com/bitcoin-sv/teranode/services/blockchain"
+	"github.com/bsv-blockchain/teranode-operator/internal/utils"
+	"github.com/bsv-blockchain/teranode/services/blockchain"
 	"github.com/go-logr/logr"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -37,7 +37,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	teranodev1alpha1 "github.com/bitcoin-sv/teranode-operator/api/v1alpha1"
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 )
 
 // BlockchainReconciler reconciles a Blockchain object
