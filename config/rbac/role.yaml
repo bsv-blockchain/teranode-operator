@@ -1,125 +1,124 @@
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: manager-role
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  - endpoints
-  - persistentvolumeclaims
-  - secrets
-  - services
-  verbs:
-  - create
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - apps
-  resources:
-  - deployments
-  verbs:
-  - create
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - discovery.k8s.io
-  resources:
-  - endpointslices
-  verbs:
-  - create
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - networking.k8s.io
-  resources:
-  - ingresses
-  - networkpolicies
-  verbs:
-  - create
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems
-  - assets
-  - blockassemblies
-  - blockchains
-  - blockpersisters
-  - blockvalidators
-  - bootstraps
-  - clusters
-  - coinbases
-  - faucets
-  - legacies
-  - peers
-  - propagations
-  - rpcs
-  - subtreevalidators
-  - utxopersisters
-  - validators
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems/finalizers
-  - assets/finalizers
-  - blockassemblies/finalizers
-  - blockchains/finalizers
-  - blockpersisters/finalizers
-  - blockvalidators/finalizers
-  - bootstraps/finalizers
-  - clusters/finalizers
-  - coinbases/finalizers
-  - faucets/finalizers
-  - legacies/finalizers
-  - peers/finalizers
-  - propagations/finalizers
-  - rpcs/finalizers
-  - subtreevalidators/finalizers
-  - utxopersisters/finalizers
-  - validators/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - teranode.bsvblockchain.org
-  resources:
-  - alertsystems/status
-  - assets/status
-  - blockassemblies/status
-  - blockchains/status
-  - blockpersisters/status
-  - blockvalidators/status
-  - bootstraps/status
-  - clusters/status
-  - coinbases/status
-  - faucets/status
-  - legacies/status
-  - peers/status
-  - propagations/status
-  - rpcs/status
-  - subtreevalidators/status
-  - utxopersisters/status
-  - validators/status
-  verbs:
-  - get
-  - patch
-  - update
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - endpoints
+      - persistentvolumeclaims
+      - secrets
+      - services
+    verbs:
+      - create
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - create
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - create
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+      - networkpolicies
+    verbs:
+      - create
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems
+      - assets
+      - blockassemblies
+      - blockchains
+      - blockpersisters
+      - blockvalidators
+      - bootstraps
+      - clusters
+      - coinbases
+      - faucets
+      - legacies
+      - peers
+      - propagations
+      - rpcs
+      - subtreevalidators
+      - utxopersisters
+      - validators
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems/finalizers
+      - assets/finalizers
+      - blockassemblies/finalizers
+      - blockchains/finalizers
+      - blockpersisters/finalizers
+      - blockvalidators/finalizers
+      - bootstraps/finalizers
+      - clusters/finalizers
+      - coinbases/finalizers
+      - faucets/finalizers
+      - legacies/finalizers
+      - peers/finalizers
+      - propagations/finalizers
+      - rpcs/finalizers
+      - subtreevalidators/finalizers
+      - utxopersisters/finalizers
+      - validators/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - alertsystems/status
+      - assets/status
+      - blockassemblies/status
+      - blockchains/status
+      - blockpersisters/status
+      - blockvalidators/status
+      - bootstraps/status
+      - clusters/status
+      - coinbases/status
+      - faucets/status
+      - legacies/status
+      - peers/status
+      - propagations/status
+      - rpcs/status
+      - subtreevalidators/status
+      - utxopersisters/status
+      - validators/status
+    verbs:
+      - get
+      - patch
+      - update
