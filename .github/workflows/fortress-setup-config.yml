@@ -53,9 +53,6 @@ on:
       benchmarks-enabled:
         description: "Whether benchmarks are enabled"
         value: ${{ jobs.setup-config.outputs.benchmarks-enabled }}
-      cache-warming-enabled:
-        description: "Whether cache warming is enabled"
-        value: ${{ jobs.setup-config.outputs.cache-warming-enabled }}
       benchmark-matrix:
         description: "Benchmark matrix JSON"
         value: ${{ jobs.setup-config.outputs.benchmark-matrix }}
@@ -65,6 +62,9 @@ on:
       coverage-provider:
         description: "Coverage service provider (internal or codecov)"
         value: ${{ jobs.setup-config.outputs.coverage-provider }}
+      cache-warming-enabled:
+        description: "Whether cache warming is enabled"
+        value: ${{ jobs.setup-config.outputs.cache-warming-enabled }}
       fuzz-testing-enabled:
         description: "Whether fuzz testing is enabled"
         value: ${{ jobs.setup-config.outputs.fuzz-testing-enabled }}
@@ -179,10 +179,10 @@ jobs:
     runs-on: ${{ inputs.primary-runner }}
     outputs:
       benchmarks-enabled: ${{ steps.config.outputs.benchmarks-enabled }}
-      cache-warming-enabled: ${{ steps.config.outputs.cache-warming-enabled }}
       benchmark-matrix: ${{ steps.matrix.outputs.matrix }}
       code-coverage-enabled: ${{ steps.config.outputs.code-coverage-enabled }}
       coverage-provider: ${{ steps.config.outputs.coverage-provider }}
+      cache-warming-enabled: ${{ steps.config.outputs.cache-warming-enabled }}
       fuzz-testing-enabled: ${{ steps.config.outputs.fuzz-testing-enabled }}
       go-primary-version: ${{ steps.config.outputs.go-primary-version }}
       go-secondary-version: ${{ steps.config.outputs.go-secondary-version }}
