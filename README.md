@@ -276,9 +276,9 @@ Edit `AGENTS.md` first when adjusting these policies, and keep the other files i
 <br/>
 
 ## 👥 Maintainers
-| [<img src="https://github.com/mrz1836.png" height="50" width="50" alt="MrZ" />](https://github.com/mrz1836) | [<img src="https://github.com/icellan.png" height="50" alt="Siggi" />](https://github.com/icellan) |
-|:-----------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------:|
-|                                      [MrZ](https://github.com/mrz1836)                                      |                                [Siggi](https://github.com/icellan)                                 |
+| [<img src="https://github.com/icellan.png" height="50" alt="Siggi" />](https://github.com/icellan) | [<img src="https://github.com/galt-tr.png" height="50" alt="Dylan" />](https://github.com/galt-tr) | [<img src="https://github.com/oskarszoon.png" height="50" alt="Oli" />](https://github.com/oskarszoon) | [<img src="https://github.com/mrz1836.png" height="50" width="50" alt="MrZ" />](https://github.com/mrz1836) |
+|:--------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------:|
+|                                [Siggi](https://github.com/icellan)                                 |                                [Dylan](https://github.com/galt-tr)                                 |                                  [Oli](https://github.com/oskarszoon)                                  |                                      [MrZ](https://github.com/mrz1836)                                      |
 
 <br/>
 
