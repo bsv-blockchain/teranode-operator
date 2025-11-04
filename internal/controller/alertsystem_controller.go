@@ -39,10 +39,11 @@ import (
 // AlertSystemReconciler reconciles a AlertSystem object
 type AlertSystemReconciler struct {
 	client.Client
+
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
 	NamespacedName types.NamespacedName
-	Context        context.Context
+	Context        context.Context //nolint:containedctx // Required for reconciler pattern
 }
 
 //+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=alertsystems,verbs=get;list;watch;create;update;patch;delete

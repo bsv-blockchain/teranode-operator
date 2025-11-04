@@ -39,10 +39,11 @@ import (
 // BlockValidatorReconciler reconciles a BlockValidator object
 type BlockValidatorReconciler struct {
 	client.Client
+
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
 	NamespacedName types.NamespacedName
-	Context        context.Context
+	Context        context.Context //nolint:containedctx // Required for reconciler pattern
 }
 
 //+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=blockvalidators,verbs=get;list;watch;create;update;patch;delete
@@ -84,7 +85,7 @@ func (r *BlockValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 			},
 		)
 		_ = r.Client.Status().Update(ctx, &blockValidator)
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, nil
+		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
 		apimeta.SetStatusCondition(&blockValidator.Status.Conditions,
 			metav1.Condition{

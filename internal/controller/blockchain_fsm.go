@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"fmt"
 
 	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
@@ -12,6 +13,9 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 )
 
+// ErrFSMDisabled is returned when the finite state machine is disabled
+var ErrFSMDisabled = errors.New("finite state machine is disabled")
+
 // GetFSMState gets the current state of the FSM
 func (r *BlockchainReconciler) GetFSMState(log logr.Logger) (*blockchain.FSMStateType, error) {
 	b := teranodev1alpha1.Blockchain{}
@@ -19,7 +23,7 @@ func (r *BlockchainReconciler) GetFSMState(log logr.Logger) (*blockchain.FSMStat
 		return nil, err
 	}
 	if b.Spec.FiniteStateMachine != nil && !b.Spec.FiniteStateMachine.Enabled {
-		return nil, nil
+		return nil, ErrFSMDisabled
 	}
 	if r.BlockchainClient == nil {
 		uLog := ulogger.New("fsm")

@@ -59,7 +59,7 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 	return &appsv1.DeploymentSpec{
 		Replicas: ptr.To(int32(2)), // TODO: verify the replicas number, the spec has 2
 		Selector: metav1.SetAsLabelSelector(labels),
-		//Strategy: appsv1.DeploymentStrategy{ // TODO: verify if no strategy should be used by default
+		// Strategy: appsv1.DeploymentStrategy{ // TODO: verify if no strategy should be used by default
 		//	Type: appsv1.RecreateDeploymentStrategyType,
 		// },
 		Template: corev1.PodTemplateSpec{

@@ -33,7 +33,7 @@ if [ -n "$GITHUB_OUTPUT" ]; then
   echo "git_version=$GIT_VERSION" >> $GITHUB_OUTPUT
   echo "git_commit=$GIT_COMMIT" >> $GITHUB_OUTPUT
   echo "git_sha=$GIT_SHA" >> $GITHUB_OUTPUT
-  
+
   echo "Calculated GIT_VERSION: $GIT_VERSION"
   echo "Calculated GIT_COMMIT: $GIT_COMMIT"
   echo "Calculated GIT_SHA: $GIT_SHA"

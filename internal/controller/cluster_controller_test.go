@@ -427,7 +427,6 @@ var _ = Describe("Cluster Controller", func() {
 				Namespace: "default",
 			}, dep)).To(Succeed())
 			Expect(dep.Spec.Template.Spec.ImagePullSecrets).To(ContainElements(customSecrets))
-
 		})
 
 		It("should disable all services when cluster is disabled", func() {
@@ -714,6 +713,7 @@ var _ = Describe("Cluster Controller", func() {
 				Name:      "teranode-0",
 				Namespace: "default",
 			}, ingress0)
+			//nolint:godox // Known limitation being documented
 			// Note: Due to the current implementation not cleaning up ingresses from previous tests,
 			// we cannot guarantee this ingress doesn't exist from a previous test.
 			// This is a limitation of the current implementation.
@@ -800,6 +800,7 @@ var _ = Describe("Cluster Controller", func() {
 				Namespace: "default",
 			}, ingress0)).To(Succeed())
 
+			//nolint:godox // Known limitation being documented
 			// Note: The current implementation does not delete ingresses when they are removed from the spec.
 			// This is a limitation that should be addressed in the controller implementation.
 			// For now, we verify that teranode-1 still exists but is not managed by the current spec.

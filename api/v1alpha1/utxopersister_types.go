@@ -53,7 +53,8 @@ func (up *UtxoPersister) Metadata() metav1.ObjectMeta { return up.ObjectMeta }
 type UtxoPersisterList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []UtxoPersister `json:"items"`
+
+	Items []UtxoPersister `json:"items"`
 }
 
 func init() {

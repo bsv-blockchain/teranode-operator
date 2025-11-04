@@ -1,4 +1,3 @@
-
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -29,3 +28,32 @@ go.work
 *.swp
 *.swo
 *~
+
+# Go List
+go.list
+
+# OS files
+*.db
+*.DS_Store
+
+# Jetbrains
+.idea/
+
+# Eclipse
+.project
+
+# Notes
+todo.md
+
+# Distribution
+dist
+
+# Code coverage
+coverage.txt
+coverage.out
+
+# Fuzz Tests
+testdata
+
+# Node modules
+node_modules/

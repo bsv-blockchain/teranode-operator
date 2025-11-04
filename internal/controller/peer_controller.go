@@ -40,10 +40,12 @@ import (
 // PeerReconciler reconciles a Peer object
 type PeerReconciler struct {
 	client.Client
+
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
 	NamespacedName types.NamespacedName
-	Context        context.Context
+	//nolint:containedctx // Required for reconciler pattern
+	Context context.Context
 }
 
 //+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=peers,verbs=get;list;watch;create;update;patch;delete

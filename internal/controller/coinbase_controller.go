@@ -40,10 +40,12 @@ import (
 // CoinbaseReconciler reconciles a Coinbase object
 type CoinbaseReconciler struct {
 	client.Client
+
 	Scheme         *runtime.Scheme
 	Log            logr.Logger
 	NamespacedName types.NamespacedName
-	Context        context.Context
+	//nolint:containedctx // Required for reconciler pattern
+	Context context.Context
 }
 
 //+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=coinbases,verbs=get;list;watch;create;update;patch;delete

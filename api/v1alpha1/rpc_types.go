@@ -21,6 +21,7 @@ import (
 )
 
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
+//nolint:godox // Kubebuilder-generated scaffolding comment
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
 // RPCSpec defines the desired state of RPC
@@ -56,7 +57,8 @@ type RPC struct {
 type RPCList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []RPC `json:"items"`
+
+	Items []RPC `json:"items"`
 }
 
 func init() {

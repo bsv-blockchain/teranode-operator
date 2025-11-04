@@ -25,6 +25,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+//nolint:gocognit,gocyclo // Function complexity is inherent to handling multiple override cases
 func SetDeploymentOverrides(client client.Client, dep *appsv1.Deployment, cr v1alpha1.TeranodeService) {
 	if cr.DeploymentOverrides() == nil {
 		return

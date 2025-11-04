@@ -1,9 +1,9 @@
 resources:
-- manager.yaml
-- config.yaml
+  - manager.yaml
+  - config.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
-- name: controller
-  newName: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator
-  newTag: v0.5.5
+  - name: controller
+    newName: 434394763103.dkr.ecr.eu-north-1.amazonaws.com/teranode-operator
+    newTag: v0.5.5
