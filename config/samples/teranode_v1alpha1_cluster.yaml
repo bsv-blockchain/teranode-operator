@@ -1,0 +1,161 @@
+apiVersion: teranode.bsvblockchain.org/v1alpha1
+kind: Cluster
+metadata:
+  labels:
+    app.kubernetes.io/created-by: teranode-operator
+    app.kubernetes.io/instance: cluster-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: cluster
+    app.kubernetes.io/part-of: teranode-operator
+  name: cluster-sample
+spec:
+  configMapName: teranode-operator-config
+  asset:
+    enabled: true
+    spec:
+      grpcIngress:
+        className: nginx
+        host: cluster.example.com
+      httpIngress:
+        className: nginx
+        host: cluster.example.com
+      httpsIngress:
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-prod
+        className: nginx
+        host: cluster.example.com
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+  utxoPersister:
+    enabled: false
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 2
+            memory: 1Gi
+  legacy:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 2
+            memory: 1Gi
+  blockAssembly:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 2
+            memory: 1Gi
+  blockPersister:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+      storageClass: standard
+      storageResources:
+        requests:
+          storage: 5Gi
+  blockValidator:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+  blockchain:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+  bootstrap:
+    enabled: false
+    spec: {}
+  coinbase:
+    enabled: false
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+  miner:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+  peer:
+    enabled: true
+    spec:
+      grpcIngress:
+        className: nginx
+        host: cluster.example.com
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+      wsIngress:
+        className: nginx
+        host: cluster.example.com
+      wssIngress:
+        className: nginx
+        host: cluster.example.com
+  propagation:
+    enabled: true
+    spec:
+      grpcIngress:
+        className: nginx
+        host: cluster.example.com
+      deploymentOverrides:
+        replicas: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+  subtreeValidator:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        resources:
+          requests:
+            cpu: 1
+            memory: 2Gi
+      storageClass: standard
+      storageResources:
+        requests:
+          storage: 5Gi
+  validator:
+    enabled: true
+    spec:
+      deploymentOverrides:
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi

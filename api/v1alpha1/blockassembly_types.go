@@ -1,0 +1,68 @@
+/*
+Copyright 2024.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package v1alpha1
+
+import (
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+)
+
+// BlockAssemblySpec defines the desired state of BlockAssembly
+type BlockAssemblySpec struct {
+	DeploymentOverrides *DeploymentOverrides         `json:"deploymentOverrides,omitempty"`
+	StorageClass        string                       `json:"storageClass,omitempty"`
+	StorageResources    *corev1.ResourceRequirements `json:"storageResources,omitempty"`
+}
+
+// BlockAssemblyStatus defines the observed state of BlockAssembly
+type BlockAssemblyStatus struct {
+	Conditions []metav1.Condition `json:"conditions,omitempty"`
+}
+
+//+kubebuilder:object:root=true
+//+kubebuilder:subresource:status
+
+// BlockAssembly is the Schema for the blockassemblies API
+type BlockAssembly struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Spec   BlockAssemblySpec   `json:"spec,omitempty"`
+	Status BlockAssemblyStatus `json:"status,omitempty"`
+}
+
+func (ba *BlockAssembly) DeploymentOverrides() *DeploymentOverrides {
+	return ba.Spec.DeploymentOverrides
+}
+
+func (ba *BlockAssembly) Metadata() metav1.ObjectMeta {
+	return ba.ObjectMeta
+}
+
+//+kubebuilder:object:root=true
+
+// BlockAssemblyList contains a list of BlockAssembly
+type BlockAssemblyList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+
+	Items []BlockAssembly `json:"items"`
+}
+
+func init() {
+	SchemeBuilder.Register(&BlockAssembly{}, &BlockAssemblyList{})
+}

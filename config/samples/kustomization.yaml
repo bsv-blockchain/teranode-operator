@@ -1,0 +1,19 @@
+## Append samples of your project ##
+resources:
+  - teranode_v1alpha1_cluster.yaml
+  - teranode_v1alpha1_asset.yaml
+  - teranode_v1alpha1_blockchain.yaml
+  - teranode_v1alpha1_peer.yaml
+  - teranode_v1alpha1_subtreevalidator.yaml
+  - teranode_v1alpha1_faucet.yaml
+  - teranode_v1alpha1_blockpersister.yaml
+  - teranode_v1alpha1_propagation.yaml
+  - teranode_v1alpha1_validator.yaml
+  - teranode_v1alpha1_coinbase.yaml
+  - teranode_v1alpha1_blockassembly.yaml
+  - teranode_v1alpha1_blockvalidator.yaml
+  - teranode_v1alpha1_legacy.yaml
+  - teranode_v1alpha1_utxopersister.yaml
+  - teranode_v1alpha1_rpc.yaml
+  - teranode_v1alpha1_alertsystem.yaml
+  #+kubebuilder:scaffold:manifestskustomizesamples

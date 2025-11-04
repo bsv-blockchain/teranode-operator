@@ -1,0 +1,27 @@
+# permissions for end users to view blockvalidators.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: blockvalidator-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: teranode-operator
+    app.kubernetes.io/part-of: teranode-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: blockvalidator-viewer-role
+rules:
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - blockvalidators
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - teranode.bsvblockchain.org
+    resources:
+      - blockvalidators/status
+    verbs:
+      - get
