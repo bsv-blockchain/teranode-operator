@@ -91,6 +91,8 @@
 
 See [helm installation](./helm/README.md) guide for details.
 
+<br/>
+
 ### Running a node
 Once you have the operator installed, modify `config/samples/teranode_v1alpha1_node.yaml` with your needed configuration values, then create the instance in the cluster:
 ```bash
