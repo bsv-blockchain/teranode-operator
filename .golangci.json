@@ -226,9 +226,12 @@
         "build-tags": [
             "mage"
         ],
+        "cache": true,
         "concurrency": 8,
+        "deadline": "15m",
         "issues-exit-code": 1,
-        "tests": true
+        "tests": true,
+        "timeout": "10m"
     },
     "severity": {
         "default": "warning",
