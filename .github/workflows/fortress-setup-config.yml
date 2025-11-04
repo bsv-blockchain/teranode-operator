@@ -68,6 +68,9 @@ on:
       fuzz-testing-enabled:
         description: "Whether fuzz testing is enabled"
         value: ${{ jobs.setup-config.outputs.fuzz-testing-enabled }}
+      go-tests-enabled:
+        description: "Whether Go tests are enabled"
+        value: ${{ jobs.setup-config.outputs.go-tests-enabled }}
       go-primary-version:
         description: "Primary Go version"
         value: ${{ jobs.setup-config.outputs.go-primary-version }}
@@ -167,6 +170,12 @@ on:
       redis-service-mode:
         description: "Redis service mode (auto, always, never)"
         value: ${{ jobs.setup-config.outputs.redis-service-mode }}
+      is-fork-pr:
+        description: "Whether this is a fork PR (true/false)"
+        value: ${{ jobs.setup-config.outputs.is-fork-pr }}
+      fork-security-mode:
+        description: "Security mode for fork PRs (safe/unsafe)"
+        value: ${{ jobs.setup-config.outputs.fork-security-mode }}
 # Security: Restrictive default permissions with job-level overrides for least privilege access
 permissions:
   contents: read
@@ -184,6 +193,7 @@ jobs:
       coverage-provider: ${{ steps.config.outputs.coverage-provider }}
       cache-warming-enabled: ${{ steps.config.outputs.cache-warming-enabled }}
       fuzz-testing-enabled: ${{ steps.config.outputs.fuzz-testing-enabled }}
+      go-tests-enabled: ${{ steps.config.outputs.go-tests-enabled }}
       go-primary-version: ${{ steps.config.outputs.go-primary-version }}
       go-secondary-version: ${{ steps.config.outputs.go-secondary-version }}
       go-sum-file: ${{ steps.config.outputs.go-sum-file }}
@@ -217,6 +227,8 @@ jobs:
       redis-cache-force-pull: ${{ steps.redis-config.outputs.redis-cache-force-pull }}
       redis-trust-service-health: ${{ steps.redis-config.outputs.redis-trust-service-health }}
       redis-service-mode: ${{ steps.redis-config.outputs.redis-service-mode }}
+      is-fork-pr: ${{ steps.fork-detection.outputs.is-fork-pr }}
+      fork-security-mode: ${{ steps.fork-detection.outputs.fork-security-mode }}
     steps:
       # --------------------------------------------------------------------
       # Start timer to record workflow start time
@@ -229,6 +241,46 @@ jobs:
           echo "start-time=$START_TIME" >> $GITHUB_OUTPUT
           echo "start-epoch=$START_EPOCH" >> $GITHUB_OUTPUT
           echo "🚀 Workflow started at: $START_TIME"
+      # --------------------------------------------------------------------
+      # Detect Fork PR Status
+      # --------------------------------------------------------------------
+      - name: 🔍 Detect Fork PR Status
+        id: fork-detection
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_HEAD_REPO: ${{ github.event.pull_request.head.repo && github.event.pull_request.head.repo.full_name || '' }}
+          BASE_REPO: ${{ github.repository }}
+        run: |
+          echo "🔍 Detecting fork status..."
+          echo "════════════════════════════════════════════════════════════════"
+          echo "Event: $EVENT_NAME"
+          echo "PR Head Repo: $PR_HEAD_REPO"
+          echo "Base Repo: $BASE_REPO"
+          echo "════════════════════════════════════════════════════════════════"
+
+          # Check if this is a fork PR
+          if [[ "$EVENT_NAME" == "pull_request" && -n "$PR_HEAD_REPO" && "$PR_HEAD_REPO" != "$BASE_REPO" ]]; then
+            echo "🚨 FORK PR DETECTED"
+            echo "is-fork-pr=true" >> $GITHUB_OUTPUT
+            echo "fork-security-mode=safe" >> $GITHUB_OUTPUT
+
+            echo ""
+            echo "⚠️  Security Mode: SAFE (Fork PR)"
+            echo "   - Security scans requiring secrets will be skipped"
+            echo "   - Test suite with Codecov will be skipped"
+            echo "   - Release job will be skipped (PRs can't trigger releases anyway)"
+            echo "   - All other checks will run normally"
+          else
+            echo "✅ NOT A FORK PR (Same repository or not a PR event)"
+            echo "is-fork-pr=false" >> $GITHUB_OUTPUT
+            echo "fork-security-mode=full" >> $GITHUB_OUTPUT
+
+            echo ""
+            echo "✅ Security Mode: FULL"
+            echo "   - All jobs will run with full access to secrets"
+          fi
+
+          echo "════════════════════════════════════════════════════════════════"
       # --------------------------------------------------------------------
       # Parse environment variables from JSON
       # --------------------------------------------------------------------
@@ -462,6 +514,7 @@ jobs:
           echo "gitleaks-enabled=${{ env.ENABLE_SECURITY_SCAN_GITLEAKS }}" >> $GITHUB_OUTPUT
           echo "static-analysis-enabled=${{ env.ENABLE_STATIC_ANALYSIS }}" >> $GITHUB_OUTPUT
           echo "fuzz-testing-enabled=${{ env.ENABLE_FUZZ_TESTING }}" >> $GITHUB_OUTPUT
+          echo "go-tests-enabled=${{ env.ENABLE_GO_TESTS }}" >> $GITHUB_OUTPUT
           echo "pre-commit-enabled=${{ env.ENABLE_GO_PRE_COMMIT }}" >> $GITHUB_OUTPUT
 
           # Detect if this is a release run
@@ -524,6 +577,38 @@ jobs:
           echo "| **Is Release Eligible** | $([ "${{ startsWith(github.ref, 'refs/tags/v') }}" == "true" ] && echo "🚀 **Yes - Release will run if tests pass**" || echo "❌ No") |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "<br><br>" >> $GITHUB_STEP_SUMMARY
+
+          # Fork PR Status (if applicable)
+          if [[ "${{ steps.fork-detection.outputs.is-fork-pr }}" == "true" ]]; then
+            echo "## 🔐 Fork PR Security Status" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ **This is a FORK Pull Request**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Security Mode:** \`${{ steps.fork-detection.outputs.fork-security-mode }}\` (restricted for security)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Jobs That Will Run:" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ **Setup & Configuration** - Environment detection and matrix generation" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ **MAGE-X Testing** - Build system verification" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ **Cache Warming** - Dependency and build cache preparation" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ **Code Quality** - golangci-lint, static analysis, YAML validation" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ **Pre-Commit Checks** - Formatting, whitespace, EOF checks (17x faster)" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ **Benchmarks** - Performance testing and regression detection" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Jobs That Will Be Skipped (Require Secrets):" >> $GITHUB_STEP_SUMMARY
+            echo "- ⛔ **Security Scans** - Nancy (requires \`OSSI_TOKEN\`), Govulncheck, Gitleaks" >> $GITHUB_STEP_SUMMARY
+            echo "- ⛔ **Test Suite with Coverage** - Codecov upload (requires \`CODECOV_TOKEN\`)" >> $GITHUB_STEP_SUMMARY
+            echo "- ⛔ **Release** - Already skipped for PRs (only runs on tags)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Why Are Some Jobs Skipped?" >> $GITHUB_STEP_SUMMARY
+            echo "Fork PRs run with limited access to repository secrets for security. This prevents:" >> $GITHUB_STEP_SUMMARY
+            echo "- Unauthorized access to external service credentials (OSSI, Codecov)" >> $GITHUB_STEP_SUMMARY
+            echo "- Potential credential theft from malicious fork PRs" >> $GITHUB_STEP_SUMMARY
+            echo "- Exposure of sensitive tokens through workflow modifications" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Maintainers will review your PR and can manually run security scans if needed.**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "<br><br>" >> $GITHUB_STEP_SUMMARY
+          fi
 
           # Configuration Statistics (moved up for overview)
           echo "## 📈 Configuration Overview" >> $GITHUB_STEP_SUMMARY
@@ -600,6 +685,7 @@ jobs:
           echo "| **Cache Warming** | $([ "${{ env.ENABLE_CACHE_WARMING }}" == "true" ] && echo "✅ Enabled" || echo "❌ Disabled") | Go module and build caches will $([ "${{ env.ENABLE_CACHE_WARMING }}" == "true" ] && echo "be pre-warmed for faster test execution" || echo "not be pre-warmed (saves memory)") |" >> $GITHUB_STEP_SUMMARY
           echo "| **Code Coverage** | $([ "${{ env.ENABLE_CODE_COVERAGE }}" == "true" ] && echo "✅ Enabled" || echo "❌ Disabled") | Coverage will $([ "${{ env.ENABLE_CODE_COVERAGE }}" == "true" ] && echo "use $([ "${{ env.GO_COVERAGE_PROVIDER }}" == "codecov" ] && echo "**Codecov**" || echo "**go-coverage**") (${{ env.GO_COVERAGE_THRESHOLD }}% threshold)" || echo "be skipped") |" >> $GITHUB_STEP_SUMMARY
           echo "| **Fuzz Testing** | $([ "${{ env.ENABLE_FUZZ_TESTING }}" == "true" ] && echo "✅ Enabled" || echo "❌ Disabled") | Fuzz tests will $([ "${{ env.ENABLE_FUZZ_TESTING }}" == "true" ] && echo "run in parallel job on Linux with primary Go version" || echo "be skipped") |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Go Tests** | $([ "${{ env.ENABLE_GO_TESTS }}" == "true" ] && echo "✅ Enabled" || echo "❌ Disabled") | Test suite will $([ "${{ env.ENABLE_GO_TESTS }}" == "true" ] && echo "run across matrix configurations" || echo "be skipped") |" >> $GITHUB_STEP_SUMMARY
           echo "| **Gitleaks (Secret Scan)** | $([ "${{ env.ENABLE_SECURITY_SCAN_GITLEAKS }}" == "true" ] && echo "✅ Enabled" || echo "❌ Disabled") | Gitleaks will $([ "${{ env.ENABLE_SECURITY_SCAN_GITLEAKS }}" == "true" ] && echo "scan for leaked secrets" || echo "be skipped") |" >> $GITHUB_STEP_SUMMARY
           echo "| **Go Linting** | $([ "${{ env.ENABLE_GO_LINT }}" == "true" ] && echo "✅ Enabled" || echo "❌ Disabled") | golangci-lint via MAGE-X will $([ "${{ env.ENABLE_GO_LINT }}" == "true" ] && echo "analyze code quality" || echo "be skipped") |" >> $GITHUB_STEP_SUMMARY
           echo "| **Govulncheck** | $([ "${{ env.ENABLE_SECURITY_SCAN_GOVULNCHECK }}" == "true" ] && echo "✅ Enabled" || echo "❌ Disabled") | govulncheck via MAGE-X will $([ "${{ env.ENABLE_SECURITY_SCAN_GOVULNCHECK }}" == "true" ] && echo "scan for Go vulnerabilities" || echo "be skipped") |" >> $GITHUB_STEP_SUMMARY
