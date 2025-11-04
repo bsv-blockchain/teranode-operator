@@ -89,7 +89,7 @@
 
 ## 📦 Installation
 
-### TODO: @galt-tr (Dylan) to update with helm documentation
+See [helm installation](./helm/README.md) guide for details.
 
 ### Running a node
 Once you have the operator installed, modify `config/samples/teranode_v1alpha1_node.yaml` with your needed configuration values, then create the instance in the cluster:
@@ -110,9 +110,6 @@ block-persister-57784567d6-tdln7                                  1/1     Runnin
 block-persister-57784567d6-wdx84                                  1/1     Running     0          3d11h
 block-validator-6c4bf46f8b-bvxmm                                  1/1     Running     0          3d11h
 blockchain-ccbbd894c-k95z9                                        1/1     Running     0          3d11h
-coinbase-6d769f5f4d-zkb4s                                         1/1     Running     0          3d11h
-dkr-ecr-eu-north-1-amazonaws-com-teranode-operator-bundle-v0-1    1/1     Running     0          3d11h
-ede69fe8f248328195a7b76b2fc4c65a4ae7b7185126cdfd54f61c7eadffnzv   0/1     Completed   0          3d11h
 miner-6b454ff67c-jsrgv                                            1/1     Running     0          3d11h
 peer-6845bc4749-24ms4                                             1/1     Running     0          3d11h
 propagation-648cd4cc56-cw5bp                                      1/1     Running     0          3d11h
@@ -139,6 +136,11 @@ This operator controls the management of each microservice associated with a Ter
 
 <details>
 <summary><strong><code>Deploy on the cluster</code></strong></summary>
+
+**Runs controller manager locally on your machine**
+```shell
+make run
+```
 
 **Build and push your image to the location specified by `IMG`:**
 
