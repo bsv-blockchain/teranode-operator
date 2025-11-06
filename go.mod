@@ -194,4 +194,7 @@ require (
 //nolint:gomoddirectives // Required for dependency override
 replace github.com/libsv/go-bt/v2 => github.com/bsv-blockchain/go-bt/v2 v2.5.0
 
+// Security fix: CVE-2025-31133, CVE-2025-52565 - upgrade runc to patched version
+replace github.com/opencontainers/runc v1.1.5 => github.com/opencontainers/runc v1.3.3
+
 // replace github.com/bitcoin-sv/go-sdk => github.com/bsv-blockchain/go-sdk v1.2.11
