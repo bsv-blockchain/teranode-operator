@@ -3,7 +3,7 @@ module github.com/bsv-blockchain/teranode-operator
 go 1.25.2
 
 require (
-	github.com/bsv-blockchain/teranode v0.11.24-beta-8
+	github.com/bsv-blockchain/teranode v0.11.24-beta-9
 	github.com/go-logr/logr v1.4.3
 	github.com/onsi/ginkgo/v2 v2.27.2
 	github.com/onsi/gomega v1.38.2
@@ -196,5 +196,8 @@ replace github.com/libsv/go-bt/v2 => github.com/bsv-blockchain/go-bt/v2 v2.5.0
 
 // Security fix: CVE-2025-31133, CVE-2025-52565 - upgrade runc to patched version
 replace github.com/opencontainers/runc v1.1.5 => github.com/opencontainers/runc v1.3.3
+
+// Security fix: CVE-2024-25621 - upgrade containerd to latest patched version
+replace github.com/containerd/containerd/v2 v2.1.4 => github.com/containerd/containerd/v2 v2.2.0
 
 // replace github.com/bitcoin-sv/go-sdk => github.com/bsv-blockchain/go-sdk v1.2.11
