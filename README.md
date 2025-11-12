@@ -89,7 +89,7 @@
 
 ## 📦 Installation
 
-See [helm installation](./helm/README.md) guide for details.
+See [teranode-operator-helm](https://github.com/bsv-blockchain/teranode-operator-helm) guide for Helm install details.
 
 <br/>
 

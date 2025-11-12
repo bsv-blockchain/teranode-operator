@@ -1,9 +1,0 @@
-{{- if .Values.sampleCluster.enable }}
----
-apiVersion: v1
-data:
-  SETTINGS_CONTEXT: operator.{{ .Values.sampleCluster.network }}
-kind: ConfigMap
-metadata:
-  name: teranode-operator-config
-{{- end }}
