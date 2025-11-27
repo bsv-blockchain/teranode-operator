@@ -1,8 +1,6 @@
 package controller
 
 import (
-	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
-	"github.com/bsv-blockchain/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -11,6 +9,9 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/utils/ptr"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
+
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
+	"github.com/bsv-blockchain/teranode-operator/internal/utils"
 )
 
 // ReconcileDeployment is the subtreeValidator service deployment reconciler

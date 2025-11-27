@@ -20,18 +20,17 @@ import (
 	"context"
 	"time"
 
-	"github.com/bsv-blockchain/teranode-operator/internal/utils"
 	"github.com/go-logr/logr"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
-	"sigs.k8s.io/controller-runtime/pkg/client"
-
 	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
 	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
+	"github.com/bsv-blockchain/teranode-operator/internal/utils"
 )
 
 // BlockAssemblyReconciler reconciles a BlockAssembly object

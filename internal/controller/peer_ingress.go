@@ -1,11 +1,12 @@
 package controller
 
 import (
-	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
 	v1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
+
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 )
 
 // ReconcileGrpcIngress is the ingress for the peer grpc server

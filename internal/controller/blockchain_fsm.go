@@ -4,13 +4,14 @@ import (
 	"errors"
 	"fmt"
 
-	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 	"github.com/bsv-blockchain/teranode/services/blockchain"
 	"github.com/bsv-blockchain/teranode/settings"
 	"github.com/bsv-blockchain/teranode/ulogger"
 	"github.com/go-logr/logr"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/types"
+
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 )
 
 // ErrFSMDisabled is returned when the finite state machine is disabled
