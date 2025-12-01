@@ -112,6 +112,12 @@ type ValidatorConfig struct {
 	Spec    *ValidatorSpec `json:"spec"`
 }
 
+// PrunerConfig defines the pruner configuration
+type PrunerConfig struct {
+	Enabled bool        `json:"enabled"`
+	Spec    *PrunerSpec `json:"spec"`
+}
+
 // ClusterSpec defines the desired state of Cluster
 type ClusterSpec struct {
 	AlertSystem      AlertSystemConfig      `json:"alertSystem"`
@@ -129,6 +135,7 @@ type ClusterSpec struct {
 	SubtreeValidator SubtreeValidatorConfig `json:"subtreeValidator"`
 	UtxoPersister    UtxoPersisterConfig    `json:"utxoPersister"`
 	Validator        ValidatorConfig        `json:"validator"`
+	Pruner           PrunerConfig           `json:"pruner"`
 
 	ConfigMapName    string                         `json:"configMapName"`
 	Env              []corev1.EnvVar                `json:"env,omitempty"`

@@ -124,6 +124,9 @@ var _ = Describe("Cluster Controller", func() {
 						Validator: teranodev1alpha1.ValidatorConfig{
 							Spec: &teranodev1alpha1.ValidatorSpec{},
 						},
+						Pruner: teranodev1alpha1.PrunerConfig{
+							Spec: &teranodev1alpha1.PrunerSpec{},
+						},
 					},
 					// TODO(user): Specify other spec details if needed.
 				}
@@ -1144,4 +1147,5 @@ func enableAllServices(cluster *teranodev1alpha1.Cluster) {
 	cluster.Spec.SubtreeValidator.Enabled = true
 	cluster.Spec.UtxoPersister.Enabled = true
 	cluster.Spec.Validator.Enabled = true
+	cluster.Spec.Pruner.Enabled = true
 }
