@@ -33,10 +33,15 @@ type AssetStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
+	// Replicas is the number of actual replicas of the asset deployment
+	Replicas int32 `json:"replicas,omitempty"`
+	// Selector is the label selector for pods corresponding to this asset deployment
+	Selector string `json:"selector,omitempty"`
 }
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+//+kubebuilder:subresource:scale:specpath=.spec.deploymentOverrides.replicas,statuspath=.status.replicas,selectorpath=.status.selector
 
 // Asset is the Schema for the assets API
 type Asset struct {

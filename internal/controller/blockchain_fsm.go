@@ -3,6 +3,7 @@ package controller
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/bsv-blockchain/teranode/services/blockchain"
 	"github.com/bsv-blockchain/teranode/settings"
@@ -89,4 +90,18 @@ func (r *BlockchainReconciler) ReconcileState(state blockchain.FSMStateType) err
 		}
 	}
 	return nil
+}
+
+// isConnectionError checks if the error is a gRPC connection/unavailability error
+// This typically happens when the operator runs out-of-cluster and cannot resolve
+// Kubernetes internal DNS names like *.svc.cluster.local
+func isConnectionError(err error) bool {
+	if err == nil {
+		return false
+	}
+	errMsg := err.Error()
+	return strings.Contains(errMsg, "Unavailable") ||
+		strings.Contains(errMsg, "no children to pick from") ||
+		strings.Contains(errMsg, "connection refused") ||
+		strings.Contains(errMsg, "no such host")
 }

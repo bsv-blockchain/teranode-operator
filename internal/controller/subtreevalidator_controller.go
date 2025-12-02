@@ -25,8 +25,10 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
+	"sigs.k8s.io/controller-runtime/pkg/predicate"
+
+	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
@@ -75,6 +77,17 @@ func (r *SubtreeValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		r.ReconcileService,
 	)
 
+	// Update scale status (replicas and selector) from deployment
+	deployment := &appsv1.Deployment{}
+	if err := r.Get(ctx, types.NamespacedName{
+		Name:      SubtreeValidatorDeploymentName,
+		Namespace: req.Namespace,
+	}, deployment); err == nil {
+		replicas, selector := utils.GetScaleStatusFromDeployment(deployment)
+		subtreeValidator.Status.Replicas = replicas
+		subtreeValidator.Status.Selector = selector
+	}
+
 	if err != nil {
 		apimeta.SetStatusCondition(&subtreeValidator.Status.Conditions,
 			metav1.Condition{
@@ -101,6 +114,14 @@ func (r *SubtreeValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	}
 
 	err = r.Client.Status().Update(ctx, &subtreeValidator)
+
+	if subtreeValidator.Spec.DeploymentOverrides != nil && subtreeValidator.Spec.DeploymentOverrides.Replicas != nil {
+		if subtreeValidator.Status.Replicas != *subtreeValidator.Spec.DeploymentOverrides.Replicas {
+			r.Log.Info("requeuing to monitor replica status", "status", subtreeValidator.Status.Replicas, "spec", subtreeValidator.Spec.DeploymentOverrides.Replicas)
+			return ctrl.Result{RequeueAfter: time.Second}, nil
+		}
+	}
+
 	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
 }
 
@@ -111,5 +132,6 @@ func (r *SubtreeValidatorReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&appsv1.Deployment{}).
 		Owns(&corev1.Service{}).
 		Owns(&corev1.PersistentVolumeClaim{}).
+		WithEventFilter(predicate.GenerationChangedPredicate{}).
 		Complete(r)
 }

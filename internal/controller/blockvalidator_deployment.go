@@ -60,7 +60,7 @@ func defaultBlockValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 	}
 	// TODO: set a default
 	return &appsv1.DeploymentSpec{
-		Replicas: ptr.To(int32(1)),
+		Replicas: ptr.To(int32(DefaultBlockValidationReplicas)),
 		Selector: metav1.SetAsLabelSelector(podLabels),
 		Strategy: appsv1.DeploymentStrategy{
 			Type: appsv1.RecreateDeploymentStrategyType,

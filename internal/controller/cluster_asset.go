@@ -55,18 +55,44 @@ func (r *ClusterReconciler) updateAsset(asset *teranodev1alpha1.Asset, cluster *
 	if err != nil {
 		return err
 	}
-	asset.Spec = *defaultAssetSpec()
 
-	// if user configures a spec
-	if cluster.Spec.Asset.Spec != nil {
-		asset.Spec = *cluster.Spec.Asset.Spec
+	// Only set defaults if this is a new resource (no spec configured yet)
+	if asset.Spec.DeploymentOverrides == nil && cluster.Spec.Asset.Spec == nil {
+		asset.Spec = *defaultAssetSpec()
 	}
+
+	// Selectively merge cluster spec - only override fields that are explicitly set
+	if cluster.Spec.Asset.Spec != nil {
+		clusterSpec := cluster.Spec.Asset.Spec
+
+		// Merge ingress configurations
+		if clusterSpec.GrpcIngress != nil {
+			asset.Spec.GrpcIngress = clusterSpec.GrpcIngress
+		}
+		if clusterSpec.HTTPIngress != nil {
+			asset.Spec.HTTPIngress = clusterSpec.HTTPIngress
+		}
+		if clusterSpec.HTTPSIngress != nil {
+			asset.Spec.HTTPSIngress = clusterSpec.HTTPSIngress
+		}
+
+		// Merge deployment overrides selectively
+		if clusterSpec.DeploymentOverrides != nil {
+			if asset.Spec.DeploymentOverrides == nil {
+				asset.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+			}
+			mergeDeploymentOverrides(asset.Spec.DeploymentOverrides, clusterSpec.DeploymentOverrides)
+		}
+	}
+
+	// Apply cluster-level defaults
 	if asset.Spec.DeploymentOverrides == nil {
 		asset.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
 	if cluster.Spec.Image != "" && asset.Spec.DeploymentOverrides.Image == "" {
 		asset.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
+	// Always apply cluster-level ImagePullSecrets (they override or are the default)
 	if cluster.Spec.ImagePullSecrets != nil {
 		asset.Spec.DeploymentOverrides.ImagePullSecrets = cluster.Spec.ImagePullSecrets
 	}

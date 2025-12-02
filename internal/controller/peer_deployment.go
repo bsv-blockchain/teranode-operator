@@ -58,7 +58,7 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 		},
 	}
 	return &appsv1.DeploymentSpec{
-		Replicas: ptr.To(int32(1)),
+		Replicas: ptr.To(int32(DefaultPeerReplicas)),
 		Selector: metav1.SetAsLabelSelector(podLabels),
 		Strategy: appsv1.DeploymentStrategy{
 			Type: appsv1.RecreateDeploymentStrategyType,

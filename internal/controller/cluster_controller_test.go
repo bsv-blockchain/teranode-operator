@@ -443,7 +443,7 @@ var _ = Describe("Cluster Controller", func() {
 			// fetch asset deployment to verify pull secrets are set there too
 			dep := &appsv1.Deployment{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      "asset",
+				Name:      AssetDeploymentName,
 				Namespace: "default",
 			}, dep)).To(Succeed())
 			Expect(dep.Spec.Template.Spec.ImagePullSecrets).To(ContainElements(customSecrets))

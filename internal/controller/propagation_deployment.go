@@ -22,15 +22,18 @@ func (r *PropagationReconciler) ReconcileDeployment(log logr.Logger) (bool, erro
 	}
 	dep := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "propagation",
+			Name:      PropagationDeploymentName,
 			Namespace: r.NamespacedName.Namespace,
 			Labels:    getAppLabels("propagation"),
 		},
 	}
+
+	// CreateOrUpdate with retry on conflicts - controller-runtime handles retries internally
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
 		return r.updateDeployment(&dep, &propagation)
 	})
 	if err != nil {
+		// Let the controller-runtime retry mechanism handle conflicts
 		return false, err
 	}
 	return true, nil
@@ -41,8 +44,18 @@ func (r *PropagationReconciler) updateDeployment(dep *appsv1.Deployment, propaga
 	if err != nil {
 		return err
 	}
-	dep.Spec = *defaultPropagationDeploymentSpec()
-	utils.SetDeploymentOverrides(r.Client, dep, propagation)
+
+	// Check if this is a new deployment (no ResourceVersion yet)
+	isNewDeployment := dep.ResourceVersion == ""
+
+	// Only set the full spec for new deployments
+	// For existing deployments, we'll selectively update fields to avoid conflicts
+	if isNewDeployment {
+		dep.Spec = *defaultPropagationDeploymentSpec()
+	}
+
+	// Apply CR spec to deployment
+	utils.SetDeploymentOverridesWithContext(r.Context, r.Log, r.Client, dep, propagation, "Propagation")
 	utils.SetClusterOverrides(r.Client, dep, propagation)
 
 	return nil
@@ -58,11 +71,8 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 		},
 	}
 	return &appsv1.DeploymentSpec{
-		Replicas: ptr.To(int32(2)), // TODO: verify the replicas number, the spec has 2
+		Replicas: ptr.To(int32(DefaultPropagationReplicas)),
 		Selector: metav1.SetAsLabelSelector(labels),
-		// Strategy: appsv1.DeploymentStrategy{ // TODO: verify if no strategy should be used by default
-		//	Type: appsv1.RecreateDeploymentStrategyType,
-		// },
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
 				CreationTimestamp: metav1.Time{},

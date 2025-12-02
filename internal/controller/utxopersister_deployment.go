@@ -62,7 +62,7 @@ func defaultUtxoPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 		},
 	}
 	return &appsv1.DeploymentSpec{
-		Replicas: ptr.To(int32(1)),
+		Replicas: ptr.To(int32(DefaultUtxoPersisterReplicas)),
 		Selector: metav1.SetAsLabelSelector(labels),
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{

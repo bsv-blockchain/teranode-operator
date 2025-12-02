@@ -48,3 +48,33 @@ const (
 	DebuggerPort             = 4040
 	HealthPort               = 8000
 )
+
+// Deployment Names
+const (
+	AssetDeploymentName            = "asset"
+	BlockAssemblyDeploymentName    = "block-assembly"
+	BlockchainDeploymentName       = "blockchain"
+	BlockValidationDeploymentName  = "block-validation"
+	BootstrapDeploymentName        = "bootstrap"
+	CoinbaseDeploymentName         = "coinbase"
+	MinerDeploymentName            = "miner"
+	PropagationDeploymentName      = "propagation"
+	SubtreeValidatorDeploymentName = "subtree-validator"
+	AlertSystemDeploymentName      = "alert-system"
+)
+
+// Replicas
+const (
+	DefaultAssetReplicas            = 2
+	DefaultBlockAssemblyReplicas    = 2
+	DefaultBlockchainReplicas       = 1
+	DefaultBlockPersisterReplicas   = 1
+	DefaultBlockValidationReplicas  = 1
+	DefaultLegacyReplicas           = 1
+	DefaultPeerReplicas             = 1
+	DefaultRPCReplicas              = 1
+	DefaultUtxoPersisterReplicas    = 1
+	DefaultPropagationReplicas      = 2
+	DefaultSubtreeValidatorReplicas = 2
+	DefaultAlertSystemReplicas      = 1
+)

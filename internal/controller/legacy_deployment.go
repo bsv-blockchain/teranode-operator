@@ -58,7 +58,7 @@ func defaultLegacyDeploymentSpec() *appsv1.DeploymentSpec {
 		},
 	}
 	return &appsv1.DeploymentSpec{
-		Replicas: ptr.To(int32(1)),
+		Replicas: ptr.To(int32(DefaultLegacyReplicas)),
 		Selector: metav1.SetAsLabelSelector(labels),
 		Strategy: appsv1.DeploymentStrategy{
 			Type: appsv1.RecreateDeploymentStrategyType,

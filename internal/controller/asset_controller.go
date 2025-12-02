@@ -26,6 +26,8 @@ import (
 	networkingv1 "k8s.io/api/networking/v1"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"sigs.k8s.io/controller-runtime/pkg/predicate"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -77,6 +79,17 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		r.ReconcileHTTPSIngress,
 	)
 
+	// Update scale status (replicas and selector) from deployment
+	deployment := &appsv1.Deployment{}
+	if err := r.Get(ctx, types.NamespacedName{
+		Name:      AssetDeploymentName,
+		Namespace: asset.Namespace,
+	}, deployment); err == nil {
+		replicas, selector := utils.GetScaleStatusFromDeployment(deployment)
+		asset.Status.Replicas = replicas
+		asset.Status.Selector = selector
+	}
+
 	if err != nil {
 		apimeta.SetStatusCondition(&asset.Status.Conditions,
 			metav1.Condition{
@@ -103,6 +116,14 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 	}
 
 	err = r.Client.Status().Update(ctx, &asset)
+
+	if asset.Spec.DeploymentOverrides != nil && asset.Spec.DeploymentOverrides.Replicas != nil {
+		if asset.Status.Replicas != *asset.Spec.DeploymentOverrides.Replicas {
+			r.Log.Info("requeuing to monitor replica status", "status", asset.Status.Replicas, "spec", asset.Spec.DeploymentOverrides.Replicas)
+			return ctrl.Result{RequeueAfter: time.Second}, nil
+		}
+	}
+
 	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
 }
 
@@ -113,5 +134,6 @@ func (r *AssetReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&appsv1.Deployment{}).
 		Owns(&networkingv1.Ingress{}).
 		Owns(&corev1.Service{}).
+		WithEventFilter(predicate.GenerationChangedPredicate{}).
 		Complete(r)
 }

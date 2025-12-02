@@ -34,10 +34,19 @@ type PropagationSpec struct {
 // PropagationStatus defines the observed state of Propagation
 type PropagationStatus struct {
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
+	// Replicas is the number of actual replicas of the propagation deployment
+	Replicas int32 `json:"replicas,omitempty"`
+	// Selector is the label selector for pods corresponding to this propagation deployment
+	Selector string `json:"selector,omitempty"`
 }
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+//+kubebuilder:subresource:scale:specpath=.spec.deploymentOverrides.replicas,statuspath=.status.replicas,selectorpath=.status.selector
+//+kubebuilder:printcolumn:name="Desired",type=integer,JSONPath=`.spec.deploymentOverrides.replicas`,description="Desired number of replicas"
+//+kubebuilder:printcolumn:name="Current",type=integer,JSONPath=`.status.replicas`,description="Current number of replicas"
+//+kubebuilder:printcolumn:name="Ready",type=string,JSONPath=`.status.conditions[?(@.type=="Reconciled")].status`,description="Ready status"
+//+kubebuilder:printcolumn:name="Age",type=date,JSONPath=`.metadata.creationTimestamp`
 
 // Propagation is the Schema for the propagations API
 type Propagation struct {

@@ -123,6 +123,12 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 				// FSM is disabled, skip FSM reconciliation
 				return ctrl.Result{}, nil
 			}
+
+			if isConnectionError(err) {
+				r.Log.Info("FSM monitoring unavailable - operator may be running out-of-cluster. FSM state cannot be retrieved when .svc.cluster.local DNS is not resolvable", "error", err.Error())
+				// Don't requeue aggressively if we know we're out-of-cluster
+				return ctrl.Result{Requeue: true, RequeueAfter: time.Minute * 5}, nil
+			}
 			r.Log.Error(err, "unable to get FSM state, trying again in a minute")
 			return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, nil
 		}

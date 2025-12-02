@@ -20,9 +20,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
+	"sigs.k8s.io/controller-runtime/pkg/predicate"
+
 	networkingv1 "k8s.io/api/networking/v1"
+
+	"github.com/go-logr/logr"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -144,5 +147,6 @@ func (r *ClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&corev1.PersistentVolumeClaim{}).
 		Owns(&networkingv1.NetworkPolicy{}).
 		Owns(&networkingv1.Ingress{}).
+		WithEventFilter(predicate.GenerationChangedPredicate{}).
 		Complete(r)
 }

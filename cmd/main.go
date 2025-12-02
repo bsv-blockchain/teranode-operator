@@ -25,9 +25,12 @@ import (
 	"sort"
 	"strings"
 
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
+	appsv1 "k8s.io/api/apps/v1"
+	scalev1 "k8s.io/api/autoscaling/v1"
+	corev1 "k8s.io/api/core/v1"
+	networkingv1 "k8s.io/api/networking/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
@@ -39,7 +42,6 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
-	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 	"github.com/bsv-blockchain/teranode-operator/internal/controller"
 )
 
@@ -55,13 +57,6 @@ const (
 	CreateControllerError = "unable to create controller"
 )
 
-func init() {
-	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
-
-	utilruntime.Must(teranodev1alpha1.AddToScheme(scheme))
-	//+kubebuilder:scaffold:scheme
-}
-
 //nolint:gocognit,gocyclo // Main function complexity is acceptable for initialization
 func main() {
 	var metricsAddr string
@@ -70,7 +65,7 @@ func main() {
 	var secureMetrics bool
 	var enableHTTP2 bool
 	flag.StringVar(&metricsAddr, "metrics-bind-address", ":8080", "The address the metric endpoint binds to.")
-	flag.StringVar(&probeAddr, "health-probe-bind-address", ":8081", "The address the probe endpoint binds to.")
+	flag.StringVar(&probeAddr, "health-probe-bind-address", ":8181", "The address the probe endpoint binds to.")
 	flag.BoolVar(&enableLeaderElection, "leader-elect", false,
 		"Enable leader election for controller manager. "+
 			"Enabling this will ensure there is only one active controller manager.")
@@ -83,6 +78,33 @@ func main() {
 	}
 	opts.BindFlags(flag.CommandLine)
 	flag.Parse()
+
+	if err := scalev1.AddToScheme(scheme); err != nil {
+		setupLog.Error(err, "unable to add autoscaling/v1 scheme")
+		os.Exit(1)
+	}
+
+	if err := teranodev1alpha1.AddToScheme(scheme); err != nil {
+		setupLog.Error(err, "unable to add v1alpha1 scheme")
+		os.Exit(1)
+	}
+
+	if err := appsv1.AddToScheme(scheme); err != nil {
+		setupLog.Error(err, "unable to add apps/v1 scheme")
+		os.Exit(1)
+	}
+
+	if err := corev1.AddToScheme(scheme); err != nil {
+		setupLog.Error(err, "unable to add core/v1 scheme")
+		os.Exit(1)
+	}
+
+	if err := networkingv1.AddToScheme(scheme); err != nil {
+		setupLog.Error(err, "unable to add networking/v1 scheme")
+		os.Exit(1)
+	}
+
+	//+kubebuilder:scaffold:scheme
 
 	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&opts)))
 

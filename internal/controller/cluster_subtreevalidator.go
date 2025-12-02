@@ -55,18 +55,38 @@ func (r *ClusterReconciler) updateSubtreeValidator(subtreeValidator *teranodev1a
 	if err != nil {
 		return err
 	}
-	subtreeValidator.Spec = *defaultSubtreeValidatorSpec()
 
-	// if user configures a config map name
-	if cluster.Spec.SubtreeValidator.Spec != nil {
-		subtreeValidator.Spec = *cluster.Spec.SubtreeValidator.Spec
+	// Only set defaults if this is a new resource (no spec configured yet)
+	if subtreeValidator.Spec.DeploymentOverrides == nil && cluster.Spec.SubtreeValidator.Spec == nil {
+		subtreeValidator.Spec = *defaultSubtreeValidatorSpec()
 	}
+
+	// Selectively merge cluster spec - only override fields that are explicitly set
+	if cluster.Spec.SubtreeValidator.Spec != nil {
+		clusterSpec := cluster.Spec.SubtreeValidator.Spec
+
+		// Merge service-specific fields
+		if clusterSpec.PodTemplateAnnotations != nil {
+			subtreeValidator.Spec.PodTemplateAnnotations = clusterSpec.PodTemplateAnnotations
+		}
+
+		// Merge deployment overrides selectively
+		if clusterSpec.DeploymentOverrides != nil {
+			if subtreeValidator.Spec.DeploymentOverrides == nil {
+				subtreeValidator.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+			}
+			mergeDeploymentOverrides(subtreeValidator.Spec.DeploymentOverrides, clusterSpec.DeploymentOverrides)
+		}
+	}
+
+	// Apply cluster-level defaults (only if not already set)
 	if subtreeValidator.Spec.DeploymentOverrides == nil {
 		subtreeValidator.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
 	if cluster.Spec.Image != "" && subtreeValidator.Spec.DeploymentOverrides.Image == "" {
 		subtreeValidator.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
+	// Always apply cluster-level ImagePullSecrets (they override or are the default)
 	if cluster.Spec.ImagePullSecrets != nil {
 		subtreeValidator.Spec.DeploymentOverrides.ImagePullSecrets = cluster.Spec.ImagePullSecrets
 	}
