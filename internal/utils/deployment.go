@@ -116,9 +116,9 @@ func SetDeploymentOverridesWithContext(ctx context.Context, log logr.Logger, cli
 	}
 	if len(cr.DeploymentOverrides().VolumeMounts) > 0 {
 		dep.Spec.Template.Spec.Containers[0].VolumeMounts = append(dep.Spec.Template.Spec.Containers[0].VolumeMounts, cr.DeploymentOverrides().VolumeMounts...)
-		if cr.DeploymentOverrides().Replicas != nil {
-			dep.Spec.Replicas = cr.DeploymentOverrides().Replicas
-		}
+	}
+	if cr.DeploymentOverrides().Replicas != nil {
+		dep.Spec.Replicas = cr.DeploymentOverrides().Replicas
 	}
 }
 
