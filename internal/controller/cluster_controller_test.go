@@ -1141,7 +1141,7 @@ var _ = Describe("Cluster Controller", func() {
 										{
 											Path:     "/invalid",
 											PathType: ptr.To(networkingv1.PathTypePrefix),
-											Backend: networkingv1.IngressBackend{
+											Backend:  networkingv1.IngressBackend{
 												// Invalid: both Service and Resource are nil
 											},
 										},
