@@ -58,7 +58,7 @@ func defaultSubtreeValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 		},
 	}
 	return &appsv1.DeploymentSpec{
-		Replicas: ptr.To(int32(2)),
+		Replicas: ptr.To(int32(DefaultSubtreeValidatorReplicas)),
 		Selector: metav1.SetAsLabelSelector(labels),
 		Strategy: appsv1.DeploymentStrategy{
 			Type: appsv1.RecreateDeploymentStrategyType,

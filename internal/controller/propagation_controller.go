@@ -26,6 +26,9 @@ import (
 	networkingv1 "k8s.io/api/networking/v1"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"sigs.k8s.io/controller-runtime/pkg/predicate"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -65,17 +68,31 @@ func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 	r.Log = log.FromContext(ctx).WithValues("propagation", req.NamespacedName)
 	r.Context = ctx
 	r.NamespacedName = req.NamespacedName
+
+	// Fetch the latest version of the Propagation CR
 	propagation := teranodev1alpha1.Propagation{}
 	if err := r.Get(ctx, req.NamespacedName, &propagation); err != nil {
 		r.Log.Error(err, "unable to fetch propagation CR")
 		return result, nil
 	}
 
-	_, err := utils.ReconcileBatch(r.Log,
+	var err error
+	_, err = utils.ReconcileBatch(r.Log,
 		r.ReconcileDeployment,
 		r.ReconcileService,
 		r.ReconcileGrpcIngress,
 	)
+
+	// Update scale status (replicas and selector) from deployment
+	deployment := &appsv1.Deployment{}
+	if err := r.Get(ctx, types.NamespacedName{
+		Name:      PropagationDeploymentName,
+		Namespace: propagation.Namespace,
+	}, deployment); err == nil {
+		replicas, selector := utils.GetScaleStatusFromDeployment(deployment)
+		propagation.Status.Replicas = replicas
+		propagation.Status.Selector = selector
+	}
 
 	if err != nil {
 		apimeta.SetStatusCondition(&propagation.Status.Conditions,
@@ -86,11 +103,11 @@ func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 				Message: err.Error(),
 			},
 		)
-		_ = r.Client.Status().Update(ctx, &propagation)
+		_ = r.Status().Update(ctx, &propagation)
 		// Since error is written on the status, let's log it and requeue
 		// Returning error here is redundant
 		r.Log.Error(err, "requeuing object for reconciliation")
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, nil
+		return ctrl.Result{RequeueAfter: time.Second}, nil
 	} else {
 		apimeta.SetStatusCondition(&propagation.Status.Conditions,
 			metav1.Condition{
@@ -102,8 +119,16 @@ func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 		)
 	}
 
-	err = r.Client.Status().Update(ctx, &propagation)
-	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
+	_ = r.Status().Update(ctx, &propagation)
+
+	if propagation.Spec.DeploymentOverrides != nil && propagation.Spec.DeploymentOverrides.Replicas != nil {
+		if propagation.Status.Replicas != *propagation.Spec.DeploymentOverrides.Replicas {
+			r.Log.Info("requeuing to monitor replica status", "status", propagation.Status.Replicas, "spec", propagation.Spec.DeploymentOverrides.Replicas)
+			return ctrl.Result{RequeueAfter: time.Second}, nil
+		}
+	}
+
+	return ctrl.Result{RequeueAfter: 0}, nil
 }
 
 // SetupWithManager sets up the controller with the Manager.
@@ -113,5 +138,6 @@ func (r *PropagationReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&appsv1.Deployment{}).
 		Owns(&networkingv1.Ingress{}).
 		Owns(&corev1.Service{}).
+		WithEventFilter(predicate.GenerationChangedPredicate{}).
 		Complete(r)
 }

@@ -55,16 +55,18 @@ func (r *ClusterReconciler) updateValidator(validator *teranodev1alpha1.Validato
 	if err != nil {
 		return err
 	}
+
 	validator.Spec = *defaultValidatorSpec()
 
-	// if user configures a config map name
+	// Selectively merge cluster spec - only override fields that are explicitly set
 	if cluster.Spec.Validator.Spec != nil {
 		validator.Spec = *cluster.Spec.Validator.Spec
 	}
+
 	if validator.Spec.DeploymentOverrides == nil {
 		validator.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
-	if cluster.Spec.Image != "" && validator.Spec.DeploymentOverrides.Image == "" {
+	if cluster.Spec.Image != "" {
 		validator.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ImagePullSecrets != nil {

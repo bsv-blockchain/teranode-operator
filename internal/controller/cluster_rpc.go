@@ -55,12 +55,26 @@ func (r *ClusterReconciler) updateRPC(rpc *teranodev1alpha1.RPC, cluster *terano
 	if err != nil {
 		return err
 	}
-	rpc.Spec = *defaultRPCSpec()
 
-	// if user configures a config map name
-	if cluster.Spec.RPC.Spec != nil {
-		rpc.Spec = *cluster.Spec.RPC.Spec
+	// Only set defaults if this is a new resource (no spec configured yet)
+	if rpc.Spec.DeploymentOverrides == nil && cluster.Spec.RPC.Spec == nil {
+		rpc.Spec = *defaultRPCSpec()
 	}
+
+	// Selectively merge cluster spec - only override fields that are explicitly set
+	if cluster.Spec.RPC.Spec != nil {
+		clusterSpec := cluster.Spec.RPC.Spec
+
+		// Merge deployment overrides selectively
+		if clusterSpec.DeploymentOverrides != nil {
+			if rpc.Spec.DeploymentOverrides == nil {
+				rpc.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+			}
+			mergeDeploymentOverrides(rpc.Spec.DeploymentOverrides, clusterSpec.DeploymentOverrides)
+		}
+	}
+
+	// Apply cluster-level defaults (only if not already set)
 	if rpc.Spec.DeploymentOverrides == nil {
 		rpc.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}

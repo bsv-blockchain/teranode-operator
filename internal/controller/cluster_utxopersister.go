@@ -55,16 +55,17 @@ func (r *ClusterReconciler) updateUtxoPersister(up *teranodev1alpha1.UtxoPersist
 	if err != nil {
 		return err
 	}
+
 	up.Spec = *defaultUtxoPersisterSpec()
 
-	// if user configures a config map name
 	if cluster.Spec.UtxoPersister.Spec != nil {
 		up.Spec = *cluster.Spec.UtxoPersister.Spec
 	}
+
 	if up.Spec.DeploymentOverrides == nil {
 		up.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
-	if cluster.Spec.Image != "" && up.Spec.DeploymentOverrides.Image == "" {
+	if cluster.Spec.Image != "" {
 		up.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ImagePullSecrets != nil {

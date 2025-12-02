@@ -65,7 +65,7 @@ func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
 		Strategy: appsv1.DeploymentStrategy{
 			Type: appsv1.RecreateDeploymentStrategyType,
 		},
-		Replicas: ptr.To(int32(1)),
+		Replicas: ptr.To(int32(DefaultBlockAssemblyReplicas)),
 		Selector: metav1.SetAsLabelSelector(labels),
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{

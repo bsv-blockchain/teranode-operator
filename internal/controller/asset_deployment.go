@@ -22,9 +22,9 @@ func (r *AssetReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
 	}
 	dep := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "asset",
+			Name:      AssetDeploymentName,
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels("asset"),
+			Labels:    getAppLabels(AssetDeploymentName),
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
@@ -50,7 +50,7 @@ func (r *AssetReconciler) updateDeployment(dep *appsv1.Deployment, asset *terano
 }
 
 func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
-	labels := getAppLabels("asset")
+	labels := getAppLabels(AssetDeploymentName)
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
@@ -59,7 +59,7 @@ func defaultAssetDeploymentSpec() *appsv1.DeploymentSpec {
 		},
 	}
 	return &appsv1.DeploymentSpec{
-		Replicas: ptr.To(int32(2)),
+		Replicas: ptr.To(int32(DefaultAssetReplicas)),
 		Selector: metav1.SetAsLabelSelector(labels),
 		Strategy: appsv1.DeploymentStrategy{
 			Type: appsv1.RecreateDeploymentStrategyType,

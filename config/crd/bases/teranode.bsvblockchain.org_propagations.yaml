@@ -14,7 +14,23 @@ spec:
     singular: propagation
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - description: Desired number of replicas
+      jsonPath: .spec.deploymentOverrides.replicas
+      name: Desired
+      type: integer
+    - description: Current number of replicas
+      jsonPath: .status.replicas
+      name: Current
+      type: integer
+    - description: Ready status
+      jsonPath: .status.conditions[?(@.type=="Reconciled")].status
+      name: Ready
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
     schema:
       openAPIV3Schema:
         description: Propagation is the Schema for the propagations API
@@ -3849,9 +3865,22 @@ spec:
                   - type
                   type: object
                 type: array
+              replicas:
+                description: Replicas is the number of actual replicas of the propagation
+                  deployment
+                format: int32
+                type: integer
+              selector:
+                description: Selector is the label selector for pods corresponding
+                  to this propagation deployment
+                type: string
             type: object
         type: object
     served: true
     storage: true
     subresources:
+      scale:
+        labelSelectorPath: .status.selector
+        specReplicasPath: .spec.deploymentOverrides.replicas
+        statusReplicasPath: .status.replicas
       status: {}

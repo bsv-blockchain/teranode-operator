@@ -55,18 +55,53 @@ func (r *ClusterReconciler) updatePropagation(propagation *teranodev1alpha1.Prop
 	if err != nil {
 		return err
 	}
-	propagation.Spec = *defaultPropagationSpec()
 
-	// if user configures a spec
-	if cluster.Spec.Propagation.Spec != nil {
-		propagation.Spec = *cluster.Spec.Propagation.Spec
+	// Only set defaults if this is a new resource (no spec configured yet)
+	if propagation.Spec.DeploymentOverrides == nil && cluster.Spec.Propagation.Spec == nil {
+		propagation.Spec = *defaultPropagationSpec()
 	}
+
+	// Selectively merge cluster spec - only override fields that are explicitly set
+	if cluster.Spec.Propagation.Spec != nil {
+		clusterSpec := cluster.Spec.Propagation.Spec
+
+		// Merge ingress configurations
+		if clusterSpec.DelveIngress != nil {
+			propagation.Spec.DelveIngress = clusterSpec.DelveIngress
+		}
+		if clusterSpec.QuicIngress != nil {
+			propagation.Spec.QuicIngress = clusterSpec.QuicIngress
+		}
+		if clusterSpec.GrpcIngress != nil {
+			propagation.Spec.GrpcIngress = clusterSpec.GrpcIngress
+		}
+		if clusterSpec.HTTPIngress != nil {
+			propagation.Spec.HTTPIngress = clusterSpec.HTTPIngress
+		}
+		if clusterSpec.ProfilerIngress != nil {
+			propagation.Spec.ProfilerIngress = clusterSpec.ProfilerIngress
+		}
+		if clusterSpec.ServiceAnnotations != nil {
+			propagation.Spec.ServiceAnnotations = clusterSpec.ServiceAnnotations
+		}
+
+		// Merge deployment overrides selectively
+		if clusterSpec.DeploymentOverrides != nil {
+			if propagation.Spec.DeploymentOverrides == nil {
+				propagation.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+			}
+			mergeDeploymentOverrides(propagation.Spec.DeploymentOverrides, clusterSpec.DeploymentOverrides)
+		}
+	}
+
+	// Apply cluster-level defaults
 	if propagation.Spec.DeploymentOverrides == nil {
 		propagation.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
 	if cluster.Spec.Image != "" && propagation.Spec.DeploymentOverrides.Image == "" {
 		propagation.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
+	// Always apply cluster-level ImagePullSecrets (they override or are the default)
 	if cluster.Spec.ImagePullSecrets != nil {
 		propagation.Spec.DeploymentOverrides.ImagePullSecrets = cluster.Spec.ImagePullSecrets
 	}

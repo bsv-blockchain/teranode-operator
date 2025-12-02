@@ -3820,9 +3820,22 @@ spec:
                   - type
                   type: object
                 type: array
+              replicas:
+                description: Replicas is the number of actual replicas of the asset
+                  deployment
+                format: int32
+                type: integer
+              selector:
+                description: Selector is the label selector for pods corresponding
+                  to this asset deployment
+                type: string
             type: object
         type: object
     served: true
     storage: true
     subresources:
+      scale:
+        labelSelectorPath: .status.selector
+        specReplicasPath: .spec.deploymentOverrides.replicas
+        statusReplicasPath: .status.replicas
       status: {}
