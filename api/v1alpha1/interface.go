@@ -35,4 +35,6 @@ type DeploymentOverrides struct {
 	Strategy           *v1.DeploymentStrategy         `json:"strategy,omitempty"`
 	Env                []corev1.EnvVar                `json:"env,omitempty"`
 	EnvFrom            []corev1.EnvFromSource         `json:"envFrom,omitempty"`
+	Volumes            []corev1.Volume                `json:"volumes,omitempty"`
+	VolumeMounts       []corev1.VolumeMount           `json:"volumeMounts,omitempty"`
 }
