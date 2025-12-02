@@ -56,6 +56,14 @@ var _ = BeforeSuite(func() {
 	testEnv = &envtest.Environment{
 		CRDDirectoryPaths:     []string{filepath.Join("..", "..", "config", "crd", "bases")},
 		ErrorIfCRDPathMissing: true,
+		ControlPlane: envtest.ControlPlane{
+			Etcd: &envtest.Etcd{
+				Args: []string{
+					"--max-request-bytes=5242880", // 5MB
+					"--max-txn-ops=10000",
+				},
+			},
+		},
 
 		// The BinaryAssetsDirectory is only required if you want to run the tests directly
 		// without call the makefile target test. If not informed it will look for the

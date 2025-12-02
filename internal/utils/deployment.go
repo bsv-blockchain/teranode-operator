@@ -108,6 +108,13 @@ func SetDeploymentOverrides(client client.Client, dep *appsv1.Deployment, cr v1a
 		}
 		dep.Spec.Template.Spec.ImagePullSecrets = append(dep.Spec.Template.Spec.ImagePullSecrets, *cr.DeploymentOverrides().ImagePullSecrets...)
 	}
+
+	if len(cr.DeploymentOverrides().Volumes) > 0 {
+		dep.Spec.Template.Spec.Volumes = append(dep.Spec.Template.Spec.Volumes, cr.DeploymentOverrides().Volumes...)
+	}
+	if len(cr.DeploymentOverrides().VolumeMounts) > 0 {
+		dep.Spec.Template.Spec.Containers[0].VolumeMounts = append(dep.Spec.Template.Spec.Containers[0].VolumeMounts, cr.DeploymentOverrides().VolumeMounts...)
+	}
 }
 
 func SetClusterOverrides(client client.Client, dep *appsv1.Deployment, cr v1alpha1.TeranodeService) {

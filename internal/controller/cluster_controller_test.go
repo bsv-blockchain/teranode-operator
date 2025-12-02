@@ -449,6 +449,78 @@ var _ = Describe("Cluster Controller", func() {
 			Expect(dep.Spec.Template.Spec.ImagePullSecrets).To(ContainElements(customSecrets))
 		})
 
+		It("should append custom volumes and mounts when specified on service", func() {
+			cluster := &teranodev1alpha1.Cluster{}
+			err := k8sClient.Get(ctx, typeNamespacedName, cluster)
+			Expect(err).NotTo(HaveOccurred())
+
+			// Enable all components
+			enableAllServices(cluster)
+
+			// Define custom volume
+			customVolumes := []v1.Volume{
+				{Name: "custom-volume-1"},
+				{Name: "custom-volume-2"},
+			}
+
+			volumeMounts := []v1.VolumeMount{
+				{Name: "custom-volume-1", MountPath: "/mnt/custom1"},
+				{Name: "custom-volume-2", MountPath: "/mnt/custom2"},
+			}
+
+			cluster.Spec.BlockValidator.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
+			cluster.Spec.BlockValidator.Spec.DeploymentOverrides.Volumes = customVolumes
+			cluster.Spec.BlockValidator.Spec.DeploymentOverrides.VolumeMounts = volumeMounts
+
+			// Update the cluster
+			Expect(k8sClient.Update(ctx, cluster)).To(Succeed())
+
+			// Reconcile
+			controllerReconciler := &ClusterReconciler{
+				Client: k8sClient,
+				Scheme: k8sClient.Scheme(),
+			}
+
+			_, err = controllerReconciler.Reconcile(ctx, reconcile.Request{
+				NamespacedName: typeNamespacedName,
+			})
+			Expect(err).NotTo(HaveOccurred())
+
+			// Verify pull secrets were applied to a component (e.g., Asset)
+			bv := &teranodev1alpha1.BlockValidator{}
+			Expect(k8sClient.Get(ctx, types.NamespacedName{
+				Name:      fmt.Sprintf("%s-blockvalidator", cluster.Name),
+				Namespace: "default",
+			}, bv)).To(Succeed())
+			Expect(bv.Spec.DeploymentOverrides.Volumes).NotTo(BeNil())
+			Expect(bv.Spec.DeploymentOverrides.Volumes).To(ContainElements(customVolumes))
+			Expect(bv.Spec.DeploymentOverrides.VolumeMounts).NotTo(BeNil())
+			Expect(bv.Spec.DeploymentOverrides.VolumeMounts).To(ContainElements(volumeMounts))
+
+			// Reconcile block validator
+			bvReconciler := &BlockValidatorReconciler{
+				Client: k8sClient,
+				Scheme: k8sClient.Scheme(),
+			}
+
+			_, err = bvReconciler.Reconcile(ctx, reconcile.Request{
+				NamespacedName: types.NamespacedName{
+					Name:      fmt.Sprintf("%s-blockvalidator", cluster.Name),
+					Namespace: "default",
+				},
+			})
+			Expect(err).NotTo(HaveOccurred())
+
+			// fetch block validator deployment to verify volumes are set there too
+			dep := &appsv1.Deployment{}
+			Expect(k8sClient.Get(ctx, types.NamespacedName{
+				Name:      "block-validator",
+				Namespace: "default",
+			}, dep)).To(Succeed())
+			Expect(dep.Spec.Template.Spec.Volumes).To(ContainElements(customVolumes))
+			Expect(dep.Spec.Template.Spec.Containers[0].VolumeMounts).To(ContainElements(volumeMounts))
+		})
+
 		It("should disable all services when cluster is disabled", func() {
 			cluster := &teranodev1alpha1.Cluster{}
 			err := k8sClient.Get(ctx, typeNamespacedName, cluster)
