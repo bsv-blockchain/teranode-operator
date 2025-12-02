@@ -14,21 +14,22 @@ import (
 	"github.com/bsv-blockchain/teranode-operator/internal/utils"
 )
 
-// ReconcileDeployment is the peer service deployment reconciler
-func (r *PeerReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
-	peer := teranodev1alpha1.Peer{}
-	if err := r.Get(r.Context, r.NamespacedName, &peer); err != nil {
+// ReconcileDeployment is the pruner service deployment reconciler
+func (r *PrunerReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
+	pruner := teranodev1alpha1.Pruner{}
+	if err := r.Get(r.Context, r.NamespacedName, &pruner); err != nil {
 		return false, err
 	}
+	labels := getAppLabels("pruner")
 	dep := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "peer",
+			Name:      "pruner",
 			Namespace: r.NamespacedName.Namespace,
-			Labels:    getAppLabels("peer"),
+			Labels:    labels,
 		},
 	}
 	_, err := controllerutil.CreateOrUpdate(r.Context, r.Client, &dep, func() error {
-		return r.updateDeployment(&dep, &peer)
+		return r.updateDeployment(&dep, &pruner)
 	})
 	if err != nil {
 		return false, err
@@ -36,25 +37,25 @@ func (r *PeerReconciler) ReconcileDeployment(log logr.Logger) (bool, error) {
 	return true, nil
 }
 
-func (r *PeerReconciler) updateDeployment(dep *appsv1.Deployment, peer *teranodev1alpha1.Peer) error {
-	err := controllerutil.SetControllerReference(peer, dep, r.Scheme)
+func (r *PrunerReconciler) updateDeployment(dep *appsv1.Deployment, pruner *teranodev1alpha1.Pruner) error {
+	err := controllerutil.SetControllerReference(pruner, dep, r.Scheme)
 	if err != nil {
 		return err
 	}
-	dep.Spec = *defaultPeerDeploymentSpec()
-	utils.SetDeploymentOverrides(r.Client, dep, peer)
-	utils.SetClusterOverrides(r.Client, dep, peer)
+	dep.Spec = *defaultPrunerDeploymentSpec()
+	utils.SetDeploymentOverrides(r.Client, dep, pruner)
+	utils.SetClusterOverrides(r.Client, dep, pruner)
 
 	return nil
 }
 
-func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
-	podLabels := getAppLabels("peer")
+func defaultPrunerDeploymentSpec() *appsv1.DeploymentSpec {
+	podLabels := getAppLabels("pruner")
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
 			Name:  "SERVICE_NAME",
-			Value: "p2p-service",
+			Value: "pruner-service",
 		},
 	}
 	return &appsv1.DeploymentSpec{
@@ -77,7 +78,7 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 								PodAffinityTerm: corev1.PodAffinityTerm{
 									LabelSelector: &metav1.LabelSelector{
 										MatchLabels: map[string]string{
-											"app": "peer",
+											"app": "pruner",
 										},
 									},
 									TopologyKey: "kubernetes.io/hostname",
@@ -91,10 +92,10 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 					{
 						EnvFrom:         envFrom,
 						Env:             env,
-						Args:            []string{"-p2p=1"},
+						Args:            []string{"-pruner=1"},
 						Image:           DefaultImage,
 						ImagePullPolicy: corev1.PullAlways,
-						Name:            "peer",
+						Name:            "pruner",
 						Resources: corev1.ResourceRequirements{
 							Limits: corev1.ResourceList{
 								corev1.ResourceMemory: resource.MustParse("2Gi"),
@@ -128,36 +129,14 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 							FailureThreshold:    2,
 							TimeoutSeconds:      3,
 						},
-						StartupProbe: &corev1.Probe{
-							ProbeHandler: corev1.ProbeHandler{
-								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health/readiness",
-									Port: intstr.FromInt32(HealthPort),
-								},
-							},
-							FailureThreshold: 30,
-							PeriodSeconds:    10,
-						},
 						TerminationMessagePolicy: corev1.TerminationMessageFallbackToLogsOnError,
 						Ports: []corev1.ContainerPort{
 							{
-								ContainerPort: DebuggerPort,
-								Protocol:      corev1.ProtocolTCP,
-							},
-							{
-								ContainerPort: PeerPort,
-								Protocol:      corev1.ProtocolTCP,
-							},
-							{
-								ContainerPort: PeerLegacyPort,
-								Protocol:      corev1.ProtocolTCP,
-							},
-							{
-								ContainerPort: PeerHTTPPort,
-								Protocol:      corev1.ProtocolTCP,
-							},
-							{
 								ContainerPort: ProfilerPort,
+								Protocol:      corev1.ProtocolTCP,
+							},
+							{
+								ContainerPort: DebuggerPort,
 								Protocol:      corev1.ProtocolTCP,
 							},
 							{
@@ -165,24 +144,10 @@ func defaultPeerDeploymentSpec() *appsv1.DeploymentSpec {
 								Protocol:      corev1.ProtocolTCP,
 							},
 						},
-						VolumeMounts: []corev1.VolumeMount{
-							{
-								MountPath: "/data",
-								Name:      SharedPVCName,
-							},
-						},
+						VolumeMounts: []corev1.VolumeMount{},
 					},
 				},
-				Volumes: []corev1.Volume{
-					{
-						Name: SharedPVCName,
-						VolumeSource: corev1.VolumeSource{
-							PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-								ClaimName: SharedPVCName,
-							},
-						},
-					},
-				},
+				Volumes: []corev1.Volume{},
 			},
 		},
 	}
