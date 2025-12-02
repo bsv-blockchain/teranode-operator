@@ -255,6 +255,13 @@ var _ = Describe("Cluster Controller", func() {
 				Namespace: "default",
 			}, alertSystem)
 			Expect(errors.IsNotFound(err)).To(BeTrue())
+
+			// Verify Pruner was deleted
+			err = k8sClient.Get(ctx, types.NamespacedName{
+				Name:      fmt.Sprintf("%s-pruner", cluster.Name),
+				Namespace: "default",
+			}, alertSystem)
+			Expect(errors.IsNotFound(err)).To(BeTrue())
 		})
 
 		It("should apply image from cluster to components", func() {
@@ -266,7 +273,8 @@ var _ = Describe("Cluster Controller", func() {
 			// Set a custom image for the cluster
 			testImage := "custom-image:v1"
 			cluster.Spec.Image = testImage
-			cluster.Spec.Asset.Enabled = true // Asset should have this image
+			cluster.Spec.Asset.Enabled = true  // Asset should have this image
+			cluster.Spec.Pruner.Enabled = true // Pruner should have this image
 
 			// Set a second custom image for BlockPersister
 			// This should take precedence over the cluster image
@@ -307,6 +315,14 @@ var _ = Describe("Cluster Controller", func() {
 				Namespace: "default",
 			}, blockPersister)).To(Succeed())
 			Expect(blockPersister.Spec.DeploymentOverrides.Image).To(Equal(testImage2))
+
+			// Verify Pruner kept its custom image
+			pruner := &teranodev1alpha1.Pruner{}
+			Expect(k8sClient.Get(ctx, types.NamespacedName{
+				Name:      fmt.Sprintf("%s-pruner", cluster.Name),
+				Namespace: "default",
+			}, pruner)).To(Succeed())
+			Expect(pruner.Spec.DeploymentOverrides.Image).To(Equal(testImage))
 		})
 
 		It("should create all components when all are enabled", func() {
@@ -323,6 +339,7 @@ var _ = Describe("Cluster Controller", func() {
 			cluster.Spec.BlockValidator.Enabled = true
 			cluster.Spec.Coinbase.Enabled = true
 			cluster.Spec.Legacy.Enabled = true
+			cluster.Spec.Pruner.Enabled = true
 			cluster.Spec.Propagation.Enabled = true
 			cluster.Spec.SubtreeValidator.Enabled = true
 			cluster.Spec.UtxoPersister.Enabled = true
@@ -355,6 +372,7 @@ var _ = Describe("Cluster Controller", func() {
 				{fmt.Sprintf("%s-coinbase", cluster.Name), &teranodev1alpha1.Coinbase{}},
 				{fmt.Sprintf("%s-legacy", cluster.Name), &teranodev1alpha1.Legacy{}},
 				{fmt.Sprintf("%s-propagation", cluster.Name), &teranodev1alpha1.Propagation{}},
+				{fmt.Sprintf("%s-pruner", cluster.Name), &teranodev1alpha1.Pruner{}},
 				{fmt.Sprintf("%s-subtreevalidator", cluster.Name), &teranodev1alpha1.SubtreeValidator{}},
 				{fmt.Sprintf("%s-utxo-persister", cluster.Name), &teranodev1alpha1.UtxoPersister{}},
 				{fmt.Sprintf("%s-validator", cluster.Name), &teranodev1alpha1.Validator{}},
@@ -464,6 +482,7 @@ var _ = Describe("Cluster Controller", func() {
 				{fmt.Sprintf("%s-blockvalidator", cluster.Name), &teranodev1alpha1.BlockValidator{}},
 				{fmt.Sprintf("%s-coinbase", cluster.Name), &teranodev1alpha1.Coinbase{}},
 				{fmt.Sprintf("%s-legacy", cluster.Name), &teranodev1alpha1.Legacy{}},
+				{fmt.Sprintf("%s-pruner", cluster.Name), &teranodev1alpha1.Pruner{}},
 				{fmt.Sprintf("%s-propagation", cluster.Name), &teranodev1alpha1.Propagation{}},
 				{fmt.Sprintf("%s-subtreevalidator", cluster.Name), &teranodev1alpha1.SubtreeValidator{}},
 				{fmt.Sprintf("%s-utxo-persister", cluster.Name), &teranodev1alpha1.UtxoPersister{}},
@@ -1142,6 +1161,7 @@ func enableAllServices(cluster *teranodev1alpha1.Cluster) {
 	cluster.Spec.Coinbase.Enabled = true
 	cluster.Spec.Legacy.Enabled = true
 	cluster.Spec.Peer.Enabled = true
+	cluster.Spec.Pruner.Enabled = true
 	cluster.Spec.Propagation.Enabled = true
 	cluster.Spec.RPC.Enabled = true
 	cluster.Spec.SubtreeValidator.Enabled = true

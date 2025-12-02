@@ -135,4 +135,7 @@ func SetClusterOverrides(client client.Client, dep *appsv1.Deployment, cr v1alph
 		}
 		dep.Spec.Template.Spec.ImagePullSecrets = append(dep.Spec.Template.Spec.ImagePullSecrets, *clusterOwner.Spec.ImagePullSecrets...)
 	}
+	if clusterOwner.Spec.Image != "" {
+		dep.Spec.Template.Spec.Containers[0].Image = clusterOwner.Spec.Image
+	}
 }
