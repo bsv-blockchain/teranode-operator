@@ -42,8 +42,8 @@ func (r *CoinbaseReconciler) updateDeployment(dep *appsv1.Deployment, coinbase *
 		return err
 	}
 	dep.Spec = *defaultCoinbaseDeploymentSpec()
-	utils.SetDeploymentOverrides(r.Client, dep, coinbase)
 	utils.SetClusterOverrides(r.Client, dep, coinbase)
+	utils.SetDeploymentOverrides(r.Client, dep, coinbase)
 
 	return nil
 }
