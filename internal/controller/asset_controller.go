@@ -81,10 +81,10 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 
 	// Update scale status (replicas and selector) from deployment
 	deployment := &appsv1.Deployment{}
-	if err := r.Get(ctx, types.NamespacedName{
+	if getErr := r.Get(ctx, types.NamespacedName{
 		Name:      AssetDeploymentName,
 		Namespace: asset.Namespace,
-	}, deployment); err == nil {
+	}, deployment); getErr == nil {
 		replicas, selector := utils.GetScaleStatusFromDeployment(deployment)
 		asset.Status.Replicas = replicas
 		asset.Status.Selector = selector

@@ -50,6 +50,7 @@ func (r *ClusterReconciler) ReconcileSubtreeValidator(log logr.Logger) (bool, er
 	return true, nil
 }
 
+//nolint:gocognit,gocyclo // Function complexity is inherent to handling multiple override cases
 func (r *ClusterReconciler) updateSubtreeValidator(subtreeValidator *teranodev1alpha1.SubtreeValidator, cluster *teranodev1alpha1.Cluster) error {
 	err := controllerutil.SetControllerReference(cluster, subtreeValidator, r.Scheme)
 	if err != nil {
@@ -62,6 +63,7 @@ func (r *ClusterReconciler) updateSubtreeValidator(subtreeValidator *teranodev1a
 	}
 
 	// Selectively merge cluster spec - only override fields that are explicitly set
+	//nolint:nestif // Nested conditions required for selective field merging
 	if cluster.Spec.SubtreeValidator.Spec != nil {
 		clusterSpec := cluster.Spec.SubtreeValidator.Spec
 

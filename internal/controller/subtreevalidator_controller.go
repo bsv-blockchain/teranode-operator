@@ -79,10 +79,10 @@ func (r *SubtreeValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 	// Update scale status (replicas and selector) from deployment
 	deployment := &appsv1.Deployment{}
-	if err := r.Get(ctx, types.NamespacedName{
+	if getErr := r.Get(ctx, types.NamespacedName{
 		Name:      SubtreeValidatorDeploymentName,
 		Namespace: req.Namespace,
-	}, deployment); err == nil {
+	}, deployment); getErr == nil {
 		replicas, selector := utils.GetScaleStatusFromDeployment(deployment)
 		subtreeValidator.Status.Replicas = replicas
 		subtreeValidator.Status.Selector = selector

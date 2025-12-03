@@ -6,6 +6,8 @@ import (
 
 // mergeDeploymentOverrides selectively merges deployment overrides from cluster spec
 // Only fields explicitly set in clusterOverrides will override the target
+//
+//nolint:gocognit,gocyclo // Function complexity is inherent to handling multiple override fields
 func mergeDeploymentOverrides(target *teranodev1alpha1.DeploymentOverrides, clusterOverrides *teranodev1alpha1.DeploymentOverrides) {
 	if clusterOverrides.Replicas != nil {
 		target.Replicas = clusterOverrides.Replicas

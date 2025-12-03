@@ -29,11 +29,11 @@ import (
 	"github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 )
 
-//nolint:gocognit,gocyclo // Function complexity is inherent to handling multiple override cases
 func SetDeploymentOverrides(client client.Client, dep *appsv1.Deployment, cr v1alpha1.TeranodeService) {
 	SetDeploymentOverridesWithContext(context.Background(), logr.Logger{}, client, dep, cr, "")
 }
 
+//nolint:gocognit,gocyclo // Function complexity is inherent to handling multiple override cases
 func SetDeploymentOverridesWithContext(ctx context.Context, log logr.Logger, client client.Client, dep *appsv1.Deployment, cr v1alpha1.TeranodeService, crKind string) {
 	if cr.DeploymentOverrides() == nil {
 		return
@@ -122,6 +122,7 @@ func SetDeploymentOverridesWithContext(ctx context.Context, log logr.Logger, cli
 	}
 }
 
+//nolint:gocognit,gocyclo // Function complexity is inherent to handling multiple override cases
 func SetClusterOverrides(client client.Client, dep *appsv1.Deployment, cr v1alpha1.TeranodeService) {
 	// if parent cluster CR has a configmap or env vars set, append it first
 	clusterOwner := GetClusterOwner(client, context.Background(), cr.Metadata())
