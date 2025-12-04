@@ -129,6 +129,16 @@ func defaultPrunerDeploymentSpec() *appsv1.DeploymentSpec {
 							FailureThreshold:    2,
 							TimeoutSeconds:      3,
 						},
+						StartupProbe: &corev1.Probe{
+							ProbeHandler: corev1.ProbeHandler{
+								HTTPGet: &corev1.HTTPGetAction{
+									Path: "/health/readiness",
+									Port: intstr.FromInt32(HealthPort),
+								},
+							},
+							FailureThreshold: 30,
+							PeriodSeconds:    10,
+						},
 						TerminationMessagePolicy: corev1.TerminationMessageFallbackToLogsOnError,
 						Ports: []corev1.ContainerPort{
 							{
