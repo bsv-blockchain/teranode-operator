@@ -85,10 +85,10 @@ func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 
 	// Update scale status (replicas and selector) from deployment
 	deployment := &appsv1.Deployment{}
-	if err := r.Get(ctx, types.NamespacedName{
+	if getErr := r.Get(ctx, types.NamespacedName{
 		Name:      PropagationDeploymentName,
 		Namespace: propagation.Namespace,
-	}, deployment); err == nil {
+	}, deployment); getErr == nil {
 		replicas, selector := utils.GetScaleStatusFromDeployment(deployment)
 		propagation.Status.Replicas = replicas
 		propagation.Status.Selector = selector

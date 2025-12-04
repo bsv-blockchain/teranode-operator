@@ -50,6 +50,7 @@ func (r *ClusterReconciler) ReconcileRPC(log logr.Logger) (bool, error) {
 	return true, nil
 }
 
+//nolint:gocognit,gocyclo // Function complexity is inherent to handling multiple override cases
 func (r *ClusterReconciler) updateRPC(rpc *teranodev1alpha1.RPC, cluster *teranodev1alpha1.Cluster) error {
 	err := controllerutil.SetControllerReference(cluster, rpc, r.Scheme)
 	if err != nil {
