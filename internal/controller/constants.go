@@ -37,6 +37,7 @@ const (
 	MinerHTTPPort            = 8092
 	PeerPort                 = 9905
 	PeerLegacyPort           = 8333
+	PeerGRPCPort             = 9904
 	PeerHTTPPort             = 9906
 	PropagationGRPCPort      = 8084
 	PropagationHTTPPort      = 8833
