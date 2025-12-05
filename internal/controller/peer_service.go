@@ -68,6 +68,12 @@ func defaultPeerServiceSpec() *corev1.ServiceSpec {
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
+				Name:       "grpc",
+				Port:       int32(PeerGRPCPort),
+				TargetPort: intstr.FromInt32(PeerGRPCPort),
+				Protocol:   corev1.ProtocolTCP,
+			},
+			{
 				Name:       "delve",
 				Port:       int32(DebuggerPort),
 				TargetPort: intstr.FromInt32(DebuggerPort),

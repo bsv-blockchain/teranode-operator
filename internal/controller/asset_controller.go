@@ -67,10 +67,13 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 	r.Context = ctx
 	r.NamespacedName = req.NamespacedName
 	asset := teranodev1alpha1.Asset{}
+
 	if err := r.Get(ctx, req.NamespacedName, &asset); err != nil {
 		r.Log.Error(err, "unable to fetch asset CR")
 		return result, nil
 	}
+
+	r.Log.Info("reconciling asset", "cluster", asset.Name)
 
 	_, err := utils.ReconcileBatch(r.Log,
 		r.ReconcileDeployment,
