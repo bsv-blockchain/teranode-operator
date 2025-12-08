@@ -2,7 +2,7 @@
 # Note: Not using SHA256 digest pinning for golang base image to support multi-arch builds.
 # SHA256 digests pin to a specific platform's image, preventing ARM64/AMD64 cross-compilation.
 # Version pinning (1.25.2) still provides reproducibility while allowing platform flexibility.
-FROM golang:1.25.4 AS builder
+FROM golang:1.25.5 AS builder
 ARG TARGETOS
 ARG TARGETARCH
 
@@ -29,7 +29,7 @@ RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -a -o ma
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM gcr.io/distroless/static:nonroot@sha256:e8a4044e0b4ae4257efa45fc026c0bc30ad320d43bd4c1a7d5271bd241e386d0
+FROM gcr.io/distroless/static:nonroot@sha256:2b7c93f6d6648c11f0e80a48558c8f77885eb0445213b8e69a6a0d7c89fc6ae4
 WORKDIR /
 COPY --from=builder /workspace/manager .
 USER 65532:65532
