@@ -18,10 +18,8 @@ package controller
 
 import (
 	"context"
-	"errors"
 	"time"
 
-	"github.com/bsv-blockchain/teranode/services/blockchain"
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -42,11 +40,10 @@ import (
 type BlockchainReconciler struct {
 	client.Client
 
-	BlockchainClient blockchain.ClientI
-	Scheme           *runtime.Scheme
-	Log              logr.Logger
-	NamespacedName   types.NamespacedName
-	Context          context.Context //nolint:containedctx // Required for reconciler pattern
+	Scheme         *runtime.Scheme
+	Log            logr.Logger
+	NamespacedName types.NamespacedName
+	Context        context.Context //nolint:containedctx // Required for reconciler pattern
 }
 
 //+kubebuilder:rbac:groups=teranode.bsvblockchain.org,resources=blockchains,verbs=get;list;watch;create;update;patch;delete
@@ -108,46 +105,6 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	// Update status and ignore if we error out
 	_ = r.Client.Status().Update(ctx, &b)
 
-	// If we want to monitor the FSM, trigger state check
-	if b.Spec.FiniteStateMachine != nil && b.Spec.FiniteStateMachine.Enabled { //nolint:nestif // FSM reconciliation logic
-		r.Log.Info("FSM monitoring is turned on, reconciling state")
-		// Fetch latest blockchain CR so the next status update works
-		b = teranodev1alpha1.Blockchain{}
-		if err := r.Get(ctx, req.NamespacedName, &b); err != nil {
-			r.Log.Error(err, "unable to fetch blockchain CR")
-			return result, nil
-		}
-		state, err := r.GetFSMState(r.Log)
-		if err != nil {
-			if errors.Is(err, ErrFSMDisabled) {
-				// FSM is disabled, skip FSM reconciliation
-				return ctrl.Result{}, nil
-			}
-
-			if isConnectionError(err) {
-				r.Log.Info("FSM monitoring unavailable - operator may be running out-of-cluster. FSM state cannot be retrieved when .svc.cluster.local DNS is not resolvable", "error", err.Error())
-				// Don't requeue aggressively if we know we're out-of-cluster
-				return ctrl.Result{Requeue: true, RequeueAfter: time.Minute * 5}, nil
-			}
-			r.Log.Error(err, "unable to get FSM state, trying again in a minute")
-			return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, nil
-		}
-
-		if state == nil {
-			return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, nil
-		}
-		r.Log.Info("FSM Status", "state", state.String())
-
-		err = r.ReconcileState(*state)
-		if err != nil {
-			return ctrl.Result{Requeue: true, RequeueAfter: time.Minute}, err
-		}
-		b.Status.FSMState = state.String()
-		err = r.Client.Status().Update(ctx, &b)
-		if err != nil {
-			r.Log.Error(err, "unable to update blockchain status")
-		}
-	}
 	return ctrl.Result{Requeue: true, RequeueAfter: time.Minute * 5}, nil
 }
 

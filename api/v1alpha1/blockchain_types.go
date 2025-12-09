@@ -22,15 +22,7 @@ import (
 
 // BlockchainSpec defines the desired state of Blockchain
 type BlockchainSpec struct {
-	DeploymentOverrides *DeploymentOverrides        `json:"deploymentOverrides,omitempty"`
-	FiniteStateMachine  *FiniteStateMachineSettings `json:"finiteStateMachine,omitempty"`
-}
-
-// FiniteStateMachineSettings defines the configuration of the FSM
-type FiniteStateMachineSettings struct {
-	Enabled      bool             `json:"enabled,omitempty"`
-	Host         string           `json:"host,omitempty"`
-	PollInterval *metav1.Duration `json:"pollInterval,omitempty"`
+	DeploymentOverrides *DeploymentOverrides `json:"deploymentOverrides,omitempty"`
 }
 
 // BlockchainStatus defines the observed state of Blockchain
