@@ -59,8 +59,6 @@ type BlockchainReconciler struct {
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
-//
-//nolint:gocognit,gocyclo // Reconcile function complexity is inherent to the reconciliation logic
 func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	result := ctrl.Result{}
 	r.Log = log.FromContext(ctx).WithValues("blockchain", req.NamespacedName)
