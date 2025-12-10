@@ -100,7 +100,7 @@ func (r *ClusterReconciler) updatePropagation(propagation *teranodev1alpha1.Prop
 	if propagation.Spec.DeploymentOverrides == nil {
 		propagation.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
-	if cluster.Spec.Image != "" && propagation.Spec.DeploymentOverrides.Image == "" {
+	if cluster.Spec.Image != "" {
 		propagation.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	// Always apply cluster-level ImagePullSecrets (they override or are the default)

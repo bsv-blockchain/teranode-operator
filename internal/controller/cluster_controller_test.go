@@ -279,6 +279,7 @@ var _ = Describe("Cluster Controller", func() {
 			testImage := "custom-image:v1"
 			cluster.Spec.Image = testImage
 			cluster.Spec.Asset.Enabled = true            // Asset should have this image
+			cluster.Spec.Propagation.Enabled = true      // Propagation should have this image
 			cluster.Spec.SubtreeValidator.Enabled = true // SubtreeValidator should have this image
 			cluster.Spec.Pruner.Enabled = true           // Pruner should have this image
 
@@ -350,6 +351,14 @@ var _ = Describe("Cluster Controller", func() {
 				Namespace: "default",
 			}, asset)).To(Succeed())
 			Expect(asset.Spec.DeploymentOverrides.Image).To(Equal("custom-image-updated:v3"))
+
+			prop := &teranodev1alpha1.Propagation{}
+			// Verify Propagation got the new image
+			Expect(k8sClient.Get(ctx, types.NamespacedName{
+				Name:      fmt.Sprintf("%s-propagation", cluster.Name),
+				Namespace: "default",
+			}, prop)).To(Succeed())
+			Expect(prop.Spec.DeploymentOverrides.Image).To(Equal("custom-image-updated:v3"))
 		})
 
 		It("should create all components when all are enabled", func() {
@@ -466,6 +475,8 @@ var _ = Describe("Cluster Controller", func() {
 				},
 			})
 			Expect(err).NotTo(HaveOccurred())
+
+			time.Sleep(1 * time.Second) // wait for deployment to be created
 
 			// fetch asset deployment to verify pull secrets are set there too
 			dep := &appsv1.Deployment{}
