@@ -19,6 +19,7 @@ package controller
 import (
 	"context"
 	"fmt"
+	"time"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -72,6 +73,7 @@ var _ = Describe("Cluster Controller", func() {
 		BeforeEach(func() {
 			By("creating the custom resource for the Kind Cluster")
 			err := k8sClient.Get(ctx, typeNamespacedName, cluster)
+
 			if err != nil && errors.IsNotFound(err) {
 				resource := &teranodev1alpha1.Cluster{
 					ObjectMeta: metav1.ObjectMeta{
@@ -141,6 +143,9 @@ var _ = Describe("Cluster Controller", func() {
 
 			By("Cleanup the specific resource instance Cluster")
 			Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
+
+			// sleep for 1 second to allow for cleanup
+			time.Sleep(1 * time.Second)
 		})
 		It("should successfully reconcile the resource", func() {
 			By("Reconciling the created resource")
@@ -273,8 +278,10 @@ var _ = Describe("Cluster Controller", func() {
 			// Set a custom image for the cluster
 			testImage := "custom-image:v1"
 			cluster.Spec.Image = testImage
-			cluster.Spec.Asset.Enabled = true  // Asset should have this image
-			cluster.Spec.Pruner.Enabled = true // Pruner should have this image
+			cluster.Spec.Asset.Enabled = true            // Asset should have this image
+			cluster.Spec.Propagation.Enabled = true      // Propagation should have this image
+			cluster.Spec.SubtreeValidator.Enabled = true // SubtreeValidator should have this image
+			cluster.Spec.Pruner.Enabled = true           // Pruner should have this image
 
 			// Set a second custom image for BlockPersister
 			// This should take precedence over the cluster image
@@ -323,6 +330,35 @@ var _ = Describe("Cluster Controller", func() {
 				Namespace: "default",
 			}, pruner)).To(Succeed())
 			Expect(pruner.Spec.DeploymentOverrides.Image).To(Equal(testImage))
+
+			// Fetch the cluster CR again; verify updates to the image actually reconciles everything
+			err = k8sClient.Get(ctx, typeNamespacedName, cluster)
+			Expect(err).NotTo(HaveOccurred())
+
+			cluster.Spec.Image = "custom-image-updated:v3"
+
+			// Update the cluster
+			Expect(k8sClient.Update(ctx, cluster)).To(Succeed())
+
+			_, err = controllerReconciler.Reconcile(ctx, reconcile.Request{
+				NamespacedName: typeNamespacedName,
+			})
+			Expect(err).NotTo(HaveOccurred())
+
+			// Verify Asset got the new image
+			Expect(k8sClient.Get(ctx, types.NamespacedName{
+				Name:      fmt.Sprintf("%s-asset", cluster.Name),
+				Namespace: "default",
+			}, asset)).To(Succeed())
+			Expect(asset.Spec.DeploymentOverrides.Image).To(Equal("custom-image-updated:v3"))
+
+			prop := &teranodev1alpha1.Propagation{}
+			// Verify Propagation got the new image
+			Expect(k8sClient.Get(ctx, types.NamespacedName{
+				Name:      fmt.Sprintf("%s-propagation", cluster.Name),
+				Namespace: "default",
+			}, prop)).To(Succeed())
+			Expect(prop.Spec.DeploymentOverrides.Image).To(Equal("custom-image-updated:v3"))
 		})
 
 		It("should create all components when all are enabled", func() {
@@ -440,6 +476,8 @@ var _ = Describe("Cluster Controller", func() {
 			})
 			Expect(err).NotTo(HaveOccurred())
 
+			time.Sleep(1 * time.Second) // wait for deployment to be created
+
 			// fetch asset deployment to verify pull secrets are set there too
 			dep := &appsv1.Deployment{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
@@ -459,8 +497,24 @@ var _ = Describe("Cluster Controller", func() {
 
 			// Define custom volume
 			customVolumes := []v1.Volume{
-				{Name: "custom-volume-1"},
-				{Name: "custom-volume-2"},
+				{
+					Name: "custom-volume-1",
+					VolumeSource: v1.VolumeSource{
+						EmptyDir: &v1.EmptyDirVolumeSource{
+							Medium:    "",
+							SizeLimit: nil,
+						},
+					},
+				},
+				{
+					Name: "custom-volume-2",
+					VolumeSource: v1.VolumeSource{
+						EmptyDir: &v1.EmptyDirVolumeSource{
+							Medium:    "",
+							SizeLimit: nil,
+						},
+					},
+				},
 			}
 
 			volumeMounts := []v1.VolumeMount{

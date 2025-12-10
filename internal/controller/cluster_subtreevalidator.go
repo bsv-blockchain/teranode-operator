@@ -85,7 +85,7 @@ func (r *ClusterReconciler) updateSubtreeValidator(subtreeValidator *teranodev1a
 	if subtreeValidator.Spec.DeploymentOverrides == nil {
 		subtreeValidator.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
-	if cluster.Spec.Image != "" && subtreeValidator.Spec.DeploymentOverrides.Image == "" {
+	if cluster.Spec.Image != "" {
 		subtreeValidator.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	// Always apply cluster-level ImagePullSecrets (they override or are the default)
