@@ -92,4 +92,7 @@ replace github.com/opencontainers/runc v1.1.5 => github.com/opencontainers/runc 
 // Security fix: CVE-2024-25621 - upgrade containerd to latest patched version
 replace github.com/containerd/containerd/v2 v2.1.4 => github.com/containerd/containerd/v2 v2.2.0
 
+// Security fix: CVE-2025-47914 - upgrade x/crypto to patched version
+replace golang.org/x/crypto v0.44.0 => golang.org/x/crypto v0.45.0
+
 // replace github.com/bitcoin-sv/go-sdk => github.com/bsv-blockchain/go-sdk v1.2.11
