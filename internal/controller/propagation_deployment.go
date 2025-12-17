@@ -73,6 +73,9 @@ func defaultPropagationDeploymentSpec() *appsv1.DeploymentSpec {
 	return &appsv1.DeploymentSpec{
 		Replicas: ptr.To(int32(DefaultPropagationReplicas)),
 		Selector: metav1.SetAsLabelSelector(labels),
+		Strategy: appsv1.DeploymentStrategy{
+			Type: appsv1.RollingUpdateDeploymentStrategyType,
+		},
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
 				CreationTimestamp: metav1.Time{},
