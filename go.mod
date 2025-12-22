@@ -9,7 +9,7 @@ require (
 	k8s.io/api v0.36.0-alpha.0
 	k8s.io/apimachinery v0.36.0-alpha.0
 	k8s.io/client-go v0.36.0-alpha.0
-	k8s.io/utils v0.0.0-20251002143259-bc988d571ff4
+	k8s.io/utils v0.0.0-20251220205832-9d40a56c1308
 	sigs.k8s.io/controller-runtime v0.22.4
 )
 
@@ -23,8 +23,8 @@ require (
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.0 // indirect
 	github.com/go-logr/zapr v1.3.0 // indirect
-	github.com/go-openapi/jsonpointer v0.22.3 // indirect
-	github.com/go-openapi/jsonreference v0.21.3 // indirect
+	github.com/go-openapi/jsonpointer v0.22.4 // indirect
+	github.com/go-openapi/jsonreference v0.21.4 // indirect
 	github.com/go-openapi/swag v0.25.4 // indirect
 	github.com/go-openapi/swag/cmdutils v0.25.4 // indirect
 	github.com/go-openapi/swag/conv v0.25.4 // indirect
@@ -38,11 +38,10 @@ require (
 	github.com/go-openapi/swag/typeutils v0.25.4 // indirect
 	github.com/go-openapi/swag/yamlutils v0.25.4 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
-	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/btree v1.1.3 // indirect
 	github.com/google/gnostic-models v0.7.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/pprof v0.0.0-20251114195745-4902fdda35c8 // indirect
+	github.com/google/pprof v0.0.0-20251213031049-b05bdaca462f // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.1 // indirect
@@ -61,20 +60,20 @@ require (
 	go.uber.org/zap v1.27.1 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/mod v0.30.0 // indirect
-	golang.org/x/net v0.47.0 // indirect
-	golang.org/x/oauth2 v0.33.0 // indirect
-	golang.org/x/sync v0.18.0 // indirect
-	golang.org/x/sys v0.38.0 // indirect
-	golang.org/x/term v0.37.0 // indirect
-	golang.org/x/text v0.31.0 // indirect
+	golang.org/x/mod v0.31.0 // indirect
+	golang.org/x/net v0.48.0 // indirect
+	golang.org/x/oauth2 v0.34.0 // indirect
+	golang.org/x/sync v0.19.0 // indirect
+	golang.org/x/sys v0.39.0 // indirect
+	golang.org/x/term v0.38.0 // indirect
+	golang.org/x/text v0.32.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
-	golang.org/x/tools v0.39.0 // indirect
+	golang.org/x/tools v0.40.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.5.0 // indirect
-	google.golang.org/protobuf v1.36.10 // indirect
+	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.13.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
-	k8s.io/apiextensions-apiserver v0.34.2 // indirect
+	k8s.io/apiextensions-apiserver v0.35.0 // indirect
 	k8s.io/klog/v2 v2.130.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20251125145642-4e65d59e963e // indirect
 	sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 // indirect
@@ -84,15 +83,15 @@ require (
 )
 
 //nolint:gomoddirectives // Required for dependency override
-replace github.com/libsv/go-bt/v2 => github.com/bsv-blockchain/go-bt/v2 v2.5.0
+replace github.com/libsv/go-bt/v2 => github.com/bsv-blockchain/go-bt/v2 v2.5.2
 
 // Security fix: CVE-2025-31133, CVE-2025-52565 - upgrade runc to patched version
-replace github.com/opencontainers/runc v1.1.5 => github.com/opencontainers/runc v1.3.3
+replace github.com/opencontainers/runc v1.1.5 => github.com/opencontainers/runc v1.4.0
 
 // Security fix: CVE-2024-25621 - upgrade containerd to latest patched version
-replace github.com/containerd/containerd/v2 v2.1.4 => github.com/containerd/containerd/v2 v2.2.0
+replace github.com/containerd/containerd/v2 v2.1.4 => github.com/containerd/containerd/v2 v2.2.1
 
 // Security fix: CVE-2025-47914 - upgrade x/crypto to patched version
-replace golang.org/x/crypto v0.44.0 => golang.org/x/crypto v0.45.0
+replace golang.org/x/crypto v0.44.0 => golang.org/x/crypto v0.46.0
 
 // replace github.com/bitcoin-sv/go-sdk => github.com/bsv-blockchain/go-sdk v1.2.11
