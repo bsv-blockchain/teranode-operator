@@ -2,7 +2,7 @@
 # Note: Not using SHA256 digest pinning for golang base image to support multi-arch builds.
 # SHA256 digests pin to a specific platform's image, preventing ARM64/AMD64 cross-compilation.
 # Version pinning (1.25.2) still provides reproducibility while allowing platform flexibility.
-FROM golang:1.25.5 AS builder
+FROM golang:1.26rc2 AS builder
 ARG TARGETOS
 ARG TARGETARCH
 
