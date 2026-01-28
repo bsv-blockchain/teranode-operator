@@ -52,6 +52,17 @@ func deduplicateEnvVars(envVars []corev1.EnvVar) []corev1.EnvVar {
 	return result
 }
 
+// getEnvFromKey generates a unique key for an EnvFromSource
+func getEnvFromKey(ef corev1.EnvFromSource) string {
+	if ef.ConfigMapRef != nil {
+		return "cm:" + ef.ConfigMapRef.Name
+	}
+	if ef.SecretRef != nil {
+		return "secret:" + ef.SecretRef.Name
+	}
+	return ""
+}
+
 // deduplicateEnvFrom removes duplicate EnvFromSource entries based on ConfigMap/Secret names
 func deduplicateEnvFrom(envFrom []corev1.EnvFromSource) []corev1.EnvFromSource {
 	if len(envFrom) == 0 {
@@ -62,26 +73,14 @@ func deduplicateEnvFrom(envFrom []corev1.EnvFromSource) []corev1.EnvFromSource {
 
 	// Track last index of each configmap/secret
 	for i, ef := range envFrom {
-		key := ""
-		if ef.ConfigMapRef != nil {
-			key = "cm:" + ef.ConfigMapRef.Name
-		} else if ef.SecretRef != nil {
-			key = "secret:" + ef.SecretRef.Name
-		}
-		if key != "" {
+		if key := getEnvFromKey(ef); key != "" {
 			seen[key] = i
 		}
 	}
 
 	// Keep only the last occurrence
 	for i, ef := range envFrom {
-		key := ""
-		if ef.ConfigMapRef != nil {
-			key = "cm:" + ef.ConfigMapRef.Name
-		} else if ef.SecretRef != nil {
-			key = "secret:" + ef.SecretRef.Name
-		}
-		if key != "" && seen[key] == i {
+		if key := getEnvFromKey(ef); key != "" && seen[key] == i {
 			result = append(result, ef)
 		}
 	}

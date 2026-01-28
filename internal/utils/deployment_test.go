@@ -211,17 +211,3 @@ func TestDeduplicateVolumeMounts(t *testing.T) {
 		})
 	}
 }
-
-// TestSetDeploymentOverridesNoDuplication verifies that calling
-// SetDeploymentOverridesWithContext multiple times does not duplicate values
-func TestSetDeploymentOverridesNoDuplication(t *testing.T) {
-	// This test will fail initially, demonstrating the bug
-	// After implementing deduplication, it should pass
-
-	// Note: This is a conceptual test. Full implementation would require
-	// mocking the CR interface and client, which is complex for a unit test.
-	// The integration test in propagation_controller_test.go will provide
-	// the actual verification.
-
-	t.Skip("Skipping - requires full controller context. See propagation_controller_test.go for integration test")
-}
