@@ -54,13 +54,23 @@ func deduplicateEnvVars(envVars []corev1.EnvVar) []corev1.EnvVar {
 
 // getEnvFromKey generates a unique key for an EnvFromSource
 func getEnvFromKey(ef corev1.EnvFromSource) string {
+	var (
+		kind string
+		name string
+	)
+
 	if ef.ConfigMapRef != nil {
-		return "cm:" + ef.ConfigMapRef.Name
+		kind = "cm"
+		name = ef.ConfigMapRef.Name
+	} else if ef.SecretRef != nil {
+		kind = "secret"
+		name = ef.SecretRef.Name
+	} else {
+		return ""
 	}
-	if ef.SecretRef != nil {
-		return "secret:" + ef.SecretRef.Name
-	}
-	return ""
+
+	// Include Prefix so that entries with the same source but different prefixes are distinct
+	return kind + ":" + ef.Prefix + ":" + name
 }
 
 // deduplicateEnvFrom removes duplicate EnvFromSource entries based on ConfigMap/Secret names
