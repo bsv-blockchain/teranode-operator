@@ -29,6 +29,146 @@ import (
 	"github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 )
 
+// deduplicateEnvVars removes duplicate environment variables, keeping the last occurrence
+func deduplicateEnvVars(envVars []corev1.EnvVar) []corev1.EnvVar {
+	if len(envVars) == 0 {
+		return envVars
+	}
+	seen := make(map[string]int)
+	result := make([]corev1.EnvVar, 0, len(envVars))
+
+	// Track last index of each env var name
+	for i, env := range envVars {
+		seen[env.Name] = i
+	}
+
+	// Keep only the last occurrence of each name
+	for i, env := range envVars {
+		if seen[env.Name] == i {
+			result = append(result, env)
+		}
+	}
+
+	return result
+}
+
+// getEnvFromKey generates a unique key for an EnvFromSource
+func getEnvFromKey(ef corev1.EnvFromSource) string {
+	var (
+		kind string
+		name string
+	)
+
+	if ef.ConfigMapRef != nil {
+		kind = "cm"
+		name = ef.ConfigMapRef.Name
+	} else if ef.SecretRef != nil {
+		kind = "secret"
+		name = ef.SecretRef.Name
+	} else {
+		return ""
+	}
+
+	// Include Prefix so that entries with the same source but different prefixes are distinct
+	return kind + ":" + ef.Prefix + ":" + name
+}
+
+// deduplicateEnvFrom removes duplicate EnvFromSource entries based on ConfigMap/Secret names
+func deduplicateEnvFrom(envFrom []corev1.EnvFromSource) []corev1.EnvFromSource {
+	if len(envFrom) == 0 {
+		return envFrom
+	}
+	seen := make(map[string]int)
+	result := make([]corev1.EnvFromSource, 0, len(envFrom))
+
+	// Track last index of each configmap/secret
+	for i, ef := range envFrom {
+		if key := getEnvFromKey(ef); key != "" {
+			seen[key] = i
+		}
+	}
+
+	// Keep only the last occurrence
+	for i, ef := range envFrom {
+		if key := getEnvFromKey(ef); key != "" && seen[key] == i {
+			result = append(result, ef)
+		}
+	}
+
+	return result
+}
+
+// deduplicateImagePullSecrets removes duplicate ImagePullSecrets
+func deduplicateImagePullSecrets(secrets []corev1.LocalObjectReference) []corev1.LocalObjectReference {
+	if len(secrets) == 0 {
+		return secrets
+	}
+	seen := make(map[string]int)
+	result := make([]corev1.LocalObjectReference, 0, len(secrets))
+
+	// Track last index of each secret name
+	for i, secret := range secrets {
+		seen[secret.Name] = i
+	}
+
+	// Keep only the last occurrence
+	for i, secret := range secrets {
+		if seen[secret.Name] == i {
+			result = append(result, secret)
+		}
+	}
+
+	return result
+}
+
+// deduplicateVolumes removes duplicate volumes by name
+func deduplicateVolumes(volumes []corev1.Volume) []corev1.Volume {
+	if len(volumes) == 0 {
+		return volumes
+	}
+	seen := make(map[string]int)
+	result := make([]corev1.Volume, 0, len(volumes))
+
+	// Track last index of each volume name
+	for i, vol := range volumes {
+		seen[vol.Name] = i
+	}
+
+	// Keep only the last occurrence
+	for i, vol := range volumes {
+		if seen[vol.Name] == i {
+			result = append(result, vol)
+		}
+	}
+
+	return result
+}
+
+// deduplicateVolumeMounts removes duplicate volume mounts by name and mountPath
+func deduplicateVolumeMounts(mounts []corev1.VolumeMount) []corev1.VolumeMount {
+	if len(mounts) == 0 {
+		return mounts
+	}
+	seen := make(map[string]int)
+	result := make([]corev1.VolumeMount, 0, len(mounts))
+
+	// Track last index using name+mountPath as key
+	for i, mount := range mounts {
+		key := mount.Name + ":" + mount.MountPath
+		seen[key] = i
+	}
+
+	// Keep only the last occurrence
+	for i, mount := range mounts {
+		key := mount.Name + ":" + mount.MountPath
+		if seen[key] == i {
+			result = append(result, mount)
+		}
+	}
+
+	return result
+}
+
 func SetDeploymentOverrides(client client.Client, dep *appsv1.Deployment, cr v1alpha1.TeranodeService) {
 	SetDeploymentOverridesWithContext(context.Background(), logr.Logger{}, client, dep, cr, "")
 }
@@ -73,12 +213,16 @@ func SetDeploymentOverridesWithContext(ctx context.Context, log logr.Logger, cli
 
 	// if user configures env vars
 	if len(cr.DeploymentOverrides().Env) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Env = append(dep.Spec.Template.Spec.Containers[0].Env, cr.DeploymentOverrides().Env...)
+		dep.Spec.Template.Spec.Containers[0].Env = deduplicateEnvVars(
+			append(dep.Spec.Template.Spec.Containers[0].Env, cr.DeploymentOverrides().Env...),
+		)
 	}
 
 	// if user configures envFrom vars
 	if len(cr.DeploymentOverrides().EnvFrom) > 0 {
-		dep.Spec.Template.Spec.Containers[0].EnvFrom = append(dep.Spec.Template.Spec.Containers[0].EnvFrom, cr.DeploymentOverrides().EnvFrom...)
+		dep.Spec.Template.Spec.Containers[0].EnvFrom = deduplicateEnvFrom(
+			append(dep.Spec.Template.Spec.Containers[0].EnvFrom, cr.DeploymentOverrides().EnvFrom...),
+		)
 	}
 
 	// if user configures a config map for the service, append it next
@@ -108,14 +252,20 @@ func SetDeploymentOverridesWithContext(ctx context.Context, log logr.Logger, cli
 		if dep.Spec.Template.Spec.ImagePullSecrets == nil {
 			dep.Spec.Template.Spec.ImagePullSecrets = []corev1.LocalObjectReference{}
 		}
-		dep.Spec.Template.Spec.ImagePullSecrets = append(dep.Spec.Template.Spec.ImagePullSecrets, *cr.DeploymentOverrides().ImagePullSecrets...)
+		dep.Spec.Template.Spec.ImagePullSecrets = deduplicateImagePullSecrets(
+			append(dep.Spec.Template.Spec.ImagePullSecrets, *cr.DeploymentOverrides().ImagePullSecrets...),
+		)
 	}
 
 	if len(cr.DeploymentOverrides().Volumes) > 0 {
-		dep.Spec.Template.Spec.Volumes = append(dep.Spec.Template.Spec.Volumes, cr.DeploymentOverrides().Volumes...)
+		dep.Spec.Template.Spec.Volumes = deduplicateVolumes(
+			append(dep.Spec.Template.Spec.Volumes, cr.DeploymentOverrides().Volumes...),
+		)
 	}
 	if len(cr.DeploymentOverrides().VolumeMounts) > 0 {
-		dep.Spec.Template.Spec.Containers[0].VolumeMounts = append(dep.Spec.Template.Spec.Containers[0].VolumeMounts, cr.DeploymentOverrides().VolumeMounts...)
+		dep.Spec.Template.Spec.Containers[0].VolumeMounts = deduplicateVolumeMounts(
+			append(dep.Spec.Template.Spec.Containers[0].VolumeMounts, cr.DeploymentOverrides().VolumeMounts...),
+		)
 	}
 	if cr.DeploymentOverrides().Replicas != nil {
 		dep.Spec.Replicas = cr.DeploymentOverrides().Replicas
@@ -146,13 +296,17 @@ func SetClusterOverrides(client client.Client, dep *appsv1.Deployment, cr v1alph
 		}
 	}
 	if len(clusterOwner.Spec.Env) > 0 {
-		dep.Spec.Template.Spec.Containers[0].Env = append(dep.Spec.Template.Spec.Containers[0].Env, clusterOwner.Spec.Env...)
+		dep.Spec.Template.Spec.Containers[0].Env = deduplicateEnvVars(
+			append(dep.Spec.Template.Spec.Containers[0].Env, clusterOwner.Spec.Env...),
+		)
 	}
 	if clusterOwner.Spec.ImagePullSecrets != nil {
 		if dep.Spec.Template.Spec.ImagePullSecrets == nil {
 			dep.Spec.Template.Spec.ImagePullSecrets = []corev1.LocalObjectReference{}
 		}
-		dep.Spec.Template.Spec.ImagePullSecrets = append(dep.Spec.Template.Spec.ImagePullSecrets, *clusterOwner.Spec.ImagePullSecrets...)
+		dep.Spec.Template.Spec.ImagePullSecrets = deduplicateImagePullSecrets(
+			append(dep.Spec.Template.Spec.ImagePullSecrets, *clusterOwner.Spec.ImagePullSecrets...),
+		)
 	}
 	if clusterOwner.Spec.Image != "" {
 		dep.Spec.Template.Spec.Containers[0].Image = clusterOwner.Spec.Image
