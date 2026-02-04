@@ -124,7 +124,7 @@ func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 	if propagation.Spec.DeploymentOverrides != nil && propagation.Spec.DeploymentOverrides.Replicas != nil {
 		if propagation.Status.Replicas != *propagation.Spec.DeploymentOverrides.Replicas {
 			r.Log.Info("requeuing to monitor replica status", "status", propagation.Status.Replicas, "spec", propagation.Spec.DeploymentOverrides.Replicas)
-			return ctrl.Result{RequeueAfter: time.Second}, nil
+			return ctrl.Result{RequeueAfter: time.Second * 5}, nil
 		}
 	}
 
