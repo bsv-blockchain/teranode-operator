@@ -96,4 +96,7 @@ replace github.com/containerd/containerd/v2 v2.1.4 => github.com/containerd/cont
 // Security fix: CVE-2025-47914 - upgrade x/crypto to patched version
 replace golang.org/x/crypto v0.44.0 => golang.org/x/crypto v0.46.0
 
+// Security fix: CVE-2026-24051 - upgrade opentelemetry SDK to patched version
+replace go.opentelemetry.io/otel/sdk v1.36.0 => go.opentelemetry.io/otel/sdk v1.40.0
+
 // replace github.com/bitcoin-sv/go-sdk => github.com/bsv-blockchain/go-sdk v1.2.11
