@@ -43,8 +43,8 @@ func (r *PrunerReconciler) updateDeployment(dep *appsv1.Deployment, pruner *tera
 		return err
 	}
 	dep.Spec = *defaultPrunerDeploymentSpec()
-	utils.SetDeploymentOverrides(r.Client, dep, pruner)
 	utils.SetClusterOverrides(r.Client, dep, pruner)
+	utils.SetDeploymentOverrides(r.Client, dep, pruner)
 
 	return nil
 }
