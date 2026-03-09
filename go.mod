@@ -1,6 +1,6 @@
 module github.com/bsv-blockchain/teranode-operator
 
-go 1.25.2
+go 1.26.1
 
 require (
 	github.com/go-logr/logr v1.4.3
