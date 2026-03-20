@@ -19,12 +19,13 @@ package controller
 import (
 	"context"
 
-	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
+
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 )
 
 var _ = Describe("BlockValidator Controller", func() {
