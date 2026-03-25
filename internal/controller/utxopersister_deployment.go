@@ -46,8 +46,8 @@ func (r *UtxoPersisterReconciler) updateDeployment(dep *appsv1.Deployment, utxoP
 		return err
 	}
 	dep.Spec = *defaultUtxoPersisterDeploymentSpec()
-	utils.SetDeploymentOverrides(r.Client, dep, utxoPersister)
 	utils.SetClusterOverrides(r.Client, dep, utxoPersister)
+	utils.SetDeploymentOverrides(r.Client, dep, utxoPersister)
 
 	return nil
 }
