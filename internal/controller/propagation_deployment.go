@@ -55,8 +55,8 @@ func (r *PropagationReconciler) updateDeployment(dep *appsv1.Deployment, propaga
 	}
 
 	// Apply CR spec to deployment
-	utils.SetDeploymentOverridesWithContext(r.Context, r.Log, r.Client, dep, propagation, "Propagation")
 	utils.SetClusterOverrides(r.Client, dep, propagation)
+	utils.SetDeploymentOverridesWithContext(r.Context, r.Log, r.Client, dep, propagation, "Propagation")
 
 	return nil
 }

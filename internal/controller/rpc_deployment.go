@@ -42,8 +42,8 @@ func (r *RPCReconciler) updateDeployment(dep *appsv1.Deployment, rpc *teranodev1
 		return err
 	}
 	dep.Spec = *defaultRPCDeploymentSpec()
-	utils.SetDeploymentOverrides(r.Client, dep, rpc)
 	utils.SetClusterOverrides(r.Client, dep, rpc)
+	utils.SetDeploymentOverrides(r.Client, dep, rpc)
 
 	return nil
 }

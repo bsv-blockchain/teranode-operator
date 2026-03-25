@@ -42,8 +42,8 @@ func (r *BlockAssemblyReconciler) updateDeployment(dep *appsv1.Deployment, block
 		return err
 	}
 	dep.Spec = *defaultBlockAssemblyDeploymentSpec()
-	utils.SetDeploymentOverrides(r.Client, dep, blockAssembly)
 	utils.SetClusterOverrides(r.Client, dep, blockAssembly)
+	utils.SetDeploymentOverrides(r.Client, dep, blockAssembly)
 
 	return nil
 }
