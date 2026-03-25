@@ -50,7 +50,6 @@ func (r *ClusterReconciler) ReconcilePropagation(log logr.Logger) (bool, error) 
 	return true, nil
 }
 
-//nolint:gocognit,gocyclo // Function complexity is inherent to handling multiple override cases
 func (r *ClusterReconciler) updatePropagation(propagation *teranodev1alpha1.Propagation, cluster *teranodev1alpha1.Cluster) error {
 	err := controllerutil.SetControllerReference(cluster, propagation, r.Scheme)
 	if err != nil {
