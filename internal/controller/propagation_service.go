@@ -50,7 +50,7 @@ func (r *PropagationReconciler) updateService(svc *corev1.Service, propagation *
 
 func defaultPropagationServiceSpec() *corev1.ServiceSpec {
 	labels := map[string]string{
-		"app": "propagation",
+		AppLabel: "propagation",
 	}
 	ipFamily := corev1.IPFamilyPolicySingleStack
 	return &corev1.ServiceSpec{
@@ -80,7 +80,7 @@ func defaultPropagationServiceSpec() *corev1.ServiceSpec {
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "health",
+				Name:       HealthPortName,
 				Port:       int32(HealthPort),
 				TargetPort: intstr.FromInt32(HealthPort),
 				Protocol:   corev1.ProtocolTCP,

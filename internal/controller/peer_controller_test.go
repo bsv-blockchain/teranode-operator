@@ -38,7 +38,7 @@ var _ = Describe("Peer Controller", func() {
 
 		typeNamespacedName := types.NamespacedName{
 			Name:      resourceName,
-			Namespace: "default", // TODO(user):Modify as needed
+			Namespace: defaultNamespace, // TODO(user):Modify as needed
 		}
 		peer := &teranodev1alpha1.Peer{}
 
@@ -49,7 +49,7 @@ var _ = Describe("Peer Controller", func() {
 				resource := &teranodev1alpha1.Peer{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
-						Namespace: "default",
+						Namespace: defaultNamespace,
 					},
 					Spec: teranodev1alpha1.PeerSpec{},
 				}
@@ -80,7 +80,7 @@ var _ = Describe("Peer Controller", func() {
 			fetchedDeployment := &appsv1.Deployment{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      "peer",
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, fetchedDeployment)).To(Succeed())
 			Expect(len(fetchedDeployment.Spec.Template.Spec.Containers)).To(Equal(1))
 			Expect(len(fetchedDeployment.Spec.Template.Spec.Containers[0].VolumeMounts)).To(Equal(1))

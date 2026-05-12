@@ -44,7 +44,7 @@ func (r *BootstrapReconciler) updateService(svc *corev1.Service, bs *teranodev1a
 
 func defaultBootstrapServiceSpec() *corev1.ServiceSpec {
 	labels := map[string]string{
-		"app": "bootstrap",
+		AppLabel: "bootstrap",
 	}
 	return &corev1.ServiceSpec{
 		Selector: labels,
@@ -68,7 +68,7 @@ func defaultBootstrapServiceSpec() *corev1.ServiceSpec {
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "profiler",
+				Name:       ProfilerPortName,
 				Port:       int32(ProfilerPort),
 				TargetPort: intstr.FromInt32(ProfilerPort),
 				Protocol:   corev1.ProtocolTCP,

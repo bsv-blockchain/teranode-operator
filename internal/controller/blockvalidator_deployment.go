@@ -54,7 +54,7 @@ func defaultBlockValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
-			Name:  "SERVICE_NAME",
+			Name:  ServiceNameEnvVar,
 			Value: "blockvalidation-service",
 		},
 	}
@@ -79,7 +79,7 @@ func defaultBlockValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 								PodAffinityTerm: corev1.PodAffinityTerm{
 									LabelSelector: &metav1.LabelSelector{
 										MatchLabels: map[string]string{
-											"app": "blockchain",
+											AppLabel: "blockchain",
 										},
 									},
 									TopologyKey: "kubernetes.io/hostname",
@@ -109,7 +109,7 @@ func defaultBlockValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 						ReadinessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health/readiness",
+									Path: HealthReadinessPath,
 									Port: intstr.FromInt32(HealthPort),
 								},
 							},
@@ -121,7 +121,7 @@ func defaultBlockValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 						LivenessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health/liveness",
+									Path: HealthLivenessPath,
 									Port: intstr.FromInt32(HealthPort),
 								},
 							},
@@ -133,7 +133,7 @@ func defaultBlockValidatorDeploymentSpec() *appsv1.DeploymentSpec {
 						StartupProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health/readiness",
+									Path: HealthReadinessPath,
 									Port: intstr.FromInt32(HealthPort),
 								},
 							},

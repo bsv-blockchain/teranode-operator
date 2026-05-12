@@ -7,6 +7,8 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
+const testVolumeName = "vol1"
+
 func TestDeduplicateEnvVars(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -144,13 +146,13 @@ func TestDeduplicateVolumes(t *testing.T) {
 		{
 			name: "removes duplicates by name",
 			input: []corev1.Volume{
-				{Name: "vol1", VolumeSource: corev1.VolumeSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
+				{Name: testVolumeName, VolumeSource: corev1.VolumeSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
 				{Name: "vol2", VolumeSource: corev1.VolumeSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
-				{Name: "vol1", VolumeSource: corev1.VolumeSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
+				{Name: testVolumeName, VolumeSource: corev1.VolumeSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
 			},
 			expected: []corev1.Volume{
 				{Name: "vol2", VolumeSource: corev1.VolumeSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
-				{Name: "vol1", VolumeSource: corev1.VolumeSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
+				{Name: testVolumeName, VolumeSource: corev1.VolumeSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
 			},
 		},
 		{
@@ -177,24 +179,24 @@ func TestDeduplicateVolumeMounts(t *testing.T) {
 		{
 			name: "removes duplicates by name and mountPath",
 			input: []corev1.VolumeMount{
-				{Name: "vol1", MountPath: "/data"},
+				{Name: testVolumeName, MountPath: "/data"},
 				{Name: "vol2", MountPath: "/config"},
-				{Name: "vol1", MountPath: "/data"},
+				{Name: testVolumeName, MountPath: "/data"},
 			},
 			expected: []corev1.VolumeMount{
 				{Name: "vol2", MountPath: "/config"},
-				{Name: "vol1", MountPath: "/data"},
+				{Name: testVolumeName, MountPath: "/data"},
 			},
 		},
 		{
 			name: "keeps different mountPaths for same volume",
 			input: []corev1.VolumeMount{
-				{Name: "vol1", MountPath: "/data1"},
-				{Name: "vol1", MountPath: "/data2"},
+				{Name: testVolumeName, MountPath: "/data1"},
+				{Name: testVolumeName, MountPath: "/data2"},
 			},
 			expected: []corev1.VolumeMount{
-				{Name: "vol1", MountPath: "/data1"},
-				{Name: "vol1", MountPath: "/data2"},
+				{Name: testVolumeName, MountPath: "/data1"},
+				{Name: testVolumeName, MountPath: "/data2"},
 			},
 		},
 		{

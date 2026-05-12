@@ -53,7 +53,7 @@ func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
-			Name:  "SERVICE_NAME",
+			Name:  ServiceNameEnvVar,
 			Value: "block-persister-service",
 		},
 		{
@@ -92,7 +92,7 @@ func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 						ReadinessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health/readiness",
+									Path: HealthReadinessPath,
 									Port: intstr.FromInt32(HealthPort),
 								},
 							},
@@ -104,7 +104,7 @@ func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 						LivenessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health/liveness",
+									Path: HealthLivenessPath,
 									Port: intstr.FromInt32(HealthPort),
 								},
 							},
@@ -116,7 +116,7 @@ func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 						StartupProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health/readiness",
+									Path: HealthReadinessPath,
 									Port: intstr.FromInt32(HealthPort),
 								},
 							},
@@ -135,7 +135,7 @@ func defaultBlockPersisterDeploymentSpec() *appsv1.DeploymentSpec {
 						},
 						VolumeMounts: []corev1.VolumeMount{
 							{
-								MountPath: "/data",
+								MountPath: DataMountPath,
 								Name:      SharedPVCName,
 							},
 						},

@@ -44,19 +44,19 @@ func (r *UtxoPersisterReconciler) updateService(svc *corev1.Service, utxop *tera
 
 func defaultUtxoPersisterServiceSpec() *corev1.ServiceSpec {
 	labels := map[string]string{
-		"app": "utxo-persister",
+		AppLabel: "utxo-persister",
 	}
 	return &corev1.ServiceSpec{
 		Selector: labels,
 		Ports: []corev1.ServicePort{
 			{
-				Name:       "health",
+				Name:       HealthPortName,
 				Port:       int32(HealthPort),
 				TargetPort: intstr.FromInt32(HealthPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "profiler",
+				Name:       ProfilerPortName,
 				Port:       int32(ProfilerPort),
 				TargetPort: intstr.FromInt32(ProfilerPort),
 				Protocol:   corev1.ProtocolTCP,

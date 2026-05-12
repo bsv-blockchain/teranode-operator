@@ -44,7 +44,7 @@ func (r *SubtreeValidatorReconciler) updateService(svc *corev1.Service, subtreeV
 
 func defaultSubtreeValidatorServiceSpec() *corev1.ServiceSpec {
 	labels := map[string]string{
-		"app": "subtree-validator",
+		AppLabel: "subtree-validator",
 	}
 	ipFamily := corev1.IPFamilyPolicySingleStack
 	return &corev1.ServiceSpec{
@@ -62,13 +62,13 @@ func defaultSubtreeValidatorServiceSpec() *corev1.ServiceSpec {
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "health",
+				Name:       HealthPortName,
 				Port:       int32(HealthPort),
 				TargetPort: intstr.FromInt32(HealthPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "profiler",
+				Name:       ProfilerPortName,
 				Port:       int32(ProfilerPort),
 				TargetPort: intstr.FromInt32(ProfilerPort),
 				Protocol:   corev1.ProtocolTCP,

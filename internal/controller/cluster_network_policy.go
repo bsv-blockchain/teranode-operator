@@ -23,7 +23,7 @@ func defaultNetworkPolicySpec() *networkingv1.NetworkPolicySpec {
 					{
 						NamespaceSelector: &metav1.LabelSelector{
 							MatchLabels: map[string]string{
-								"app": "blockchain",
+								AppLabel: "blockchain",
 							},
 						},
 					},

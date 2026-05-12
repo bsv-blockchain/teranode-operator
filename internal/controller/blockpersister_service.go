@@ -44,19 +44,19 @@ func (r *BlockPersisterReconciler) updateService(svc *corev1.Service, blockPersi
 
 func defaultBlockPersisterServiceSpec() *corev1.ServiceSpec {
 	labels := map[string]string{
-		"app": "block-persister",
+		AppLabel: "block-persister",
 	}
 	return &corev1.ServiceSpec{
 		Selector: labels,
 		Ports: []corev1.ServicePort{
 			{
-				Name:       "health",
+				Name:       HealthPortName,
 				Port:       int32(HealthPort),
 				TargetPort: intstr.FromInt32(HealthPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "profiler",
+				Name:       ProfilerPortName,
 				Port:       int32(ProfilerPort),
 				TargetPort: intstr.FromInt32(ProfilerPort),
 				Protocol:   corev1.ProtocolTCP,

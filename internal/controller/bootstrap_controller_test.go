@@ -37,7 +37,7 @@ var _ = Describe("Bootstrap Controller", func() {
 
 		typeNamespacedName := types.NamespacedName{
 			Name:      resourceName,
-			Namespace: "default", // TODO(user):Modify as needed
+			Namespace: defaultNamespace, // TODO(user):Modify as needed
 		}
 		bootstrap := &teranodev1alpha1.Bootstrap{}
 
@@ -48,7 +48,7 @@ var _ = Describe("Bootstrap Controller", func() {
 				resource := &teranodev1alpha1.Bootstrap{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
-						Namespace: "default",
+						Namespace: defaultNamespace,
 					},
 					// TODO(user): Specify other spec details if needed.
 				}

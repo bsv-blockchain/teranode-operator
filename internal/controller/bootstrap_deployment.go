@@ -77,7 +77,7 @@ func defaultBootstrapDeploymentSpec() *appsv1.DeploymentSpec {
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
-			Name:  "SERVICE_NAME",
+			Name:  ServiceNameEnvVar,
 			Value: "bootstrap-service",
 		},
 		{
@@ -115,7 +115,7 @@ func defaultBootstrapDeploymentSpec() *appsv1.DeploymentSpec {
 								PodAffinityTerm: corev1.PodAffinityTerm{
 									LabelSelector: &metav1.LabelSelector{
 										MatchLabels: map[string]string{
-											"app": "bootstrap",
+											AppLabel: "bootstrap",
 										},
 									},
 									TopologyKey: "kubernetes.io/hostname",

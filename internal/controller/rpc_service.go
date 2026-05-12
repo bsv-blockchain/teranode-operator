@@ -44,7 +44,7 @@ func (r *RPCReconciler) updateService(svc *corev1.Service, rpc *teranodev1alpha1
 
 func defaultRPCServiceSpec() *corev1.ServiceSpec {
 	labels := map[string]string{
-		"app": "rpc",
+		AppLabel: "rpc",
 	}
 	return &corev1.ServiceSpec{
 		Selector: labels,
@@ -56,13 +56,13 @@ func defaultRPCServiceSpec() *corev1.ServiceSpec {
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "health",
+				Name:       HealthPortName,
 				Port:       int32(HealthPort),
 				TargetPort: intstr.FromInt32(HealthPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "profiler",
+				Name:       ProfilerPortName,
 				Port:       int32(ProfilerPort),
 				TargetPort: intstr.FromInt32(ProfilerPort),
 				Protocol:   corev1.ProtocolTCP,

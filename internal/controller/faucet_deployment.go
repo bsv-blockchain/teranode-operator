@@ -86,14 +86,14 @@ func (r *FaucetReconciler) updateDeployment(dep *appsv1.Deployment, faucet *tera
 
 func defaultFaucetDeploymentSpec() *appsv1.DeploymentSpec {
 	labels := map[string]string{
-		"app":        "faucet",
+		AppLabel:     "faucet",
 		"deployment": "faucet",
 		"project":    "service",
 	}
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
-			Name:  "SERVICE_NAME",
+			Name:  ServiceNameEnvVar,
 			Value: "faucet-service",
 		},
 	}

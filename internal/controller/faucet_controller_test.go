@@ -37,7 +37,7 @@ var _ = Describe("Faucet Controller", func() {
 
 		typeNamespacedName := types.NamespacedName{
 			Name:      resourceName,
-			Namespace: "default", // TODO(user):Modify as needed
+			Namespace: defaultNamespace, // TODO(user):Modify as needed
 		}
 		faucet := &teranodev1alpha1.Faucet{}
 
@@ -48,7 +48,7 @@ var _ = Describe("Faucet Controller", func() {
 				resource := &teranodev1alpha1.Faucet{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
-						Namespace: "default",
+						Namespace: defaultNamespace,
 					},
 					// TODO(user): Specify other spec details if needed.
 				}

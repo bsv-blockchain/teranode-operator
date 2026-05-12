@@ -44,7 +44,7 @@ func (r *FaucetReconciler) updateService(svc *corev1.Service, faucet *teranodev1
 
 func defaultFaucetServiceSpec() *corev1.ServiceSpec {
 	labels := map[string]string{
-		"app": "faucet",
+		AppLabel: "faucet",
 	}
 	ipFamily := corev1.IPFamilyPolicySingleStack
 	return &corev1.ServiceSpec{
@@ -62,7 +62,7 @@ func defaultFaucetServiceSpec() *corev1.ServiceSpec {
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "profiler",
+				Name:       ProfilerPortName,
 				Port:       int32(9091),
 				TargetPort: intstr.FromInt32(9091),
 				Protocol:   corev1.ProtocolTCP,

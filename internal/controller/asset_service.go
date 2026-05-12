@@ -44,7 +44,7 @@ func (r *AssetReconciler) updateService(svc *corev1.Service, asset *teranodev1al
 
 func defaultAssetServiceSpec() *corev1.ServiceSpec {
 	labels := map[string]string{
-		"app": "asset",
+		AppLabel: "asset",
 	}
 	return &corev1.ServiceSpec{
 		Selector: labels,
@@ -56,13 +56,13 @@ func defaultAssetServiceSpec() *corev1.ServiceSpec {
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "health",
+				Name:       HealthPortName,
 				Port:       int32(HealthPort),
 				TargetPort: intstr.FromInt32(HealthPort),
 				Protocol:   corev1.ProtocolTCP,
 			},
 			{
-				Name:       "profiler",
+				Name:       ProfilerPortName,
 				Port:       int32(ProfilerPort),
 				TargetPort: intstr.FromInt32(ProfilerPort),
 				Protocol:   corev1.ProtocolTCP,

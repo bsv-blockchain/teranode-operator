@@ -45,7 +45,7 @@ var _ = Describe("Cluster Controller", func() {
 
 		typeNamespacedName := types.NamespacedName{
 			Name:      resourceName,
-			Namespace: "default", // TODO(user):Modify as needed
+			Namespace: defaultNamespace, // TODO(user):Modify as needed
 		}
 		cluster := &teranodev1alpha1.Cluster{
 			Spec: teranodev1alpha1.ClusterSpec{
@@ -78,7 +78,7 @@ var _ = Describe("Cluster Controller", func() {
 				resource := &teranodev1alpha1.Cluster{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
-						Namespace: "default",
+						Namespace: defaultNamespace,
 					},
 					Spec: teranodev1alpha1.ClusterSpec{
 						Asset: teranodev1alpha1.AssetConfig{
@@ -186,20 +186,20 @@ var _ = Describe("Cluster Controller", func() {
 			asset := &teranodev1alpha1.Asset{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-asset", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, asset)).To(Succeed())
 
 			blockAssembly := &teranodev1alpha1.BlockAssembly{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-blockassembly", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, blockAssembly)).To(Succeed())
 
 			// Verify disabled component doesn't exist
 			alertSystem := &teranodev1alpha1.AlertSystem{}
 			err = k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-alert-system", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, alertSystem)
 			Expect(errors.IsNotFound(err)).To(BeTrue())
 		})
@@ -208,7 +208,7 @@ var _ = Describe("Cluster Controller", func() {
 			pvc := &v1.PersistentVolumeClaim{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      SharedPVCName,
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, pvc)).To(Succeed(), "PVC should be created when cluster is created")
 		})
 
@@ -239,7 +239,7 @@ var _ = Describe("Cluster Controller", func() {
 			alertSystem := &teranodev1alpha1.AlertSystem{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-alert-system", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, alertSystem)).To(Succeed())
 
 			// Now disable the component
@@ -257,14 +257,14 @@ var _ = Describe("Cluster Controller", func() {
 			// Verify AlertSystem was deleted
 			err = k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-alert-system", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, alertSystem)
 			Expect(errors.IsNotFound(err)).To(BeTrue())
 
 			// Verify Pruner was deleted
 			err = k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-pruner", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, alertSystem)
 			Expect(errors.IsNotFound(err)).To(BeTrue())
 		})
@@ -311,7 +311,7 @@ var _ = Describe("Cluster Controller", func() {
 			asset := &teranodev1alpha1.Asset{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-asset", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, asset)).To(Succeed())
 			Expect(asset.Spec.DeploymentOverrides.Image).To(Equal(testImage))
 
@@ -319,7 +319,7 @@ var _ = Describe("Cluster Controller", func() {
 			blockPersister := &teranodev1alpha1.BlockPersister{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-blockpersister", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, blockPersister)).To(Succeed())
 			Expect(blockPersister.Spec.DeploymentOverrides.Image).To(Equal(testImage2))
 
@@ -327,7 +327,7 @@ var _ = Describe("Cluster Controller", func() {
 			pruner := &teranodev1alpha1.Pruner{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-pruner", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, pruner)).To(Succeed())
 			Expect(pruner.Spec.DeploymentOverrides.Image).To(Equal(testImage))
 
@@ -348,7 +348,7 @@ var _ = Describe("Cluster Controller", func() {
 			// Verify Asset got the new image
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-asset", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, asset)).To(Succeed())
 			Expect(asset.Spec.DeploymentOverrides.Image).To(Equal("custom-image-updated:v3"))
 
@@ -356,7 +356,7 @@ var _ = Describe("Cluster Controller", func() {
 			// Verify Propagation got the new image
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-propagation", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, prop)).To(Succeed())
 			Expect(prop.Spec.DeploymentOverrides.Image).To(Equal("custom-image-updated:v3"))
 		})
@@ -419,7 +419,7 @@ var _ = Describe("Cluster Controller", func() {
 			for _, component := range components {
 				Expect(k8sClient.Get(ctx, types.NamespacedName{
 					Name:      component.name,
-					Namespace: "default",
+					Namespace: defaultNamespace,
 				}, component.object)).To(Succeed(), "Component %s should exist", component.name)
 			}
 		})
@@ -457,7 +457,7 @@ var _ = Describe("Cluster Controller", func() {
 			asset := &teranodev1alpha1.Asset{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-asset", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, asset)).To(Succeed())
 			Expect(asset.Spec.DeploymentOverrides.ImagePullSecrets).NotTo(BeNil())
 			Expect(*asset.Spec.DeploymentOverrides.ImagePullSecrets).To(ContainElements(customSecrets))
@@ -471,7 +471,7 @@ var _ = Describe("Cluster Controller", func() {
 			_, err = assetReconciler.Reconcile(ctx, reconcile.Request{
 				NamespacedName: types.NamespacedName{
 					Name:      fmt.Sprintf("%s-asset", cluster.Name),
-					Namespace: "default",
+					Namespace: defaultNamespace,
 				},
 			})
 			Expect(err).NotTo(HaveOccurred())
@@ -482,7 +482,7 @@ var _ = Describe("Cluster Controller", func() {
 			dep := &appsv1.Deployment{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      AssetDeploymentName,
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, dep)).To(Succeed())
 			Expect(dep.Spec.Template.Spec.ImagePullSecrets).To(ContainElements(customSecrets))
 		})
@@ -544,7 +544,7 @@ var _ = Describe("Cluster Controller", func() {
 			bv := &teranodev1alpha1.BlockValidator{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      fmt.Sprintf("%s-blockvalidator", cluster.Name),
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, bv)).To(Succeed())
 			Expect(bv.Spec.DeploymentOverrides.Volumes).NotTo(BeNil())
 			Expect(bv.Spec.DeploymentOverrides.Volumes).To(ContainElements(customVolumes))
@@ -560,7 +560,7 @@ var _ = Describe("Cluster Controller", func() {
 			_, err = bvReconciler.Reconcile(ctx, reconcile.Request{
 				NamespacedName: types.NamespacedName{
 					Name:      fmt.Sprintf("%s-blockvalidator", cluster.Name),
-					Namespace: "default",
+					Namespace: defaultNamespace,
 				},
 			})
 			Expect(err).NotTo(HaveOccurred())
@@ -569,7 +569,7 @@ var _ = Describe("Cluster Controller", func() {
 			dep := &appsv1.Deployment{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      "block-validator",
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, dep)).To(Succeed())
 			Expect(dep.Spec.Template.Spec.Volumes).To(ContainElements(customVolumes))
 			Expect(dep.Spec.Template.Spec.Containers[0].VolumeMounts).To(ContainElements(volumeMounts))
@@ -620,7 +620,7 @@ var _ = Describe("Cluster Controller", func() {
 			for _, component := range components {
 				Expect(k8sClient.Get(ctx, types.NamespacedName{
 					Name:      component.name,
-					Namespace: "default",
+					Namespace: defaultNamespace,
 				}, component.object)).To(Succeed())
 			}
 
@@ -640,7 +640,7 @@ var _ = Describe("Cluster Controller", func() {
 			for _, component := range components {
 				err = k8sClient.Get(ctx, types.NamespacedName{
 					Name:      component.name,
-					Namespace: "default",
+					Namespace: defaultNamespace,
 				}, component.object)
 				Expect(errors.IsNotFound(err)).To(BeTrue(), fmt.Sprintf("%s should be deleted when cluster is disabled", component.name))
 			}
@@ -724,8 +724,8 @@ var _ = Describe("Cluster Controller", func() {
 			// Verify ingresses were created
 			ingress0 := &networkingv1.Ingress{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      "teranode-0",
-				Namespace: "default",
+				Name:      testTeranodeName,
+				Namespace: defaultNamespace,
 			}, ingress0)).To(Succeed())
 			Expect(*ingress0.Spec.IngressClassName).To(Equal("nginx"))
 			Expect(ingress0.Spec.Rules[0].Host).To(Equal("test1.example.com"))
@@ -733,7 +733,7 @@ var _ = Describe("Cluster Controller", func() {
 			ingress1 := &networkingv1.Ingress{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      "teranode-1",
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, ingress1)).To(Succeed())
 			Expect(*ingress1.Spec.IngressClassName).To(Equal("traefik"))
 			Expect(ingress1.Spec.Rules[0].Host).To(Equal("test2.example.com"))
@@ -781,8 +781,8 @@ var _ = Describe("Cluster Controller", func() {
 			// Verify initial ingress
 			ingress0 := &networkingv1.Ingress{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      "teranode-0",
-				Namespace: "default",
+				Name:      testTeranodeName,
+				Namespace: defaultNamespace,
 			}, ingress0)).To(Succeed())
 			Expect(ingress0.Spec.Rules[0].Host).To(Equal("original.example.com"))
 
@@ -818,8 +818,8 @@ var _ = Describe("Cluster Controller", func() {
 
 			// Verify first ingress was updated
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      "teranode-0",
-				Namespace: "default",
+				Name:      testTeranodeName,
+				Namespace: defaultNamespace,
 			}, ingress0)).To(Succeed())
 			Expect(ingress0.Spec.Rules[0].Host).To(Equal("updated.example.com"))
 
@@ -827,7 +827,7 @@ var _ = Describe("Cluster Controller", func() {
 			ingress1 := &networkingv1.Ingress{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      "teranode-1",
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, ingress1)).To(Succeed())
 			Expect(ingress1.Spec.Rules[0].Host).To(Equal("new.example.com"))
 		})
@@ -857,8 +857,8 @@ var _ = Describe("Cluster Controller", func() {
 			// verify no additional ingresses were created
 			ingress0 := &networkingv1.Ingress{}
 			err = k8sClient.Get(ctx, types.NamespacedName{
-				Name:      "teranode-0",
-				Namespace: "default",
+				Name:      testTeranodeName,
+				Namespace: defaultNamespace,
 			}, ingress0)
 			//nolint:godox // Known limitation being documented
 			// Note: Due to the current implementation not cleaning up ingresses from previous tests,
@@ -909,14 +909,14 @@ var _ = Describe("Cluster Controller", func() {
 			// Verify both ingresses exist
 			ingress0 := &networkingv1.Ingress{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      "teranode-0",
-				Namespace: "default",
+				Name:      testTeranodeName,
+				Namespace: defaultNamespace,
 			}, ingress0)).To(Succeed())
 
 			ingress1 := &networkingv1.Ingress{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
 				Name:      "teranode-1",
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, ingress1)).To(Succeed())
 
 			// Update to remove one ingress
@@ -943,8 +943,8 @@ var _ = Describe("Cluster Controller", func() {
 
 			// Verify first ingress still exists
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      "teranode-0",
-				Namespace: "default",
+				Name:      testTeranodeName,
+				Namespace: defaultNamespace,
 			}, ingress0)).To(Succeed())
 
 			//nolint:godox // Known limitation being documented
@@ -953,7 +953,7 @@ var _ = Describe("Cluster Controller", func() {
 			// For now, we verify that teranode-1 still exists but is not managed by the current spec.
 			err = k8sClient.Get(ctx, types.NamespacedName{
 				Name:      "teranode-1",
-				Namespace: "default",
+				Namespace: defaultNamespace,
 			}, ingress1)
 			// The ingress will still exist due to the current implementation
 			Expect(err).NotTo(HaveOccurred())
@@ -1017,8 +1017,8 @@ var _ = Describe("Cluster Controller", func() {
 			// Verify ingress was created with TLS
 			ingress0 := &networkingv1.Ingress{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      "teranode-0",
-				Namespace: "default",
+				Name:      testTeranodeName,
+				Namespace: defaultNamespace,
 			}, ingress0)).To(Succeed())
 
 			// Verify TLS configuration
@@ -1035,7 +1035,7 @@ var _ = Describe("Cluster Controller", func() {
 				Context: ctx,
 				NamespacedName: types.NamespacedName{
 					Name:      "non-existent-cluster",
-					Namespace: "default",
+					Namespace: defaultNamespace,
 				},
 			}
 
@@ -1105,7 +1105,7 @@ var _ = Describe("Cluster Controller", func() {
 				ingress := &networkingv1.Ingress{}
 				Expect(k8sClient.Get(ctx, types.NamespacedName{
 					Name:      fmt.Sprintf("teranode-%d", i),
-					Namespace: "default",
+					Namespace: defaultNamespace,
 				}, ingress)).To(Succeed())
 				Expect(ingress.Spec.Rules[0].Host).To(Equal(fmt.Sprintf("test%d.example.com", i)))
 			}
@@ -1144,8 +1144,8 @@ var _ = Describe("Cluster Controller", func() {
 			// Verify controller reference
 			ingress := &networkingv1.Ingress{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      "teranode-0",
-				Namespace: "default",
+				Name:      testTeranodeName,
+				Namespace: defaultNamespace,
 			}, ingress)).To(Succeed())
 
 			Expect(ingress.OwnerReferences).To(HaveLen(1))
@@ -1168,8 +1168,8 @@ var _ = Describe("Cluster Controller", func() {
 
 			// Verify controller reference is still set after update
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      "teranode-0",
-				Namespace: "default",
+				Name:      testTeranodeName,
+				Namespace: defaultNamespace,
 			}, ingress)).To(Succeed())
 
 			Expect(ingress.OwnerReferences).To(HaveLen(1))
@@ -1268,8 +1268,8 @@ var _ = Describe("Cluster Controller", func() {
 			// Verify ingress was created
 			ingress := &networkingv1.Ingress{}
 			Expect(k8sClient.Get(ctx, types.NamespacedName{
-				Name:      "teranode-0",
-				Namespace: "default",
+				Name:      testTeranodeName,
+				Namespace: defaultNamespace,
 			}, ingress)).To(Succeed())
 			Expect(ingress.Spec.Rules[0].Host).To(Equal("re-enabled.example.com"))
 		})

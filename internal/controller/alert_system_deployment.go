@@ -50,14 +50,14 @@ func (r *AlertSystemReconciler) updateDeployment(dep *appsv1.Deployment, alert *
 
 func defaultAlertSystemDeploymentSpec() *appsv1.DeploymentSpec {
 	labels := map[string]string{
-		"app":        "alert",
+		AppLabel:     "alert",
 		"deployment": "alert",
 		"project":    "service",
 	}
 	envFrom := []corev1.EnvFromSource{}
 	env := []corev1.EnvVar{
 		{
-			Name:  "SERVICE_NAME",
+			Name:  ServiceNameEnvVar,
 			Value: "alert-service",
 		},
 	}
@@ -92,7 +92,7 @@ func defaultAlertSystemDeploymentSpec() *appsv1.DeploymentSpec {
 						ReadinessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health/readiness",
+									Path: HealthReadinessPath,
 									Port: intstr.FromInt32(HealthPort),
 								},
 							},
@@ -104,7 +104,7 @@ func defaultAlertSystemDeploymentSpec() *appsv1.DeploymentSpec {
 						LivenessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health/liveness",
+									Path: HealthLivenessPath,
 									Port: intstr.FromInt32(HealthPort),
 								},
 							},
@@ -116,7 +116,7 @@ func defaultAlertSystemDeploymentSpec() *appsv1.DeploymentSpec {
 						StartupProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
-									Path: "/health/readiness",
+									Path: HealthReadinessPath,
 									Port: intstr.FromInt32(HealthPort),
 								},
 							},

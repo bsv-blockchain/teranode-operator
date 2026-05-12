@@ -79,3 +79,14 @@ const (
 	DefaultSubtreeValidatorReplicas = 2
 	DefaultAlertSystemReplicas      = 1
 )
+
+// Common label keys, port names, env vars, and paths used across deployments and services.
+const (
+	AppLabel            = "app"
+	HealthPortName      = "health"
+	ProfilerPortName    = "profiler"
+	ServiceNameEnvVar   = "SERVICE_NAME"
+	HealthReadinessPath = "/health/readiness"
+	HealthLivenessPath  = "/health/liveness"
+	DataMountPath       = "/data"
+)

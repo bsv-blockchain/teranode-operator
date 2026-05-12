@@ -110,7 +110,7 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 func getAppLabels(service string) map[string]string {
 	return map[string]string{
 		teranodev1alpha1.TeranodeLabel: "true",
-		"app":                          service,
+		AppLabel:                       service,
 	}
 }
 
