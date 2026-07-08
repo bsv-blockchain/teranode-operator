@@ -797,6 +797,8 @@ spec:
                         type: array
                         x-kubernetes-list-type: atomic
                     type: object
+                  priorityClassName:
+                    type: string
                   replicas:
                     format: int32
                     type: integer

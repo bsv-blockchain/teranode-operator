@@ -575,6 +575,139 @@ var _ = Describe("Cluster Controller", func() {
 			Expect(dep.Spec.Template.Spec.Containers[0].VolumeMounts).To(ContainElements(volumeMounts))
 		})
 
+		It("should propagate priorityClassName to every service child CRD", func() {
+			cluster := &teranodev1alpha1.Cluster{}
+			Expect(k8sClient.Get(ctx, typeNamespacedName, cluster)).To(Succeed())
+
+			const priorityClass = "high-priority"
+			overrides := func() *teranodev1alpha1.DeploymentOverrides {
+				return &teranodev1alpha1.DeploymentOverrides{PriorityClassName: priorityClass}
+			}
+
+			// Configure priorityClassName on every service that supports DeploymentOverrides.
+			cluster.Spec.Asset.Spec = &teranodev1alpha1.AssetSpec{DeploymentOverrides: overrides()}
+			cluster.Spec.AlertSystem.Spec = &teranodev1alpha1.AlertSystemSpec{DeploymentOverrides: overrides()}
+			cluster.Spec.BlockAssembly.Spec = &teranodev1alpha1.BlockAssemblySpec{DeploymentOverrides: overrides()}
+			cluster.Spec.Blockchain.Spec = &teranodev1alpha1.BlockchainSpec{DeploymentOverrides: overrides()}
+			cluster.Spec.BlockPersister.Spec = &teranodev1alpha1.BlockPersisterSpec{DeploymentOverrides: overrides()}
+			cluster.Spec.BlockValidator.Spec = &teranodev1alpha1.BlockValidatorSpec{DeploymentOverrides: overrides()}
+			cluster.Spec.Coinbase.Spec = &teranodev1alpha1.CoinbaseSpec{DeploymentOverrides: overrides()}
+			cluster.Spec.Legacy.Spec = &teranodev1alpha1.LegacySpec{DeploymentOverrides: overrides()}
+			cluster.Spec.Peer.Spec = &teranodev1alpha1.PeerSpec{DeploymentOverrides: overrides()}
+			cluster.Spec.Propagation.Spec = &teranodev1alpha1.PropagationSpec{DeploymentOverrides: overrides()}
+			cluster.Spec.Pruner.Spec = &teranodev1alpha1.PrunerSpec{DeploymentOverrides: overrides()}
+			cluster.Spec.RPC.Spec = &teranodev1alpha1.RPCSpec{DeploymentOverrides: overrides()}
+			cluster.Spec.SubtreeValidator.Spec = &teranodev1alpha1.SubtreeValidatorSpec{DeploymentOverrides: overrides()}
+			cluster.Spec.UtxoPersister.Spec = &teranodev1alpha1.UtxoPersisterSpec{DeploymentOverrides: overrides()}
+			cluster.Spec.Validator.Spec = &teranodev1alpha1.ValidatorSpec{DeploymentOverrides: overrides()}
+
+			enableAllServices(cluster)
+			Expect(k8sClient.Update(ctx, cluster)).To(Succeed())
+
+			controllerReconciler := &ClusterReconciler{
+				Client: k8sClient,
+				Scheme: k8sClient.Scheme(),
+			}
+			_, err := controllerReconciler.Reconcile(ctx, reconcile.Request{
+				NamespacedName: typeNamespacedName,
+			})
+			Expect(err).NotTo(HaveOccurred())
+
+			// Each service's child CRD should carry the priorityClassName. This exercises both
+			// propagation paths: the reflection merge (asset, rpc, subtreevalidator) and the
+			// whole-spec copy (all others).
+			checks := []struct {
+				suffix string
+				get    func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides
+			}{
+				{"asset", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.Asset{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"alert-system", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.AlertSystem{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"blockassembly", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.BlockAssembly{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"blockchain", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.Blockchain{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"blockpersister", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.BlockPersister{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"blockvalidator", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.BlockValidator{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"coinbase", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.Coinbase{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"legacy", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.Legacy{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"peer", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.Peer{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"propagation", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.Propagation{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"pruner", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.Pruner{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"rpc", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.RPC{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"subtreevalidator", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.SubtreeValidator{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"utxo-persister", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.UtxoPersister{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+				{"validator", func(nn types.NamespacedName) *teranodev1alpha1.DeploymentOverrides {
+					o := &teranodev1alpha1.Validator{}
+					Expect(k8sClient.Get(ctx, nn, o)).To(Succeed())
+					return o.Spec.DeploymentOverrides
+				}},
+			}
+
+			for _, c := range checks {
+				nn := types.NamespacedName{
+					Name:      fmt.Sprintf("%s-%s", cluster.Name, c.suffix),
+					Namespace: defaultNamespace,
+				}
+				do := c.get(nn)
+				Expect(do).NotTo(BeNil(), c.suffix)
+				Expect(do.PriorityClassName).To(Equal(priorityClass), c.suffix)
+			}
+		})
+
 		It("should disable all services when cluster is disabled", func() {
 			cluster := &teranodev1alpha1.Cluster{}
 			err := k8sClient.Get(ctx, typeNamespacedName, cluster)

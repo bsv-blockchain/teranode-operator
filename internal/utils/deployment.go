@@ -211,6 +211,11 @@ func SetDeploymentOverridesWithContext(ctx context.Context, log logr.Logger, cli
 		dep.Spec.Template.Spec.ServiceAccountName = cr.DeploymentOverrides().ServiceAccount
 	}
 
+	// if user configures a priority class
+	if cr.DeploymentOverrides().PriorityClassName != "" {
+		dep.Spec.Template.Spec.PriorityClassName = cr.DeploymentOverrides().PriorityClassName
+	}
+
 	// if user configures env vars
 	if len(cr.DeploymentOverrides().Env) > 0 {
 		dep.Spec.Template.Spec.Containers[0].Env = deduplicateEnvVars(
