@@ -22,7 +22,8 @@ func GetClusterOwner(client client.Client, ctx context.Context, obj metav1.Objec
 				types.NamespacedName{
 					Name:      ownerRef.Name,
 					Namespace: obj.Namespace,
-				}, &cluster); err != nil && !k8serrors.IsNotFound(err) {
+				}, &cluster,
+			); err != nil && !k8serrors.IsNotFound(err) {
 				return nil
 			}
 		}
