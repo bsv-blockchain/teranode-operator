@@ -75,7 +75,8 @@ func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 	}
 
 	var err error
-	_, err = utils.ReconcileBatch(r.Log,
+	_, err = utils.ReconcileBatch(
+		r.Log,
 		r.ReconcileDeployment,
 		r.ReconcileService,
 		r.ReconcileGrpcIngress,
@@ -93,7 +94,8 @@ func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 	}
 
 	if err != nil {
-		apimeta.SetStatusCondition(&propagation.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&propagation.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -107,7 +109,8 @@ func (r *PropagationReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 		r.Log.Error(err, "requeuing object for reconciliation")
 		return ctrl.Result{RequeueAfter: time.Second}, nil
 	} else {
-		apimeta.SetStatusCondition(&propagation.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&propagation.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,

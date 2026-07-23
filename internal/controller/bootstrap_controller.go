@@ -69,13 +69,15 @@ func (r *BootstrapReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 		r.Log.Error(err, "unable to fetch peer CR")
 		return result, nil
 	}
-	_, err := utils.ReconcileBatch(r.Log,
+	_, err := utils.ReconcileBatch(
+		r.Log,
 		// r.Validate,
 		r.ReconcileDeployment,
 		r.ReconcileService,
 	)
 	if err != nil {
-		apimeta.SetStatusCondition(&bs.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&bs.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -86,7 +88,8 @@ func (r *BootstrapReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 		_ = r.Client.Status().Update(ctx, &bs)
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
-		apimeta.SetStatusCondition(&bs.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&bs.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,

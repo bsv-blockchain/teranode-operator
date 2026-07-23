@@ -96,7 +96,8 @@ var _ = Describe("controller", Ordered, func() {
 			verifyControllerUp := func() error {
 				// Get pod name
 
-				cmd = exec.CommandContext(context.Background(), "kubectl", "get",
+				cmd = exec.CommandContext(
+					context.Background(), "kubectl", "get",
 					"pods", "-l", "control-plane=controller-manager",
 					"-o", "go-template={{ range .items }}"+
 						"{{ if not .metadata.deletionTimestamp }}"+
@@ -116,7 +117,8 @@ var _ = Describe("controller", Ordered, func() {
 
 				// Validate pod status
 				//nolint:gosec // G204: Controlled variables in test environment
-				cmd = exec.CommandContext(context.Background(), "kubectl", "get",
+				cmd = exec.CommandContext(
+					context.Background(), "kubectl", "get",
 					"pods", controllerPodName, "-o", "jsonpath={.status.phase}",
 					"-n", namespace,
 				)

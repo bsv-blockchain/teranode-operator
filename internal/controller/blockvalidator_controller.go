@@ -68,14 +68,16 @@ func (r *BlockValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		r.Log.Error(err, "unable to fetch block validator CR")
 		return result, nil
 	}
-	_, err := utils.ReconcileBatch(r.Log,
+	_, err := utils.ReconcileBatch(
+		r.Log,
 		// r.Validate,
 		r.ReconcileDeployment,
 		r.ReconcileService,
 	)
 
 	if err != nil {
-		apimeta.SetStatusCondition(&blockValidator.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&blockValidator.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -86,7 +88,8 @@ func (r *BlockValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		_ = r.Client.Status().Update(ctx, &blockValidator)
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
-		apimeta.SetStatusCondition(&blockValidator.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&blockValidator.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,

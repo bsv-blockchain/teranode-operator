@@ -71,7 +71,8 @@ func (r *SubtreeValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		return result, nil
 	}
 
-	_, err := utils.ReconcileBatch(r.Log,
+	_, err := utils.ReconcileBatch(
+		r.Log,
 		r.ReconcileDeployment,
 		r.ReconcileService,
 	)
@@ -88,7 +89,8 @@ func (r *SubtreeValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	}
 
 	if err != nil {
-		apimeta.SetStatusCondition(&subtreeValidator.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&subtreeValidator.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -102,7 +104,8 @@ func (r *SubtreeValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		r.Log.Error(err, "requeuing object for reconciliation")
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, nil
 	} else {
-		apimeta.SetStatusCondition(&subtreeValidator.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&subtreeValidator.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,

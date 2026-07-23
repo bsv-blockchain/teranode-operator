@@ -72,7 +72,8 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	}
 	r.Log.Info("reconciling cluster", "cluster", cluster.Name)
 
-	_, err := utils.ReconcileBatch(r.Log,
+	_, err := utils.ReconcileBatch(
+		r.Log,
 		// r.Validate,
 		r.ReconcilePVC,
 		r.ReconcileAlertSystem,
@@ -95,7 +96,8 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		r.ReconcileAdditionalIngresses,
 	)
 	if err != nil {
-		apimeta.SetStatusCondition(&cluster.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&cluster.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -109,7 +111,8 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		r.Log.Error(err, "requeuing object for reconciliation")
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, nil
 	} else {
-		apimeta.SetStatusCondition(&cluster.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&cluster.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,

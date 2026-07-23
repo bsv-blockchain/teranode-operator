@@ -70,14 +70,16 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		return result, nil
 	}
 
-	_, err := utils.ReconcileBatch(r.Log,
+	_, err := utils.ReconcileBatch(
+		r.Log,
 		// r.Validate,
 		r.ReconcileDeployment,
 		r.ReconcileService,
 	)
 
 	if err != nil {
-		apimeta.SetStatusCondition(&b.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&b.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -90,7 +92,8 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		// Returning error here is redundant
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
-		apimeta.SetStatusCondition(&b.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&b.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,
