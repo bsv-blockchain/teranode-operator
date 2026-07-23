@@ -74,7 +74,8 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 
 	r.Log.Info("reconciling asset", "cluster", asset.Name)
 
-	_, err := utils.ReconcileBatch(r.Log,
+	_, err := utils.ReconcileBatch(
+		r.Log,
 		r.ReconcileDeployment,
 		r.ReconcileService,
 		r.ReconcileHTTPIngress,
@@ -93,7 +94,8 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 	}
 
 	if err != nil {
-		apimeta.SetStatusCondition(&asset.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&asset.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -107,7 +109,8 @@ func (r *AssetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		r.Log.Error(err, "requeuing object for reconciliation")
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, nil
 	} else {
-		apimeta.SetStatusCondition(&asset.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&asset.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,

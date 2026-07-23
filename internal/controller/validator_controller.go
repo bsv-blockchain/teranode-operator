@@ -70,13 +70,15 @@ func (r *ValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 		return result, nil
 	}
 
-	_, err := utils.ReconcileBatch(r.Log,
+	_, err := utils.ReconcileBatch(
+		r.Log,
 		r.ReconcileDeployment,
 		r.ReconcileService,
 	)
 
 	if err != nil {
-		apimeta.SetStatusCondition(&validator.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&validator.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -90,7 +92,8 @@ func (r *ValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 		r.Log.Error(err, "requeuing object for reconciliation")
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, nil
 	} else {
-		apimeta.SetStatusCondition(&validator.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&validator.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,

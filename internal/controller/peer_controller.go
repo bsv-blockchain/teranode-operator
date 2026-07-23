@@ -70,7 +70,8 @@ func (r *PeerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 		r.Log.Error(err, "unable to fetch peer CR")
 		return result, nil
 	}
-	_, err := utils.ReconcileBatch(r.Log,
+	_, err := utils.ReconcileBatch(
+		r.Log,
 		// r.Validate,
 		r.ReconcileDeployment,
 		r.ReconcileService,
@@ -80,7 +81,8 @@ func (r *PeerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 	)
 
 	if err != nil {
-		apimeta.SetStatusCondition(&peer.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&peer.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -94,7 +96,8 @@ func (r *PeerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 		r.Log.Error(err, "requeuing object for reconciliation")
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
-		apimeta.SetStatusCondition(&peer.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&peer.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,

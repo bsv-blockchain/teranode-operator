@@ -65,12 +65,14 @@ func (r *PrunerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		return result, nil
 	}
 
-	_, err := utils.ReconcileBatch(r.Log,
+	_, err := utils.ReconcileBatch(
+		r.Log,
 		r.ReconcileDeployment,
 	)
 
 	if err != nil {
-		apimeta.SetStatusCondition(&p.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&p.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionFalse,
@@ -83,7 +85,8 @@ func (r *PrunerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		// Returning error here is redundant
 		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
 	} else {
-		apimeta.SetStatusCondition(&p.Status.Conditions,
+		apimeta.SetStatusCondition(
+			&p.Status.Conditions,
 			metav1.Condition{
 				Type:    teranodev1alpha1.ConditionReconciled,
 				Status:  metav1.ConditionTrue,
