@@ -3,8 +3,11 @@ package utils
 import (
 	"testing"
 
+	"github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 	"github.com/stretchr/testify/assert"
+	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 const testVolumeName = "vol1"
@@ -212,4 +215,57 @@ func TestDeduplicateVolumeMounts(t *testing.T) {
 			assert.Equal(t, tt.expected, result)
 		})
 	}
+}
+
+// fakeService is a minimal TeranodeService implementation for unit-testing the
+// deployment override helpers without spinning up envtest.
+type fakeService struct {
+	overrides *v1alpha1.DeploymentOverrides
+}
+
+func (f fakeService) DeploymentOverrides() *v1alpha1.DeploymentOverrides { return f.overrides }
+func (f fakeService) Metadata() metav1.ObjectMeta                        { return metav1.ObjectMeta{} }
+
+func newDeployment() *appsv1.Deployment {
+	return &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
+			Template: corev1.PodTemplateSpec{
+				Spec: corev1.PodSpec{
+					Containers: []corev1.Container{{Name: "main"}},
+				},
+			},
+		},
+	}
+}
+
+// SetDeploymentOverrides is the single helper every service funnels through, so
+// verifying PriorityClassName here proves the CRD->Deployment step for all services.
+func TestSetDeploymentOverridesSetsPriorityClassName(t *testing.T) {
+	dep := newDeployment()
+	svc := fakeService{overrides: &v1alpha1.DeploymentOverrides{PriorityClassName: "high-priority"}}
+
+	SetDeploymentOverrides(nil, dep, svc)
+
+	assert.Equal(t, "high-priority", dep.Spec.Template.Spec.PriorityClassName)
+}
+
+// An unset PriorityClassName must not clobber whatever the default spec already has.
+func TestSetDeploymentOverridesEmptyPriorityClassNameDoesNotClobber(t *testing.T) {
+	dep := newDeployment()
+	dep.Spec.Template.Spec.PriorityClassName = "existing"
+	svc := fakeService{overrides: &v1alpha1.DeploymentOverrides{}}
+
+	SetDeploymentOverrides(nil, dep, svc)
+
+	assert.Equal(t, "existing", dep.Spec.Template.Spec.PriorityClassName)
+}
+
+// Nil overrides is a no-op.
+func TestSetDeploymentOverridesNilOverrides(t *testing.T) {
+	dep := newDeployment()
+	svc := fakeService{overrides: nil}
+
+	SetDeploymentOverrides(nil, dep, svc)
+
+	assert.Empty(t, dep.Spec.Template.Spec.PriorityClassName)
 }

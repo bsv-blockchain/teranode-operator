@@ -27,6 +27,7 @@ type DeploymentOverrides struct {
 	ImagePullPolicy    corev1.PullPolicy              `json:"imagePullPolicy,omitempty"`
 	ImagePullSecrets   *[]corev1.LocalObjectReference `json:"imagePullSecrets,omitempty"`
 	ServiceAccount     string                         `json:"serviceAccount,omitempty"`
+	PriorityClassName  string                         `json:"priorityClassName,omitempty"`
 	ConfigMapName      string                         `json:"configMapName,omitempty"`
 	ServiceAnnotations map[string]string              `json:"serviceAnnotations,omitempty"`
 	Replicas           *int32                         `json:"replicas,omitempty"`
