@@ -83,7 +83,7 @@ func (r *PrunerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		_ = r.Client.Status().Update(ctx, &p)
 		// Since error is written on the status, let's log it and requeue
 		// Returning error here is redundant
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
+		return ctrl.Result{RequeueAfter: time.Second}, err
 	} else {
 		apimeta.SetStatusCondition(
 			&p.Status.Conditions,
@@ -99,7 +99,7 @@ func (r *PrunerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	// Update status and ignore if we error out
 	_ = r.Client.Status().Update(ctx, &p)
 
-	return ctrl.Result{Requeue: true, RequeueAfter: time.Minute * 5}, nil
+	return ctrl.Result{RequeueAfter: time.Minute * 5}, nil
 }
 
 // SetupWithManager sets up the controller with the Manager.

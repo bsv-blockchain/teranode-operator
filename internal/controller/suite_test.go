@@ -53,16 +53,16 @@ var _ = BeforeSuite(func() {
 	logf.SetLogger(zap.New(zap.WriteTo(GinkgoWriter), zap.UseDevMode(true)))
 
 	By("bootstrapping test environment")
+	etcd := &envtest.Etcd{}
+	etcd.Configure().
+		Append("max-request-bytes", "5242880"). // 5MB
+		Append("max-txn-ops", "10000")
+
 	testEnv = &envtest.Environment{
 		CRDDirectoryPaths:     []string{filepath.Join("..", "..", "config", "crd", "bases")},
 		ErrorIfCRDPathMissing: true,
 		ControlPlane: envtest.ControlPlane{
-			Etcd: &envtest.Etcd{
-				Args: []string{
-					"--max-request-bytes=5242880", // 5MB
-					"--max-txn-ops=10000",
-				},
-			},
+			Etcd: etcd,
 		},
 
 		// The BinaryAssetsDirectory is only required if you want to run the tests directly
