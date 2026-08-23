@@ -90,7 +90,7 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		_ = r.Client.Status().Update(ctx, &b)
 		// Since error is written on the status, let's log it and requeue
 		// Returning error here is redundant
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
+		return ctrl.Result{RequeueAfter: time.Second}, err
 	} else {
 		apimeta.SetStatusCondition(
 			&b.Status.Conditions,
@@ -106,7 +106,7 @@ func (r *BlockchainReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	// Update status and ignore if we error out
 	_ = r.Client.Status().Update(ctx, &b)
 
-	return ctrl.Result{Requeue: true, RequeueAfter: time.Minute * 5}, nil
+	return ctrl.Result{RequeueAfter: time.Minute * 5}, nil
 }
 
 // getAppLabels defines the label applied to created resources. This label is used by the predicate to determine which resources are ours

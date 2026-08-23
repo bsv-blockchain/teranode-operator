@@ -88,7 +88,7 @@ func (r *AlertSystemReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 		_ = r.Client.Status().Update(ctx, &as)
 		// Since error is written on the status, let's log it and requeue
 		// Returning error here is redundant
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
+		return ctrl.Result{RequeueAfter: time.Second}, err
 	} else {
 		apimeta.SetStatusCondition(
 			&as.Status.Conditions,
@@ -102,7 +102,7 @@ func (r *AlertSystemReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 	}
 	err = r.Client.Status().Update(ctx, &as)
 
-	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
+	return ctrl.Result{}, err
 }
 
 // SetupWithManager sets up the controller with the Manager.

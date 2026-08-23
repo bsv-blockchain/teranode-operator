@@ -102,7 +102,7 @@ func (r *FaucetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		err = statusErr
 	}
 
-	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
+	return ctrl.Result{}, err
 }
 
 // SetupWithManager sets up the controller with the Manager.

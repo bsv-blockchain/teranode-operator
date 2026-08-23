@@ -3,9 +3,10 @@ package controller
 import (
 	"testing"
 
-	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/utils/ptr"
+
+	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
 )
 
 // mergeDeploymentOverrides is generic (reflection over every field), so any set field

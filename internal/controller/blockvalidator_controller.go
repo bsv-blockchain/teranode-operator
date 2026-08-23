@@ -86,7 +86,7 @@ func (r *BlockValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 			},
 		)
 		_ = r.Client.Status().Update(ctx, &blockValidator)
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
+		return ctrl.Result{RequeueAfter: time.Second}, err
 	} else {
 		apimeta.SetStatusCondition(
 			&blockValidator.Status.Conditions,
@@ -100,7 +100,7 @@ func (r *BlockValidatorReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	}
 
 	err = r.Client.Status().Update(ctx, &blockValidator)
-	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
+	return ctrl.Result{}, err
 }
 
 // SetupWithManager sets up the controller with the Manager.

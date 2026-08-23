@@ -86,7 +86,7 @@ func (r *BootstrapReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 			},
 		)
 		_ = r.Client.Status().Update(ctx, &bs)
-		return ctrl.Result{Requeue: true, RequeueAfter: time.Second}, err
+		return ctrl.Result{RequeueAfter: time.Second}, err
 	} else {
 		apimeta.SetStatusCondition(
 			&bs.Status.Conditions,
@@ -100,7 +100,7 @@ func (r *BootstrapReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 	}
 
 	err = r.Client.Status().Update(ctx, &bs)
-	return ctrl.Result{Requeue: false, RequeueAfter: 0}, err
+	return ctrl.Result{}, err
 }
 
 // SetupWithManager sets up the controller with the Manager.
