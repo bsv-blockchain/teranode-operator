@@ -21,9 +21,11 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
 	teranodev1alpha1 "github.com/bsv-blockchain/teranode-operator/api/v1alpha1"
@@ -64,6 +66,22 @@ var _ = Describe("Asset Controller", func() {
 
 			By("Cleanup the specific resource instance Asset")
 			Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
+
+			// envtest has no garbage collector, so owner-reference cascade deletion
+			// does not run. Explicitly remove the deployment this Asset created so it
+			// does not leak into other specs that share the fixed AssetDeploymentName
+			// in the default namespace (an orphaned deployment owned by this Asset
+			// blocks other Assets from taking ownership of it).
+			dep := &appsv1.Deployment{}
+			err = k8sClient.Get(ctx, types.NamespacedName{
+				Name:      AssetDeploymentName,
+				Namespace: defaultNamespace,
+			}, dep)
+			if err == nil {
+				Expect(k8sClient.Delete(ctx, dep)).To(Succeed())
+			} else {
+				Expect(client.IgnoreNotFound(err)).NotTo(HaveOccurred())
+			}
 		})
 		It("should successfully reconcile the resource", func() {
 			By("Reconciling the created resource")
