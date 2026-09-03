@@ -1,8 +1,10 @@
 # Build the manager binary
-# Note: Not using SHA256 digest pinning for golang base image to support multi-arch builds.
-# SHA256 digests pin to a specific platform's image, preventing ARM64/AMD64 cross-compilation.
-# Version pinning (1.25.2) still provides reproducibility while allowing platform flexibility.
-FROM golang:1.27.0 AS builder
+# The digest below is the multi-arch OCI image index (manifest list) for golang:1.27.0,
+# not a single-platform image digest. Pinning to the index digest keeps builds reproducible
+# and satisfies supply-chain scanners (Scorecard Pinned-Dependencies) while still resolving
+# to the correct per-platform image for multi-arch builds (linux/amd64, linux/arm64, ...).
+# To refresh: docker buildx imagetools inspect golang:<version> and copy the top-level Digest.
+FROM golang:1.27.0@sha256:4013ae0f9e7994f8535c58c811f8f863fbed38b72e0d51e6592156f758d66146 AS builder
 ARG TARGETOS
 ARG TARGETARCH
 
