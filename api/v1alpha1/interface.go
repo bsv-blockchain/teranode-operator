@@ -38,4 +38,12 @@ type DeploymentOverrides struct {
 	EnvFrom            []corev1.EnvFromSource         `json:"envFrom,omitempty"`
 	Volumes            []corev1.Volume                `json:"volumes,omitempty"`
 	VolumeMounts       []corev1.VolumeMount           `json:"volumeMounts,omitempty"`
+
+	// Probes replace the controller's built-in ones wholesale (no field merge).
+	// Needed for slow-starting services: block-assembly replays its unmined set before
+	// its intake queue starts (30m0s measured on dev-ovh-1), and the default 5min
+	// startup budget kills it mid-replay, restarting it from zero.
+	StartupProbe   *corev1.Probe `json:"startupProbe,omitempty"`
+	ReadinessProbe *corev1.Probe `json:"readinessProbe,omitempty"`
+	LivenessProbe  *corev1.Probe `json:"livenessProbe,omitempty"`
 }

@@ -206,6 +206,17 @@ func SetDeploymentOverridesWithContext(ctx context.Context, log logr.Logger, cli
 		dep.Spec.Template.Spec.Containers[0].ImagePullPolicy = cr.DeploymentOverrides().ImagePullPolicy
 	}
 
+	// if user configures probes, replace the built-in ones wholesale
+	if cr.DeploymentOverrides().StartupProbe != nil {
+		dep.Spec.Template.Spec.Containers[0].StartupProbe = cr.DeploymentOverrides().StartupProbe
+	}
+	if cr.DeploymentOverrides().ReadinessProbe != nil {
+		dep.Spec.Template.Spec.Containers[0].ReadinessProbe = cr.DeploymentOverrides().ReadinessProbe
+	}
+	if cr.DeploymentOverrides().LivenessProbe != nil {
+		dep.Spec.Template.Spec.Containers[0].LivenessProbe = cr.DeploymentOverrides().LivenessProbe
+	}
+
 	// if user configures a service account
 	if cr.DeploymentOverrides().ServiceAccount != "" {
 		dep.Spec.Template.Spec.ServiceAccountName = cr.DeploymentOverrides().ServiceAccount
