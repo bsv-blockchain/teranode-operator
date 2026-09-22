@@ -104,6 +104,9 @@ func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
 							FailureThreshold:    2,
 							TimeoutSeconds:      3,
 						},
+						// Slack liveness: during the unmined replay the process can miss a 3s
+						// deadline, and 5s x 2 killed it after ~10s (2026-09-21: 6 restarts,
+						// exit 0 from liveness, not OOM). Now tolerates ~60s.
 						LivenessProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
@@ -112,10 +115,13 @@ func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
 								},
 							},
 							InitialDelaySeconds: 1,
-							PeriodSeconds:       5,
-							FailureThreshold:    2,
-							TimeoutSeconds:      3,
+							PeriodSeconds:       10,
+							FailureThreshold:    6,
+							TimeoutSeconds:      10,
 						},
+						// Startup budget must exceed the worst-case unmined replay: while it is
+						// pending, liveness/readiness are suppressed. 30 x 10s (5min) could not
+						// cover a measured 30min replay; 240 x 10s = 40min can.
 						StartupProbe: &corev1.Probe{
 							ProbeHandler: corev1.ProbeHandler{
 								HTTPGet: &corev1.HTTPGetAction{
@@ -123,8 +129,9 @@ func defaultBlockAssemblyDeploymentSpec() *appsv1.DeploymentSpec {
 									Port: intstr.FromInt32(HealthPort),
 								},
 							},
-							FailureThreshold: 30,
+							FailureThreshold: 240,
 							PeriodSeconds:    10,
+							TimeoutSeconds:   10,
 						},
 						Ports: []corev1.ContainerPort{
 							{

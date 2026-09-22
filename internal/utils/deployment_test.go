@@ -270,3 +270,43 @@ func TestSetDeploymentOverridesNilOverrides(t *testing.T) {
 
 	assert.Empty(t, dep.Spec.Template.Spec.PriorityClassName)
 }
+
+// Probe overrides let an operator widen a startup budget without a new controller build.
+// block-assembly's 30m unmined replay outlives the built-in 5min budget, and each kill
+// restarts the replay from zero, so a lagging node never converges.
+func TestSetDeploymentOverridesSetsProbes(t *testing.T) {
+	dep := newDeployment()
+	startup := &corev1.Probe{FailureThreshold: 240, PeriodSeconds: 10}
+	liveness := &corev1.Probe{FailureThreshold: 6, PeriodSeconds: 10, TimeoutSeconds: 10}
+	readiness := &corev1.Probe{FailureThreshold: 3, PeriodSeconds: 10}
+	svc := fakeService{overrides: &v1alpha1.DeploymentOverrides{
+		StartupProbe:   startup,
+		LivenessProbe:  liveness,
+		ReadinessProbe: readiness,
+	}}
+
+	SetDeploymentOverrides(nil, dep, svc)
+
+	c := dep.Spec.Template.Spec.Containers[0]
+	assert.Equal(t, int32(240), c.StartupProbe.FailureThreshold,
+		"startup budget must be settable or a slow replay never finishes")
+	assert.Equal(t, int32(6), c.LivenessProbe.FailureThreshold)
+	assert.Equal(t, int32(10), c.LivenessProbe.TimeoutSeconds)
+	assert.Equal(t, int32(3), c.ReadinessProbe.FailureThreshold)
+}
+
+// Unset probes must leave the controller's defaults intact — a partial override
+// must never silently blank out a probe the controller relies on.
+func TestSetDeploymentOverridesNilProbesDoNotClobber(t *testing.T) {
+	dep := newDeployment()
+	dep.Spec.Template.Spec.Containers[0].StartupProbe = &corev1.Probe{FailureThreshold: 30, PeriodSeconds: 10}
+	dep.Spec.Template.Spec.Containers[0].LivenessProbe = &corev1.Probe{FailureThreshold: 2, PeriodSeconds: 5}
+	svc := fakeService{overrides: &v1alpha1.DeploymentOverrides{}}
+
+	SetDeploymentOverrides(nil, dep, svc)
+
+	c := dep.Spec.Template.Spec.Containers[0]
+	assert.Equal(t, int32(30), c.StartupProbe.FailureThreshold)
+	assert.Equal(t, int32(2), c.LivenessProbe.FailureThreshold)
+	assert.Nil(t, c.ReadinessProbe)
+}
