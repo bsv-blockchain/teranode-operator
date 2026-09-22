@@ -4,8 +4,8 @@ go 1.26.1
 
 require (
 	github.com/go-logr/logr v1.4.4
-	github.com/onsi/ginkgo/v2 v2.32.2
-	github.com/onsi/gomega v1.43.0
+	github.com/onsi/ginkgo/v2 v2.33.0
+	github.com/onsi/gomega v1.43.1
 	github.com/stretchr/testify v1.12.1
 	k8s.io/api v0.38.0-alpha.0
 	k8s.io/apimachinery v0.38.0-alpha.0
