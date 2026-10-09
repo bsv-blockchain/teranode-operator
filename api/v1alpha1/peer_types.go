@@ -61,5 +61,5 @@ type PeerList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Peer{}, &PeerList{})
+	knownTypes = append(knownTypes, &Peer{}, &PeerList{})
 }

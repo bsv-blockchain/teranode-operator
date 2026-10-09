@@ -67,5 +67,5 @@ type BootstrapList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Bootstrap{}, &BootstrapList{})
+	knownTypes = append(knownTypes, &Bootstrap{}, &BootstrapList{})
 }

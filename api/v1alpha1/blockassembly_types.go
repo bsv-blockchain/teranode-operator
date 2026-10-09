@@ -64,5 +64,5 @@ type BlockAssemblyList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&BlockAssembly{}, &BlockAssemblyList{})
+	knownTypes = append(knownTypes, &BlockAssembly{}, &BlockAssemblyList{})
 }

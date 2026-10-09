@@ -58,5 +58,5 @@ type LegacyList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Legacy{}, &LegacyList{})
+	knownTypes = append(knownTypes, &Legacy{}, &LegacyList{})
 }

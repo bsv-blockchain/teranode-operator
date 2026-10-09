@@ -68,5 +68,5 @@ type BlockPersisterList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&BlockPersister{}, &BlockPersisterList{})
+	knownTypes = append(knownTypes, &BlockPersister{}, &BlockPersisterList{})
 }

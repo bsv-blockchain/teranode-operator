@@ -139,7 +139,7 @@ This operator controls the management of each microservice associated with a Ter
 ### Getting Started with Development
 
 #### Prerequisites
-- go version v1.20.0+
+- go version v1.27.0+
 - docker version 17.03+.
 - kubectl version v1.11.3+.
 - Access to a Kubernetes v1.11.3+ cluster.

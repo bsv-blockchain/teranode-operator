@@ -62,5 +62,5 @@ type RPCList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&RPC{}, &RPCList{})
+	knownTypes = append(knownTypes, &RPC{}, &RPCList{})
 }

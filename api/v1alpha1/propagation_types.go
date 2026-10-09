@@ -73,5 +73,5 @@ type PropagationList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Propagation{}, &PropagationList{})
+	knownTypes = append(knownTypes, &Propagation{}, &PropagationList{})
 }

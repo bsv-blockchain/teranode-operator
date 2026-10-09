@@ -63,5 +63,5 @@ type PrunerList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Pruner{}, &PrunerList{})
+	knownTypes = append(knownTypes, &Pruner{}, &PrunerList{})
 }

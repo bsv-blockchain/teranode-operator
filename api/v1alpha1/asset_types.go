@@ -71,5 +71,5 @@ type AssetList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Asset{}, &AssetList{})
+	knownTypes = append(knownTypes, &Asset{}, &AssetList{})
 }
