@@ -58,5 +58,5 @@ type UtxoPersisterList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&UtxoPersister{}, &UtxoPersisterList{})
+	knownTypes = append(knownTypes, &UtxoPersister{}, &UtxoPersisterList{})
 }

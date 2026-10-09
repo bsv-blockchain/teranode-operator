@@ -69,5 +69,5 @@ type FaucetList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Faucet{}, &FaucetList{})
+	knownTypes = append(knownTypes, &Faucet{}, &FaucetList{})
 }

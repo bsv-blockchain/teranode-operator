@@ -184,5 +184,5 @@ type ClusterList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Cluster{}, &ClusterList{})
+	knownTypes = append(knownTypes, &Cluster{}, &ClusterList{})
 }

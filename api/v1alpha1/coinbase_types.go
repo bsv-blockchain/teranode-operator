@@ -66,5 +66,5 @@ type CoinbaseList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Coinbase{}, &CoinbaseList{})
+	knownTypes = append(knownTypes, &Coinbase{}, &CoinbaseList{})
 }

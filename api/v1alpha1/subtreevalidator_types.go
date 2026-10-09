@@ -66,5 +66,5 @@ type SubtreeValidatorList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&SubtreeValidator{}, &SubtreeValidatorList{})
+	knownTypes = append(knownTypes, &SubtreeValidator{}, &SubtreeValidatorList{})
 }

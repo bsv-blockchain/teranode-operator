@@ -66,5 +66,5 @@ type AlertSystemList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&AlertSystem{}, &AlertSystemList{})
+	knownTypes = append(knownTypes, &AlertSystem{}, &AlertSystemList{})
 }

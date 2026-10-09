@@ -58,5 +58,5 @@ type BlockValidatorList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&BlockValidator{}, &BlockValidatorList{})
+	knownTypes = append(knownTypes, &BlockValidator{}, &BlockValidatorList{})
 }

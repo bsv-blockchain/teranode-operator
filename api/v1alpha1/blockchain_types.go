@@ -68,5 +68,5 @@ type BlockchainList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Blockchain{}, &BlockchainList{})
+	knownTypes = append(knownTypes, &Blockchain{}, &BlockchainList{})
 }
