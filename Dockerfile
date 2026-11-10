@@ -4,7 +4,7 @@
 # and satisfies supply-chain scanners (Scorecard Pinned-Dependencies) while still resolving
 # to the correct per-platform image for multi-arch builds (linux/amd64, linux/arm64, ...).
 # To refresh: docker buildx imagetools inspect golang:<version> and copy the top-level Digest.
-FROM golang:1.27.3@sha256:2920bb124f1a2e12a1d39f0cab756ae0068441ee1da7655dec7f5e374944095b AS builder
+FROM golang:1.27.3@sha256:e519d3b0a5b285e5aa53ab9eef02bc6bbb9cb04608389b743a136a9ce75f0d1e AS builder
 ARG TARGETOS
 ARG TARGETARCH
 
