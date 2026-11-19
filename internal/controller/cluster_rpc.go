@@ -79,7 +79,14 @@ func (r *ClusterReconciler) updateRPC(rpc *teranodev1alpha1.RPC, cluster *terano
 	if rpc.Spec.DeploymentOverrides == nil {
 		rpc.Spec.DeploymentOverrides = &teranodev1alpha1.DeploymentOverrides{}
 	}
-	if cluster.Spec.Image != "" && rpc.Spec.DeploymentOverrides.Image == "" {
+	// The RPC spec is merged into the existing CR rather than rebuilt, so its image
+	// field already holds the image from the previous reconcile. Re-apply the
+	// cluster image every time, or a cluster image bump never reaches RPC. A
+	// per-service image override in the cluster spec still takes precedence.
+	serviceImageSet := cluster.Spec.RPC.Spec != nil &&
+		cluster.Spec.RPC.Spec.DeploymentOverrides != nil &&
+		cluster.Spec.RPC.Spec.DeploymentOverrides.Image != ""
+	if cluster.Spec.Image != "" && !serviceImageSet {
 		rpc.Spec.DeploymentOverrides.Image = cluster.Spec.Image
 	}
 	if cluster.Spec.ImagePullSecrets != nil {
